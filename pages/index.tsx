@@ -1,23 +1,166 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import SearchInput from '../components/common/search.input'
-import { GetData } from '../Utils/fetchData'
+import ImageIcon from '@mui/icons-material/Image';
+import StarBorder from '@mui/icons-material/StarBorder';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import * as React from 'react';
+import { useState } from 'react';
+import SearchInput from '../components/common/search.input';
+import styles from '../styles/Home.module.css';
+import { isValidHttpUrl } from '../Utils/crunchUrls';
+import { GetData, PostData } from '../Utils/fetchData';
 
+interface hackerRankDataType {
+  linkedin_url: string
+  github_url: string
+  leetcode_url: string
+  country: string
+  languages: []
+  avatar: string
+  name: string
+}
+
+interface githubDataType {
+  blog: string
+  email: string
+  avatar_url: string
+}
+
+const domainList: any = {
+  "hackerrank": {
+    name: "hackerrank",
+    userInfoApi: "https://www.hackerrank.com/rest/contests/master/hackers/userName/profile",
+  },
+  "github": {
+    name: "github",
+    userInfoApi: "https://api.github.com/users/userName"
+  }
+}
 const Home: NextPage = () => {
-  const searchInputHandler = async (searchVal: string) => {
-    const profileUrl = 'https://www.hackerrank.com/rest/contests/master/hackers/sifatul/profile'
-    const data = await GetData(profileUrl)
-    console.log(data)
 
+  const [userInfo, setUserInfo] = useState({
+    searchVal: '',
+    hackerrank: {
+      linkedin_url: '', github_url: "", leetcode_url: '', country: '', languages: [], avatar: '', name: ''
+    },
+    github: {
+      blog: "", email: "", avatar_url: ""
+    }
+
+
+  })
+
+
+
+  const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
+    const getUserProfileApi = domainList.hackerrank.userInfoApi
+    const userProfileApi = getUserProfileApi.replace('userName', nameFromUrl)
+    const profileUrl = '/api/hello'
+    const data: any = await PostData(profileUrl, userProfileApi)
+    const hackerRankdata: hackerRankDataType = data?.model || {}
+
+    const { linkedin_url = '', country = '', github_url = "", languages = [], avatar = '', leetcode_url = '', name = '' } = hackerRankdata
+
+    setUserInfo(prevState => {
+      return {
+        ...prevState,
+        hackerrank: {
+          linkedin_url, country, github_url, languages, avatar, leetcode_url, name
+        }
+      }
+    })
+
+    return hackerRankdata
+  }, [])
+
+  const getGithubInfoByName = React.useCallback(async (name: string) => {
+
+    const getUserProfileApi = domainList.github.userInfoApi
+    const userProfileApi = getUserProfileApi.replace('userName', name)
+    const profileUrl = '/api/hello'
+    const data: any = await PostData(profileUrl, userProfileApi)
+    const githubData: githubDataType = data || {}
+    const { blog = '', email = '', avatar_url = '' } = githubData
+
+    setUserInfo(prevState => {
+      return {
+        ...prevState,
+        github: {
+          blog, email, avatar_url
+        }
+      }
+    })
+
+  }, [])
+  // React.useEffect(() => {
+  //   //when github url found
+  //   if (!userInfo.github.checked && userInfo.hackerrank.github_url)
+
+  //     let githubName = userInfo.hackerrank.github_url?.split('/')?.pop() || nameFromUrl
+
+  //   await getGithubInfoByName(githubName);
+
+  // }, [userInfo.hackerrank.github_url])
+
+
+  const searchInputHandler = async (searchVal: string) => {
+
+
+    const isValidUrl = isValidHttpUrl(searchVal)
+    if (!isValidUrl) {
+      await getGithubInfoByName(searchVal);
+      await getHackerRankInfo(searchVal)
+      return
+    }
+
+    const myUrl = new URL(searchVal)
+    // const parts = ['protocol', 'hostname', 'pathname'];
+
+
+
+    const domain = myUrl.hostname
+    const pathname = myUrl.pathname
+    const nameFromUrl = pathname.split("/").pop()
+
+
+    if (!nameFromUrl) return
+
+    if ((new RegExp("hackerrank.com")).test(domain)) {
+      const { github_url } = await getHackerRankInfo(nameFromUrl)
+      const githubUserName = github_url?.split("/").pop() || nameFromUrl
+      await getGithubInfoByName(githubUserName);
+
+    } else if ((new RegExp("github.com")).test(domain)) {
+      await getGithubInfoByName(nameFromUrl);
+      await getHackerRankInfo(nameFromUrl)
+    }
 
     return
   }
+  const userAvatar = React.useMemo(() => {
+    if (userInfo.github.avatar_url) return userInfo.github.avatar_url
+    return userInfo.hackerrank.avatar
+
+  }, [userInfo.github.avatar_url, userInfo.hackerrank.avatar])
+
+  const userName = React.useMemo(() => {
+    return userInfo.hackerrank.name
+
+  }, [userInfo.hackerrank.name])
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Find Profile</title>
         <meta name="description" content="Generated by create next app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -27,39 +170,123 @@ const Home: NextPage = () => {
         <SearchInput callback={searchInputHandler} />
 
 
+        <Grid container spacing={2}>
+
+          <Grid item xs={6} p={10} >
+            <Box
+              sx={{
+                width: 'auto',
+                height: 'auto',
+                // border: '0.5px solid',
+                borderColor: 'primary.dark'
+                // backgroundColor: 'white',
+                // border: '1px solid primary.dark',
+                // '&:hover': {
+                //   backgroundColor: 'primary.main',
+                //   opacity: [0.9, 0.8, 0.7],
+                // },
+              }}
+            >
+              {(userAvatar || userName) && <ListItem>
+                <ListItemAvatar>
+                  <Avatar alt="avatar" src={userAvatar} />
+                </ListItemAvatar>
+                <ListItemText primary="Name" secondary={userName} />
+              </ListItem>}
+
+              {userInfo.github?.email && <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <ImageIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary="Email" secondary={userInfo.github?.email} />
+              </ListItem>}
+              {userInfo.hackerrank?.country && <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <ImageIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary="Country" secondary={userInfo.hackerrank?.country} />
+              </ListItem>}
+
+              {userInfo.github?.blog && <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <ImageIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary="Blog" secondary={userInfo.github?.blog} />
+              </ListItem>}
+              {userInfo.hackerrank?.github_url && <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <ImageIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary="Github" secondary={userInfo.hackerrank?.github_url} />
+              </ListItem>}
+
+              {userInfo.hackerrank?.linkedin_url && <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <ImageIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary="LinkedIn" secondary={userInfo.hackerrank?.linkedin_url} />
+              </ListItem>
+              }
+
+              {userInfo.hackerrank?.leetcode_url && <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <ImageIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary="LeetCode" secondary={userInfo.hackerrank?.leetcode_url} />
+              </ListItem>}
+
+
+              {userInfo.hackerrank?.languages?.length > 0 && <>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <ImageIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Language" />
+                </ListItem>
+                {userInfo.hackerrank.languages.map((item, idx) => {
+
+                  return <Collapse in={true} timeout="auto" unmountOnExit key={idx}>
+                    <List component="div" disablePadding>
+                      <ListItemButton sx={{ pl: 4 }}>
+                        <ListItemIcon>
+                          <StarBorder />
+                        </ListItemIcon>
+                        <ListItemText primary={item[0]} />
+                      </ListItemButton>
+                    </List>
+                  </Collapse>
+                })}
+              </>}
+
+            </Box>
 
 
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+          </Grid>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+          {/* <Grid item xs={6}>
+            B
+          </Grid> */}
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+        </Grid>
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+
       </main>
+
 
       <footer className={styles.footer}>
         <a

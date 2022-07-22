@@ -3,7 +3,7 @@ import { rejects } from "assert/strict";
 const GetData = (url: string) => {
   return new Promise(resolve => {
 
-    fetch(url)
+    fetch(url, { method: "GET" })
       .then(function (res) {
         return res.json();
       })
@@ -14,4 +14,18 @@ const GetData = (url: string) => {
   })
 
 }
-export { GetData }
+const PostData = (url: string, profileUrl: string) => {
+  return new Promise(resolve => {
+
+    fetch(url, { method: "POST", body: profileUrl })
+      .then(function (res) {
+        return res.json();
+      })
+      .then(function (json) {
+        resolve(json)
+      })
+
+  })
+
+}
+export { GetData, PostData }
