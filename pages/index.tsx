@@ -19,22 +19,34 @@ import SearchInput from '../components/common/search.input';
 import styles from '../styles/Home.module.css';
 import { isValidHttpUrl } from '../Utils/crunchUrls';
 import { GetData, PostData } from '../Utils/fetchData';
+import { getGithubInfoByName, getRepoList, githubDataType } from "../Utils/github"
+import CardGithub from "../components/common/card"
+import { Chip, Stack } from '@mui/material';
 
 interface hackerRankDataType {
   linkedin_url: string
   github_url: string
   leetcode_url: string
   country: string
-  languages: []
+  languages: string[]
   avatar: string
   name: string
 }
+const initialState = {
+  searchVal: '',
+  hackerrank: {
+    linkedin_url: '', github_url: "", leetcode_url: '', country: '', languages: [], avatar: '', name: ''
+  },
+  github: {
+    blog: "", email: "", avatar_url: "",
+    topRepos: [
 
-interface githubDataType {
-  blog: string
-  email: string
-  avatar_url: string
+    ]
+  }
+
+
 }
+
 
 const domainList: any = {
   "hackerrank": {
@@ -43,23 +55,17 @@ const domainList: any = {
   },
   "github": {
     name: "github",
-    userInfoApi: "https://api.github.com/users/userName"
+    userInfoApi: "https://api.github.com/users/userName",
+    repoListApi: "https://api.github.com/users/userName/repos"
   }
 }
 const Home: NextPage = () => {
 
-  const [userInfo, setUserInfo] = useState({
-    searchVal: '',
-    hackerrank: {
-      linkedin_url: '', github_url: "", leetcode_url: '', country: '', languages: [], avatar: '', name: ''
-    },
-    github: {
-      blog: "", email: "", avatar_url: ""
-    }
-
-
-  })
-
+  const [userInfo, setUserInfo] = useState<{
+    searchVal: string,
+    hackerrank: hackerRankDataType,
+    github: githubDataType
+  }>(initialState)
 
 
   const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
@@ -83,34 +89,26 @@ const Home: NextPage = () => {
     return hackerRankdata
   }, [])
 
-  const getGithubInfoByName = React.useCallback(async (name: string) => {
 
-    const getUserProfileApi = domainList.github.userInfoApi
-    const userProfileApi = getUserProfileApi.replace('userName', name)
-    const profileUrl = '/api/hello'
-    const data: any = await PostData(profileUrl, userProfileApi)
-    const githubData: githubDataType = data || {}
-    const { blog = '', email = '', avatar_url = '' } = githubData
+  const getGithubData = React.useCallback(async (name: string) => {
 
+    const getRepoListApi = domainList.github.repoListApi.replace('userName', name)
+    const userProfileApi = domainList.github.userInfoApi.replace('userName', name)
+
+    const [gitHubBasicInfo, githubRepos] = await Promise.all([getGithubInfoByName(userProfileApi), getRepoList(getRepoListApi)])
     setUserInfo(prevState => {
       return {
         ...prevState,
         github: {
-          blog, email, avatar_url
+          ...gitHubBasicInfo,
+          topRepos: githubRepos
         }
       }
     })
-
   }, [])
-  // React.useEffect(() => {
-  //   //when github url found
-  //   if (!userInfo.github.checked && userInfo.hackerrank.github_url)
 
-  //     let githubName = userInfo.hackerrank.github_url?.split('/')?.pop() || nameFromUrl
+  console.log(userInfo.github.topRepos)
 
-  //   await getGithubInfoByName(githubName);
-
-  // }, [userInfo.hackerrank.github_url])
 
 
   const searchInputHandler = async (searchVal: string) => {
@@ -118,9 +116,11 @@ const Home: NextPage = () => {
 
     const isValidUrl = isValidHttpUrl(searchVal)
     if (!isValidUrl) {
-      await getGithubInfoByName(searchVal);
-      await getHackerRankInfo(searchVal)
+
+      getGithubData(searchVal)
+      getHackerRankInfo(searchVal);
       return
+
     }
 
     const myUrl = new URL(searchVal)
@@ -138,11 +138,11 @@ const Home: NextPage = () => {
     if ((new RegExp("hackerrank.com")).test(domain)) {
       const { github_url } = await getHackerRankInfo(nameFromUrl)
       const githubUserName = github_url?.split("/").pop() || nameFromUrl
-      await getGithubInfoByName(githubUserName);
+      getGithubData(githubUserName)
 
     } else if ((new RegExp("github.com")).test(domain)) {
-      await getGithubInfoByName(nameFromUrl);
-      await getHackerRankInfo(nameFromUrl)
+      getHackerRankInfo(nameFromUrl);
+      getGithubData(nameFromUrl)
     }
 
     return
@@ -257,19 +257,23 @@ const Home: NextPage = () => {
                   </ListItemAvatar>
                   <ListItemText primary="Language" />
                 </ListItem>
-                {userInfo.hackerrank.languages.map((item, idx) => {
 
-                  return <Collapse in={true} timeout="auto" unmountOnExit key={idx}>
-                    <List component="div" disablePadding>
-                      <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemIcon>
-                          <StarBorder />
-                        </ListItemIcon>
-                        <ListItemText primary={item[0]} />
-                      </ListItemButton>
-                    </List>
-                  </Collapse>
-                })}
+
+
+
+
+
+                <Collapse in={true} timeout="auto" unmountOnExit >
+                  <Stack spacing={1} alignItems="center">
+                    <Stack direction="row" spacing={1}>
+                      {userInfo.hackerrank.languages.map((item, idx) => {
+                        return <Chip label={item[0]} color="primary" key={idx} />
+                      })}
+                    </Stack>
+
+                  </Stack>
+                </Collapse>
+
               </>}
 
             </Box>
@@ -278,9 +282,9 @@ const Home: NextPage = () => {
 
           </Grid>
 
-          {/* <Grid item xs={6}>
-            B
-          </Grid> */}
+          <Grid item xs={3}>
+            {(userInfo.github.topRepos || [])?.length > 0 && userInfo.github.topRepos?.map((repo, idx) => <CardGithub topRepo={repo} key={'repo' + idx} />)}
+          </Grid>
 
         </Grid>
 
