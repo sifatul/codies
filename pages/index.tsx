@@ -1,28 +1,25 @@
 import ImageIcon from '@mui/icons-material/Image';
-import StarBorder from '@mui/icons-material/StarBorder';
+import { Chip, Stack, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import Grid from '@mui/material/Grid';
-import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import * as React from 'react';
 import { useState } from 'react';
+import CardGithub from "../components/common/card";
 import SearchInput from '../components/common/search.input';
 import styles from '../styles/Home.module.css';
 import { isValidHttpUrl } from '../Utils/crunchUrls';
-import { GetData, PostData } from '../Utils/fetchData';
-import { getGithubInfoByName, getRepoList, githubDataType } from "../Utils/github"
-import CardGithub from "../components/common/card"
-import { Chip, Stack } from '@mui/material';
-
+import { PostData } from '../Utils/fetchData';
+import { getGithubInfoByName, getRepoList, githubDataType } from "../Utils/github";
+import GitHubIcon from '@mui/icons-material/GitHub';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 interface hackerRankDataType {
   linkedin_url: string
   github_url: string
@@ -168,6 +165,10 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <SearchInput callback={searchInputHandler} />
+        {/* <Typography sx={{ mb: 1.5 }} color="text.secondary" align={'left'} variant="body2" component="h2">
+          https://github.com/sifatul
+      </Typography> */}
+
 
 
         <Grid container spacing={2}>
@@ -222,7 +223,7 @@ const Home: NextPage = () => {
               {userInfo.hackerrank?.github_url && <ListItem>
                 <ListItemAvatar>
                   <Avatar>
-                    <ImageIcon />
+                    <GitHubIcon />
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary="Github" secondary={userInfo.hackerrank?.github_url} />
@@ -298,9 +299,9 @@ const Home: NextPage = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Made with
           <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
+            <FavoriteRoundedIcon style={{ color: 'red' }} />
           </span>
         </a>
       </footer>
