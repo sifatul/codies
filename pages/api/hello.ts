@@ -17,7 +17,11 @@ export default async function handler(
   
  try{
   output = await  new Promise(resolve=>{
-    fetch(body).then(res => res.json()).then(output=>resolve(output))
+    fetch(body)
+    .then(res => res.json())
+    .then((result:any)=>{
+      resolve(result)
+    })
 
   })
  }catch(e){
