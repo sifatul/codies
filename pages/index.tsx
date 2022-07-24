@@ -1,5 +1,7 @@
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import ImageIcon from '@mui/icons-material/Image';
-import { Chip, Stack, Typography } from '@mui/material';
+import { Chip, Stack } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
@@ -9,17 +11,15 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import * as React from 'react';
 import { useState } from 'react';
 import CardGithub from "../components/common/card";
+import Hint from "../components/common/hint";
 import SearchInput from '../components/common/search.input';
 import styles from '../styles/Home.module.css';
 import { isValidHttpUrl } from '../Utils/crunchUrls';
 import { PostData } from '../Utils/fetchData';
 import { getGithubInfoByName, getRepoList, githubDataType } from "../Utils/github";
-import GitHubIcon from '@mui/icons-material/GitHub';
-import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 interface hackerRankDataType {
   linkedin_url: string
   github_url: string
@@ -104,11 +104,18 @@ const Home: NextPage = () => {
     })
   }, [])
 
-  console.log(userInfo.github.topRepos)
+
 
 
 
   const searchInputHandler = async (searchVal: string) => {
+
+    setUserInfo(prevState => {
+      return {
+        ...prevState,
+        searchVal
+      }
+    })
 
 
     const isValidUrl = isValidHttpUrl(searchVal)
@@ -122,8 +129,6 @@ const Home: NextPage = () => {
 
     const myUrl = new URL(searchVal)
     // const parts = ['protocol', 'hostname', 'pathname'];
-
-
 
     const domain = myUrl.hostname
     const pathname = myUrl.pathname
@@ -162,30 +167,22 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-
       <main className={styles.main}>
-        <SearchInput callback={searchInputHandler} />
-        {/* <Typography sx={{ mb: 1.5 }} color="text.secondary" align={'left'} variant="body2" component="h2">
-          https://github.com/sifatul
-      </Typography> */}
+        <div className={styles.seachContainer}>
+          <SearchInput callback={searchInputHandler} />
 
+        </div>
 
+        {!userInfo.searchVal && <Hint />}
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ paddingTop: '100px' }}>
 
           <Grid item xs={6} p={10} >
             <Box
               sx={{
                 width: 'auto',
                 height: 'auto',
-                // border: '0.5px solid',
                 borderColor: 'primary.dark'
-                // backgroundColor: 'white',
-                // border: '1px solid primary.dark',
-                // '&:hover': {
-                //   backgroundColor: 'primary.main',
-                //   opacity: [0.9, 0.8, 0.7],
-                // },
               }}
             >
               {(userAvatar || userName) && <ListItem>
@@ -259,11 +256,6 @@ const Home: NextPage = () => {
                   <ListItemText primary="Language" />
                 </ListItem>
 
-
-
-
-
-
                 <Collapse in={true} timeout="auto" unmountOnExit >
                   <Stack spacing={1} alignItems="center">
                     <Stack direction="row" spacing={1}>
@@ -278,8 +270,6 @@ const Home: NextPage = () => {
               </>}
 
             </Box>
-
-
 
           </Grid>
 
@@ -305,7 +295,7 @@ const Home: NextPage = () => {
           </span>
         </a>
       </footer>
-    </div>
+    </div >
   )
 }
 
