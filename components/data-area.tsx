@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import React from "react";
 import CardGithub from "./common/card"
-import LinkedinArea from './linkedin-are';
+import LinkedinArea from './linkedin-area';
 
 const DataArea = (props) => {
   const { userInfo } = props
