@@ -8,6 +8,7 @@ export interface githubTopRepoType {
   homepage: string
   stargazers_count: number
   visibility: "public"
+  updated_at: string
 }
 
 export interface githubDataType {

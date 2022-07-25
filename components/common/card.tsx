@@ -12,9 +12,9 @@ import IconButton from '@mui/material/IconButton';
 import StarIcon from '@mui/icons-material/Star';
 import { Chip } from '@mui/material';
 export default function OutlinedCard({ topRepo }: { topRepo: githubTopRepoType }) {
-
+  const updatedAt = new Date(topRepo.updated_at).toLocaleString();
   return (
-    <Box sx={{ minWidth: 275 }}>
+    <Box sx={{ minWidth: 275, mb: 1.5 }}>
       <Card variant="outlined">
         <React.Fragment>
           <CardContent>
@@ -25,7 +25,12 @@ export default function OutlinedCard({ topRepo }: { topRepo: githubTopRepoType }
 
               {topRepo.url?.replace('https://api.github.com/repos/', '')}
             </Typography>
-            <Chip label={topRepo.language} color="primary" />
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              {updatedAt}
+            </Typography>
+
+            {topRepo.language && <Chip sx={{ mb: 1.5 }} label={topRepo.language} color="primary" />}
+
 
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               {topRepo.description}
