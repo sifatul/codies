@@ -103,8 +103,10 @@ const Home: NextPage = () => {
   React.useEffect(() => {
     if (!userInfo.hackerrank.linkedin_url) return
     const linkedInUrl = new URL(userInfo.hackerrank.linkedin_url)
-    const { pathname } = linkedInUrl
+    let { pathname } = linkedInUrl
+    if (pathname.substr(-1) === "/") pathname = pathname.slice(0, -1);
     const linkedinUserName = pathname.split("/").pop()
+
     if (!linkedinUserName) return
 
     getLinkedinUserInfo(linkedinUserName)
