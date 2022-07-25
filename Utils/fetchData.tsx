@@ -1,4 +1,3 @@
-import { rejects } from "assert/strict";
 
 const GetData = (url: string) => {
   return new Promise(resolve => {
@@ -28,4 +27,4 @@ const PostData = (url: string, profileUrl: string) => {
   })
 
 }
-export { GetData, PostData }
+export { GetData, PostData };

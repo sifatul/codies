@@ -63,13 +63,14 @@ const Home: NextPage = () => {
     hackerrank: hackerRankDataType,
     github: githubDataType
   }>(initialState)
+  const [linkedinInfo, setLinkedinInfo] = useState({})
 
 
   const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
     const getUserProfileApi = domainList.hackerrank.userInfoApi
     const userProfileApi = getUserProfileApi.replace('userName', nameFromUrl)
-    const profileUrl = '/api/hello'
-    const data: any = await PostData(profileUrl, userProfileApi)
+    const postApiForwardingApi = '/api/hello'
+    const data: any = await PostData(postApiForwardingApi, userProfileApi)
     const hackerRankdata: hackerRankDataType = data?.model || {}
 
     const { linkedin_url = '', country = '', github_url = "", languages = [], avatar = '', leetcode_url = '', name = '' } = hackerRankdata
@@ -85,6 +86,31 @@ const Home: NextPage = () => {
 
     return hackerRankdata
   }, [])
+  const getLinkedinUserInfo = React.useCallback(async (linkedinUserName: string) => {
+
+    const linkinedApi = '/api/linkedin'
+
+    const linkedinInfo: any = await PostData(linkinedApi, linkedinUserName)
+    setLinkedinInfo(prevState => {
+      return {
+        ...prevState,
+        ...linkedinInfo
+      }
+    })
+  }, [userInfo.hackerrank.linkedin_url])
+
+
+  React.useEffect(() => {
+    if (!userInfo.hackerrank.linkedin_url) return
+    const linkedInUrl = new URL(userInfo.hackerrank.linkedin_url)
+    const { pathname } = linkedInUrl
+    const linkedinUserName = pathname.split("/").pop()
+    if (!linkedinUserName) return
+
+    getLinkedinUserInfo(linkedinUserName)
+
+
+  }, [userInfo.hackerrank.linkedin_url])
 
 
   const getGithubData = React.useCallback(async (name: string) => {
@@ -300,3 +326,6 @@ const Home: NextPage = () => {
 }
 
 export default Home
+
+
+
