@@ -1,7 +1,7 @@
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ImageIcon from '@mui/icons-material/Image';
-import { Chip, Stack } from '@mui/material';
+import { Chip, Divider, Stack, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
@@ -14,6 +14,7 @@ import Head from 'next/head';
 import * as React from 'react';
 import { useState } from 'react';
 import CardGithub from "../components/common/card";
+import LinkedinExperience from "../components/common/linkedin-experience";
 import Hint from "../components/common/hint";
 import SearchInput from '../components/common/search.input';
 import styles from '../styles/Home.module.css';
@@ -101,7 +102,7 @@ const Home: NextPage = () => {
 
 
   React.useEffect(() => {
-    if (!userInfo.hackerrank.linkedin_url) return
+    if (!userInfo.hackerrank.linkedin_url || linkedinInfo?.workExperience) return
     const linkedInUrl = new URL(userInfo.hackerrank.linkedin_url)
     let { pathname } = linkedInUrl
     if (pathname.substr(-1) === "/") pathname = pathname.slice(0, -1);
@@ -148,6 +149,7 @@ const Home: NextPage = () => {
 
     const isValidUrl = isValidHttpUrl(searchVal)
     if (!isValidUrl) {
+      console.log("not a url")
 
       getGithubData(searchVal)
       getHackerRankInfo(searchVal);
@@ -159,11 +161,16 @@ const Home: NextPage = () => {
     // const parts = ['protocol', 'hostname', 'pathname'];
 
     const domain = myUrl.hostname
-    const pathname = myUrl.pathname
+    let pathname = myUrl.pathname
+    if (pathname.substr(-1) === "/") pathname = pathname.slice(0, -1);
     const nameFromUrl = pathname.split("/").pop()
 
 
-    if (!nameFromUrl) return
+    if (!nameFromUrl) {
+      console.log("no name found")
+      return
+    }
+
 
     if ((new RegExp("hackerrank.com")).test(domain)) {
       const { github_url } = await getHackerRankInfo(nameFromUrl)
@@ -173,6 +180,11 @@ const Home: NextPage = () => {
     } else if ((new RegExp("github.com")).test(domain)) {
       getHackerRankInfo(nameFromUrl);
       getGithubData(nameFromUrl)
+    }
+    else if ((new RegExp("linkedin.com")).test(domain)) {
+      // getHackerRankInfo(nameFromUrl);
+      // getGithubData(nameFromUrl)
+      getLinkedinUserInfo(nameFromUrl)
     }
 
     return
@@ -204,8 +216,35 @@ const Home: NextPage = () => {
         {!userInfo.searchVal && <Hint />}
 
         <Grid container spacing={2} sx={{ paddingTop: '100px' }}>
+          <Grid item xs={8} p={2}>
 
-          <Grid item xs={6} p={10} >
+            {(userInfo.github.topRepos || [])?.length > 0 && <>
+              <Typography variant="h5" component="div">
+                Projects
+            </Typography>
+
+              <Divider sx={{ mb: 5 }} />
+
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+
+                {userInfo.github.topRepos?.map((repo, idx) => <CardGithub topRepo={repo} key={'repo' + idx} />)}
+              </div>
+            </>}
+
+            {(linkedinInfo?.workExperience || [])?.length > 0 && <>
+              <Typography variant="h5" component="div">
+                Experience
+            </Typography>
+
+              <Divider sx={{ mb: 5 }} />
+
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+
+                {linkedinInfo?.workExperience.map((experience, idx) => <LinkedinExperience experiences={experience} key={'repo' + idx} />)}
+              </div>
+            </>}
+          </Grid>
+          <Grid item xs={4} p={10} >
             <Box
               sx={{
                 width: 'auto',
@@ -301,9 +340,7 @@ const Home: NextPage = () => {
 
           </Grid>
 
-          <Grid item xs={3}>
-            {(userInfo.github.topRepos || [])?.length > 0 && userInfo.github.topRepos?.map((repo, idx) => <CardGithub topRepo={repo} key={'repo' + idx} />)}
-          </Grid>
+
 
         </Grid>
 
