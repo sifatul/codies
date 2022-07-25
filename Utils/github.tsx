@@ -18,10 +18,10 @@ export interface githubDataType {
   topRepos?: githubTopRepoType[]
 }
 
-
+const forwardApiPath = '/api/forward-api'
 const getGithubInfoByName = async (userProfileApi: string) => {
-  const profileUrl = '/api/hello'
-  const data: any = await PostData(profileUrl, userProfileApi)
+
+  const data: any = await PostData(forwardApiPath, userProfileApi)
   const githubData: githubDataType = data || {}
   const { blog = '', email = '', avatar_url = '' } = githubData
   return { blog, email, avatar_url }
@@ -29,8 +29,7 @@ const getGithubInfoByName = async (userProfileApi: string) => {
 }
 
 const getRepoList = async (getRepoListApi: string) => {
-  const profileUrl = '/api/hello'
-  const data: any = await PostData(profileUrl, getRepoListApi)
+  const data: any = await PostData(forwardApiPath, getRepoListApi)
   if (data.message === "Not Found") return []
   console.log("data: ", data)
   if (!data || data?.length <= 0) return []
