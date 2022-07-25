@@ -34,3 +34,14 @@ This project is at its earliest stage. It requires development at every stage. A
 To contribute in development, follow the following steps: 
 - fork the project and PR to main branch
 - meaning commits message, PR title or description would be appriciated
+
+## What's coming next?
+
+Some new features that can be developed soon:
+
+- show data from leetcode
+- show data from codepen
+- show data from linkedin
+- add badges beside the content to represent source
+## Legal
+This code is in no way affiliated with, authorized, maintained, sponsored or endorsed by Linkedin, github, leetcode or any of its affiliates or subsidiaries. This is an independent and unofficial API.
