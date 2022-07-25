@@ -1,6 +1,13 @@
+
+[![TypeScript](https://badgen.net/badge/icon/typescript?icon=typescript&label)](https://typescriptlang.org)
+
 ## What
 [`find-profile`](https://find-profile.vercel.app/) is an intergrated platform to get cummulative summary of any developer's profiles.
 
+### Result Sources
+
+![image](https://img.shields.io/badge/-Hackerrank-2EC866?style=for-the-badge&logo=HackerRank&logoColor=white)
+![image](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white) 
 ## Why
 When we try to know about any developer we need to search in many different platforms like github, linkedIn, hackerrank, leetcode etc to get better insights about the developers.
 
@@ -27,4 +34,3 @@ This project is at its earliest stage. It requires development at every stage. A
 To contribute in development, follow the following steps: 
 - fork the project and PR to main branch
 - meaning commits message, PR title or description would be appriciated
-
