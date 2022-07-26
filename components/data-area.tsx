@@ -45,7 +45,7 @@ const domainList: any = {
     repoListApi: "https://api.github.com/users/userName/repos"
   }
 }
-const DataArea = (props) => {
+const DataArea = (props: any) => {
   const { searchVal } = props
   const { hostname = '', pathname = '', searchBy, originalSearchVal } = searchVal
   console.log(searchVal)

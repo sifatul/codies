@@ -1,10 +1,10 @@
-import { Typography } from "@mui/material"
+import { Divider, Typography } from "@mui/material"
 import React from "react"
 import { useState } from "react"
 import { PostData } from "../Utils/fetchData"
 import LinkedinExperience from './common/linkedin-experience'
 
-const LinkedinArea = (props) => {
+const LinkedinArea = (props: any) => {
   const { linkedin_url } = props
 
   const [linkedinInfo, setLinkedinInfo] = useState({})
@@ -48,7 +48,7 @@ const LinkedinArea = (props) => {
 
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-        {linkedinInfo?.workExperience.map((experience, idx) => <LinkedinExperience experiences={experience} key={'repo' + idx} />)}
+        {linkedinInfo?.workExperience.map((experience: any, idx: string) => <LinkedinExperience experiences={experience} key={'repo' + idx} />)}
       </div>
     </>}
   </>
