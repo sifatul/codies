@@ -18,7 +18,6 @@ const CodePenArea = (props: any) => {
     //extract name from the url
     codePenUserName = pathname.split("/").pop()
   }
-  if (!codePenUserName) return <></>
   const codepenInfoFetchApi = codepenInfoFetchUrl.replace('userName', codePenUserName)
 
 
@@ -39,7 +38,7 @@ const CodePenArea = (props: any) => {
     getCodepenData()
   }, [])
   console.log(popularPen)
-
+  if (!codePenUserName) return <></>
 
   return <div style={{ display: 'flex' }}>
     {
