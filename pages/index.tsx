@@ -7,140 +7,42 @@ import Hint from "../components/common/hint";
 import SearchInput from '../components/common/search.input';
 import DataArea from '../components/data-area';
 import styles from '../styles/Home.module.css';
-import { isValidHttpUrl } from '../Utils/crunchUrls';
-import { PostData } from '../Utils/fetchData';
-import { getGithubInfoByName, getRepoList, githubDataType } from "../Utils/github";
-interface hackerRankDataType {
-  linkedin_url: string
-  github_url: string
-  leetcode_url: string
-  country: string
-  languages: string[]
-  avatar: string
-  name: string
-}
-const initialState = {
-  searchVal: '',
-  hackerrank: {
-    linkedin_url: '', github_url: "", leetcode_url: '', country: '', languages: [], avatar: '', name: ''
-  },
-  github: {
-    blog: "", email: "", avatar_url: "",
-    topRepos: [
+import { SearchByType } from '../types/common.types';
 
-    ]
-  }
-
-
-}
-
-
-const domainList: any = {
-  "hackerrank": {
-    name: "hackerrank",
-    userInfoApi: "https://www.hackerrank.com/rest/contests/master/hackers/userName/profile",
-  },
-  "github": {
-    name: "github",
-    userInfoApi: "https://api.github.com/users/userName",
-    repoListApi: "https://api.github.com/users/userName/repos"
-  }
-}
 const Home: NextPage = () => {
 
-  const [userInfo, setUserInfo] = useState<{
-    searchVal: string,
-    hackerrank: hackerRankDataType,
-    github: githubDataType
-  }>(initialState)
+  const [searchVal, setSearchVal] = useState({
+    protocol: '', hostname: '', pathname: '',
+    originalSearchVal: '',
+    searchBy: SearchByType.NONE
+  })
+  console.log(searchVal)
 
-
-
-  const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
-    const getUserProfileApi = domainList.hackerrank.userInfoApi
-    const userProfileApi = getUserProfileApi.replace('userName', nameFromUrl)
-    const postApiForwardingApi = '/api/forward-api'
-    const data: any = await PostData(postApiForwardingApi, userProfileApi)
-    const hackerRankdata: hackerRankDataType = data?.model || {}
-
-    const { linkedin_url = '', country = '', github_url = "", languages = [], avatar = '', leetcode_url = '', name = '' } = hackerRankdata
-
-    setUserInfo(prevState => {
-      return {
-        ...prevState,
-        hackerrank: {
-          linkedin_url, country, github_url, languages, avatar, leetcode_url, name
-        }
-      }
-    })
-
-    return hackerRankdata
-  }, [])
-
-
-  const getGithubData = React.useCallback(async (name: string) => {
-
-    const getRepoListApi = domainList.github.repoListApi.replace('userName', name)
-    const userProfileApi = domainList.github.userInfoApi.replace('userName', name)
-
-    const [gitHubBasicInfo, githubRepos] = await Promise.all([getGithubInfoByName(userProfileApi), getRepoList(getRepoListApi)])
-    setUserInfo(prevState => {
-      return {
-        ...prevState,
-        github: {
-          ...gitHubBasicInfo,
-          topRepos: githubRepos
-        }
-      }
-    })
-  }, [])
 
 
   const searchInputHandler = async (searchVal: string) => {
+    if (!searchVal) return
+    try {
+      let { protocol, hostname, pathname } = new URL(searchVal)
+      const isValidUrl = (protocol === "http:" || protocol === "https:")
 
-    setUserInfo(prevState => {
-      return {
-        ...prevState,
-        searchVal
-      }
-    })
+      //remove trailing slash
+      if (pathname.substr(-1) === "/") pathname = pathname.slice(0, -1);
 
-
-    const isValidUrl = isValidHttpUrl(searchVal)
-    if (!isValidUrl) {
-      console.log("not a url")
-
-      getGithubData(searchVal)
-      getHackerRankInfo(searchVal);
-      return
-
+      setSearchVal({
+        protocol, hostname, pathname, originalSearchVal: searchVal, searchBy: SearchByType.URL
+      })
+    } catch (e) {
+      console.error(e)
+      setSearchVal(prevState => {
+        return {
+          ...prevState,
+          searchBy: SearchByType.NAME,
+          originalSearchVal: searchVal
+        }
+      })
     }
 
-    const myUrl = new URL(searchVal)
-    // const parts = ['protocol', 'hostname', 'pathname'];
-
-    const domain = myUrl.hostname
-    let pathname = myUrl.pathname
-    if (pathname.substr(-1) === "/") pathname = pathname.slice(0, -1);
-    const nameFromUrl = pathname.split("/").pop()
-
-
-    if (!nameFromUrl) {
-      console.log("no name found")
-      return
-    }
-
-
-    if ((new RegExp("hackerrank.com")).test(domain)) {
-      const { github_url } = await getHackerRankInfo(nameFromUrl)
-      const githubUserName = github_url?.split("/").pop() || nameFromUrl
-      getGithubData(githubUserName)
-
-    } else if ((new RegExp("github.com")).test(domain)) {
-      getHackerRankInfo(nameFromUrl);
-      getGithubData(nameFromUrl)
-    }
-    return
   }
 
   return (
@@ -157,9 +59,9 @@ const Home: NextPage = () => {
 
         </div>
 
-        {!userInfo.searchVal && <Hint />}
+        {searchVal.searchBy === SearchByType.NONE && <Hint />}
 
-        <DataArea userInfo={userInfo} />
+        {searchVal.searchBy !== SearchByType.NONE && <DataArea searchVal={searchVal} />}
       </main>
 
 

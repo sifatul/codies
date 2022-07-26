@@ -6,8 +6,11 @@
 
 ### Result Sources
 
-![image](https://img.shields.io/badge/-Hackerrank-2EC866?style=for-the-badge&logo=HackerRank&logoColor=white)
+ 
+
 ![image](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white) 
+![image](https://img.shields.io/badge/-Hackerrank-2EC866?style=for-the-badge&logo=HackerRank&logoColor=white)
+![CodePen](https://img.shields.io/badge/Codepen-000000?style=for-the-badge&logo=codepen&logoColor=white)
 ## Why
 When we try to know about any developer we need to search in many different platforms like github, linkedIn, hackerrank, leetcode etc to get better insights about the developers.
 
@@ -40,7 +43,6 @@ To contribute in development, follow the following steps:
 Some new features that can be developed soon:
 
 - show data from leetcode
-- show data from codepen
 - show data from linkedin
 - add badges beside the content to represent source
 ## Legal

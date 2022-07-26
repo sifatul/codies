@@ -31,7 +31,6 @@ const getGithubInfoByName = async (userProfileApi: string) => {
 const getRepoList = async (getRepoListApi: string) => {
   const data: any = await PostData(forwardApiPath, getRepoListApi)
   if (data.message === "Not Found") return []
-  console.log("data: ", data)
   if (!data || data?.length <= 0) return []
 
   const onlyPublicRepo: githubTopRepoType[] = (data || []).filter((item: githubTopRepoType) => item.visibility === "public")

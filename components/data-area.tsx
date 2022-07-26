@@ -3,12 +3,140 @@ import ImageIcon from '@mui/icons-material/Image';
 import { Avatar, Chip, Divider, Grid, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from "@mui/material";
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
-import React from "react";
-import CardGithub from "./common/card"
-import LinkedinArea from './linkedin-area';
+import React, { useCallback, useEffect, useState } from "react";
+import { SearchByType } from '../types/common.types';
+import { PostData } from '../Utils/fetchData';
+import { getGithubInfoByName, getRepoList, githubDataType } from '../Utils/github';
+import CodePenArea from './codepen-area';
+import CardGithub from "./common/card";
+interface hackerRankDataType {
+  linkedin_url: string
+  github_url: string
+  leetcode_url: string
+  country: string
+  languages: string[]
+  avatar: string
+  name: string
+}
+const initialState = {
 
+  hackerrank: {
+    linkedin_url: '', github_url: "", leetcode_url: '', country: '', languages: [], avatar: '', name: ''
+  },
+  github: {
+    blog: "", email: "", avatar_url: "",
+    topRepos: [
+
+    ]
+  }
+
+
+}
+
+
+const domainList: any = {
+  "hackerrank": {
+    name: "hackerrank",
+    userInfoApi: "https://www.hackerrank.com/rest/contests/master/hackers/userName/profile",
+  },
+  "github": {
+    name: "github",
+    userInfoApi: "https://api.github.com/users/userName",
+    repoListApi: "https://api.github.com/users/userName/repos"
+  }
+}
 const DataArea = (props) => {
-  const { userInfo } = props
+  const { searchVal } = props
+  const { hostname = '', pathname = '', searchBy, originalSearchVal } = searchVal
+  console.log(searchVal)
+  const [userInfo, setUserInfo] = useState<{
+
+    hackerrank: hackerRankDataType,
+    github: githubDataType
+  }>(initialState)
+
+
+  const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
+    const getUserProfileApi = domainList.hackerrank.userInfoApi
+    const userProfileApi = getUserProfileApi.replace('userName', nameFromUrl)
+    const postApiForwardingApi = '/api/forward-api'
+    const data: any = await PostData(postApiForwardingApi, userProfileApi)
+    const hackerRankdata: hackerRankDataType = data?.model || {}
+
+    const { linkedin_url = '', country = '', github_url = "", languages = [], avatar = '', leetcode_url = '', name = '' } = hackerRankdata
+
+    setUserInfo(prevState => {
+      return {
+        ...prevState,
+        hackerrank: {
+          linkedin_url, country, github_url, languages, avatar, leetcode_url, name
+        }
+      }
+    })
+
+    return hackerRankdata
+  }, [])
+
+
+  const getGithubData = React.useCallback(async (name: string) => {
+
+    const getRepoListApi = domainList.github.repoListApi.replace('userName', name)
+    const userProfileApi = domainList.github.userInfoApi.replace('userName', name)
+
+    const [gitHubBasicInfo, githubRepos] = await Promise.all([getGithubInfoByName(userProfileApi), getRepoList(getRepoListApi)])
+    setUserInfo(prevState => {
+      return {
+        ...prevState,
+        github: {
+          ...gitHubBasicInfo,
+          topRepos: githubRepos
+        }
+      }
+    })
+  }, [])
+
+  const getDataFromUrl = useCallback(() => {
+    if (!hostname || !pathname) return
+    const nameFromUrl = pathname.split("/").pop()
+    console.log(nameFromUrl)
+    if ((new RegExp("hackerrank.com")).test(hostname)) {
+      getHackerRankInfo(nameFromUrl).then(output => {
+        const { github_url } = output
+        const githubUserName = github_url?.split("/").pop() || nameFromUrl
+        getGithubData(githubUserName)
+      })
+
+
+    } else if ((new RegExp("github.com")).test(hostname)) {
+      getHackerRankInfo(nameFromUrl);
+      getGithubData(nameFromUrl)
+    }
+    return
+  }, [hostname, pathname])
+  const getDataFromName = useCallback(async () => {
+
+    if (!originalSearchVal) return
+
+    const hackerRankInfo = await getHackerRankInfo(originalSearchVal)
+    const { github_url } = hackerRankInfo
+    const githubUserName = github_url?.split("/").pop() || originalSearchVal
+    getGithubData(githubUserName)
+
+  }, [originalSearchVal])
+
+
+  useEffect(() => {
+    console.log(searchBy)
+    if (searchBy === SearchByType.URL) {
+
+      getDataFromUrl()
+    } else if (searchBy === SearchByType.NAME) {
+
+      getDataFromName()
+    }
+
+  }, [searchBy])
+
 
   const userAvatar = React.useMemo(() => {
     if (userInfo.github.avatar_url) return userInfo.github.avatar_url
@@ -20,6 +148,8 @@ const DataArea = (props) => {
     return userInfo.hackerrank.name
 
   }, [userInfo.hackerrank.name])
+
+
 
   return <>
 
@@ -39,7 +169,8 @@ const DataArea = (props) => {
           </div>
         </>}
 
-        <LinkedinArea linkedin_url={userInfo?.hackerrank.linkedin_url} />
+        {/* <LinkedinArea linkedin_url={userInfo?.hackerrank.linkedin_url} /> */}
+        <CodePenArea {...searchVal} />
       </Grid>
       <Grid item xs={4} p={10} >
         <Box

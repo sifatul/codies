@@ -40,7 +40,7 @@ export default function CustomizedInputBase({ callback }: propsType) {
       } else {
         placeholderIndex = (placeholderIndex + 1)
       }
-    }, 150);
+    }, 220);
 
   }, [placeholder])
 
