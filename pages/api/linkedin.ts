@@ -15,7 +15,7 @@ export default async function handler(
   output = await  new Promise(resolve=>{
     scrapper({
       url:body, // ex: natsu-gupta/
-  }).then(res=>{
+  }).then((res: any)=>{
     resolve(res)
     console.warn(res)
   });
