@@ -7,15 +7,15 @@ const Hint = () => {
 
     <p> Now you can get a summary of developers profile by inserting </p>
     <div>Profile <strong>user name</strong> or <strong>profile link</strong> from:</div>
-    <Image
+    <img
       alt="github icon"
-      src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="100px" height="30px" />
-    <Image
+      src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" height="30px" />
+    <img
       alt="hackerrank icon"
-      src="https://img.shields.io/badge/-Hackerrank-2EC866?style=for-the-badge&logo=HackerRank&logoColor=white" width="100px" height="30px" />
-    <Image
+      src="https://img.shields.io/badge/-Hackerrank-2EC866?style=for-the-badge&logo=HackerRank&logoColor=white" height="30px" />
+    <img
       alt="codepen icon"
-      src="https://img.shields.io/badge/Codepen-000000?style=for-the-badge&logo=codepen&logoColor=white" width="100px" height="30px" />
+      src="https://img.shields.io/badge/Codepen-000000?style=for-the-badge&logo=codepen&logoColor=white" height="30px" />
 
 
   </div >
