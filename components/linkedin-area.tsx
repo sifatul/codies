@@ -3,7 +3,7 @@ import React from "react"
 import { useState } from "react"
 import { PostData } from "../Utils/fetchData"
 import LinkedinExperience from './common/linkedin-experience'
-interface LinkedinExperienceType {
+export interface LinkedinExperienceType {
   description: string
   position: string
   from: string
