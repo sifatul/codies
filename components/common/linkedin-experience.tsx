@@ -8,6 +8,7 @@ import { LinkedinExperienceType } from '../linkedin-area';
 export default function OutlinedCard({ experience }: { experience: LinkedinExperienceType }) {
 
   const updatedAt = new Date(experience.from).toLocaleString();
+
   return (
     <Box sx={{ minWidth: 275, mb: 1.5, maxWidth: '50%' }}>
       <Card variant="outlined">

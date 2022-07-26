@@ -1,0 +1,77 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-react-hooks",
+    "tslint:latest",
+    "tslint-react",
+    "tslint-config-prettier"
+  ],
+  "rulesDirectory": [
+    "tslint-plugin-prettier"
+  ],
+  "jsRules": {
+    "no-unused-expression": true
+  },
+  "rules": {
+    "forin": false,
+    "no-shadowed-variable": false,
+    "import-name": false,
+    "align": false,
+   
+    "indent": [true, "spaces", 2],
+    "variable-name": {
+      "options": ["ban-keywords", "check-format", "allow-pascal-case", "require-const-for-all-caps"]
+    },
+    "ban-types": [false],
+    "arrow-parens": false,
+    "typedef": [false, "property-declaration", "object-destructuring"],
+    "max-line-length": [false, 130],
+    "interface-over-type-literal": true,
+    "react-hooks-nesting": {
+      "severity": "off",
+      "options": {
+        "detect-hooks-from-non-react-namespace": true
+      }
+    },
+    "no-object-literal-type-assertion": false,
+    "semicolon": [false, "always"],
+    "no-console": [false, "log", "error"],
+    "await-promise": true,
+    "no-async-without-await": false,
+    "no-floating-promises": [false, { "ignoreVoid": true }],
+    "no-null-keyword": false,
+    "no-var-keyword": true,
+    "radix": false,
+    "prefer-conditional-expression": [true, "check-else-if"],
+    "no-any": [false, { "ignore-rest-args": true }],
+    "one-variable-per-declaration": [true, "ignore-for-loop"],
+    "no-implicit-dependencies": false,
+    "jsx-no-multiline-js": false,
+    "jsx-no-lambda": false,
+    "jsx-boolean-value": false,
+    "no-submodule-imports": false,
+    "jsx-wrap-multiline": false,
+    "import-blacklist": [true, { "react": ["Component"] }],
+    "unnecessary-else": [true, { "allow-else-if": false }], 
+    "cyclomatic-complexity": [false, 10],
+    "member-access": [false],
+    "newline-before-return": true,
+    "prefer-object-spread": true,
+    "prefer-template": false,
+    "object-literal-shorthand": false,
+    "no-default-export": false,
+    "no-var-requires": false,
+    "no-string-literal": false,
+    "no-empty": false,
+    "quotemark": [true, "double", "avoid-escape", "avoid-template"],
+    "interface-name": [false, "always-prefix"],
+    "prettier": true
+  },
+  "linterOptions": {
+    "exclude": [
+      "node_modules", 
+      "**/*.tsx", 
+      "**/*.js"
+    ]
+  }
+}

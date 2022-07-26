@@ -1,29 +1,26 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from "next";
 const scrapper = require("linkedin-scrapper");
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  const body = req.body
-  
-  let output ={}
-  
- try{
+  const body = req.body;
 
+  let output = {};
 
-  output = await  new Promise(resolve=>{
-    scrapper({
-      url:body, // ex: natsu-gupta/
-  }).then((res: any)=>{
-    resolve(res)
-    console.warn(res)
-  });
+  try {
+    output = await new Promise((resolve) => {
+      scrapper({
+        url: body, // ex: natsu-gupta/
+      }).then((res: any) => {
+        resolve(res);
+        console.warn(res);
+      });
+    });
+  } catch (e) {
+    console.log(e);
+  }
 
-  })
- }catch(e){
-   console.log(e)
- }
-
-  res.status(200).json(output)
+  res.status(200).json(output);
 }
