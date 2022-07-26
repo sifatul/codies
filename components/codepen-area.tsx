@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from "react";
 import { SearchByType } from '../types/common.types';
-import { isValidHttpUrl } from '../Utils/crunchUrls';
 import { GetData } from "../Utils/fetchData";
 
 const codepenInfoFetchUrl = 'https://api.rss2json.com/v1/api.json?rss_url=https://codepen.io/userName/popular/feed/'
-const CodePenArea = (props) => {
+const CodePenArea = (props: any) => {
   const { originalSearchVal, searchBy, pathname } = props
 
   let codePenUserName = originalSearchVal
