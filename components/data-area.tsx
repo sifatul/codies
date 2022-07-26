@@ -169,7 +169,7 @@ const DataArea = (props: any) => {
           </div>
         </>}
 
-        {/* <LinkedinArea linkedin_url={userInfo?.hackerrank.linkedin_url} /> */}
+        {/* {userInfo?.hackerrank.linkedin_url && <LinkedinArea linkedin_url={userInfo?.hackerrank.linkedin_url} />} */}
         <CodePenArea {...searchVal} />
       </Grid>
       <Grid item xs={4} p={10} >

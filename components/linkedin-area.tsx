@@ -19,11 +19,11 @@ const LinkedinArea = (props: any) => {
         ...linkedinInfo
       }
     })
-  }, [linkedin_url])
+  }, [])
 
 
   React.useEffect(() => {
-    if (!linkedin_url || linkedinInfo?.workExperience) return
+
     const linkedInUrl = new URL(linkedin_url)
     let { pathname } = linkedInUrl
     if (pathname.substr(-1) === "/") pathname = pathname.slice(0, -1);
@@ -34,7 +34,7 @@ const LinkedinArea = (props: any) => {
     getLinkedinUserInfo(linkedinUserName)
 
 
-  }, [linkedin_url])
+  }, [])
 
 
   return <>
