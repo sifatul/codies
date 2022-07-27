@@ -12,10 +12,10 @@
 ![image](https://img.shields.io/badge/-Hackerrank-2EC866?style=for-the-badge&logo=HackerRank&logoColor=white)
 ![CodePen](https://img.shields.io/badge/Codepen-000000?style=for-the-badge&logo=codepen&logoColor=white)
 ## Why
-When we try to know about any developer we need to search in many different platforms like github, linkedIn, hackerrank, leetcode etc to get better insights about the developers.
+When we try to know about any developer we need to search in many different platforms like Github, LinkedIn, HackerRank, Leetcode etc to get better insights about the developers.
 
 ## How
-Fetch basic but vital informations from different platforms like github, linkedIn etc and present in a single page
+Fetch basic but vital informations from different platforms like Github, LinkedIn etc and present in a single page
 
 ## How to run the project locally
 
@@ -28,22 +28,39 @@ npm run dev
 ## How to contribute
 
 This project is at its earliest stage. It requires development at every stage. Anyone no matter beginner or expert can participate in :
-- planning
-- designing
-- development
-- maintainance 
+- Planning
+- Designing
+- Development
+- Maintenance 
 
+To contribute in development, please follow the following steps: 
+- Fork the project and create pull request(PR) to main branch
+- Meaningful commit messages, PR title or description
 
-To contribute in development, follow the following steps: 
-- fork the project and PR to main branch
-- meaning commits message, PR title or description would be appriciated
+## FAQ
+- Frontend/Backend -> NextJS
+- Package Manager -> Yarn
+(More to be added...)
 
-## What's coming next?
+## List of features
+- Show data from Leetcode
+- Show data from LinkedIn
+- Add badges beside the content to represent source
+(More to be added...)
 
-Some new features that can be developed soon:
+## List of issues
+- Legal issues incase of using 3rd party APIs
+- No availability of public APIs
+- Incorrect search result if there are multiple people with the same name across different platforms (to be addressed later after MVP)
+(More to be added...)
 
-- show data from leetcode
-- show data from linkedin
-- add badges beside the content to represent source
+## Priorities
+- Organise project structure (Folder structure, eslint, tslint, prettier config, etc)
+- Involve more contributors
+- Integrate available platforms in the system
+- Find public APIs for integration
+- Create APIs if no public API available.
+(More to be added...)
+
 ## Legal
 This code is in no way affiliated with, authorized, maintained, sponsored or endorsed by Linkedin, github, leetcode or any of its affiliates or subsidiaries. This is an independent and unofficial API.
