@@ -135,7 +135,7 @@ const DataArea = (props: any) => {
       getDataFromName()
     }
 
-  }, [searchBy])
+  }, [searchBy, originalSearchVal])
 
 
   const userAvatar = React.useMemo(() => {
