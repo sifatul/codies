@@ -63,6 +63,12 @@ export default function CustomizedInputBase({ callback }: propsType) {
         inputProps={{ 'aria-label': 'search google maps' }}
         onChange={e => { setSearchVal(e.target.value) }}
         error={true}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            inputSubmitHandler()
+            e.preventDefault();
+          }
+        }}
 
       />
 
