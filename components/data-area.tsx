@@ -9,6 +9,7 @@ import { PostData } from '../Utils/fetchData';
 import { getGithubInfoByName, getRepoList, githubDataType } from '../Utils/github';
 import CodePenArea from './codepen-area';
 import CardGithub from "./common/card";
+import LeetCodeArea from '../components/leetcode-area'
 interface hackerRankDataType {
   linkedin_url: string
   github_url: string
@@ -171,6 +172,7 @@ const DataArea = (props: any) => {
 
         {/* {userInfo?.hackerrank.linkedin_url && <LinkedinArea linkedin_url={userInfo?.hackerrank.linkedin_url} />} */}
         <CodePenArea {...searchVal} />
+        <LeetCodeArea {...searchVal} />
       </Grid>
       <Grid item xs={4} p={10} >
         <Box
