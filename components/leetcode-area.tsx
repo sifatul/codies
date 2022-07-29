@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { SearchByType } from "../types/common.types"
-import { ForwardPostData, PostData } from "../Utils/fetchData"
 
 const LeetCodeApi = "https://leetcode.com/graphql/"
 const LeetCodeArea = (props: any) => {
