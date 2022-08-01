@@ -17,6 +17,7 @@
     "axios": "^0.27.2",
     "graphql": "^16.5.0",
     "graphql-request": "^4.3.0",
+    "eslint-config-prettier": "^8.5.0",
     "linkedin-scrapper": "^1.2.1",
     "next": "12.2.2",
     "node-fetch": "^3.2.9",

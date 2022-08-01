@@ -1,6 +1,6 @@
 enum SearchByType {
-  NAME = "name",
-  URL = "url",
-  NONE = "none"
+    NAME = 'name',
+    URL = 'url',
+    NONE = 'none',
 }
-export { SearchByType }
+export { SearchByType };
