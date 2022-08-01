@@ -103,7 +103,11 @@ export default function MiniDrawer(props) {
   const { children, searchInputHandler, searchVal } = props
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -192,7 +196,11 @@ export default function MiniDrawer(props) {
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{
+        flexGrow: 1, p: 3,
+        width: { sm: `calc(100% - ${drawerWidth}px)` }
+
+      }}>
 
         <DataArea searchVal={searchVal} />
 

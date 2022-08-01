@@ -107,6 +107,7 @@ const DataArea = (props: any) => {
     }, []);
 
     const getGithubData = React.useCallback(async (name: string) => {
+        if (window == undefined) return;
         const getRepoListApi = domainList.github.repoListApi.replace('userName', name);
         const userProfileApi = domainList.github.userInfoApi.replace('userName', name);
 

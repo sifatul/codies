@@ -8,6 +8,7 @@ import * as React from 'react';
 
 interface propsType {
     callback: Function;
+    value: string;
 }
 const passedPlaceholderList = ['profile link', 'username'];
 export default function CustomizedInputBase({ callback, value }: propsType) {
