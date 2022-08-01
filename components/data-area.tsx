@@ -3,6 +3,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import {
     Avatar,
     Chip,
+    Container,
     Divider,
     Grid,
     ListItem,
@@ -165,9 +166,10 @@ const DataArea = (props: any) => {
     }, [userInfo.hackerrank.name]);
 
     return (
-        <>
+        <Container maxWidth="lg">
+
             <Grid container spacing={2} sx={{ paddingTop: '100px' }}>
-                <Grid item xs={8} p={2}>
+                <Grid item lg={8} md={12} xs={12} p={2}>
                     {(userInfo.github.topRepos || [])?.length > 0 && (
                         <>
                             <Typography variant='h5' component='div'>
@@ -188,7 +190,7 @@ const DataArea = (props: any) => {
                     <CodePenArea {...searchVal} />
                     <LeetCodeArea {...searchVal} />
                 </Grid>
-                <Grid item xs={4} p={10}>
+                <Grid item lg={4} md={12} xs={12} p={10} >
                     <Box
                         sx={{
                             width: 'auto',
@@ -312,7 +314,7 @@ const DataArea = (props: any) => {
                     </Box>
                 </Grid>
             </Grid>
-        </>
+        </Container>
     );
 };
 
