@@ -20,14 +20,14 @@ const UserInfoArea = (props: any) => {
         // bgcolor: 'blue'
       }}
     >
-      {(userAvatar || userName) && (
+      {/* {(userAvatar || userName) && (
         <ListItem>
           <ListItemAvatar>
             <Avatar alt='avatar' src={userAvatar} />
           </ListItemAvatar>
           <ListItemText primary='Name' secondary={userName} />
         </ListItem>
-      )}
+      )} */}
 
       {email && (
         <ListItem>
@@ -39,19 +39,7 @@ const UserInfoArea = (props: any) => {
           <ListItemText primary='Email' secondary={email} />
         </ListItem>
       )}
-      {country && (
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <LanguageIcon color="primary" />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            primary='Country'
-            secondary={country}
-          />
-        </ListItem>
-      )}
+
 
       {blog && (
         <ListItem>

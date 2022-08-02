@@ -9,6 +9,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import LeetCodeArea from '../components/leetcode-area';
 import { useAppDispatch, useAppSelector } from '../store';
 import { getHackerRankUserInfo, setHackerRankInfo } from '../store/platforms/hackerrank';
+import { getUserState, setCountry, setName, setProfilePic } from '../store/user/basicInfo';
 import { getGithubUserInfo, setGithubUserInfo } from '../store/platforms/github';
 import { SearchByType } from '../types/common.types';
 import { PostData } from '../Utils/fetchData';
@@ -57,7 +58,10 @@ const DataArea = (props: any) => {
         const postApiForwardingApi = '/api/forward-api';
         const data: any = await PostData(postApiForwardingApi, userProfileApi);
         const hackerRankdata: hackerRankDataType = data?.model || {};
-
+        const { name, avatar, country } = hackerRankdata
+        if (name) dispatch(setName(name))
+        if (avatar) dispatch(setProfilePic(avatar))
+        if (country) dispatch(setCountry(country))
         dispatch(setHackerRankInfo(hackerRankdata))
         return hackerRankdata
 

@@ -46,6 +46,18 @@ export const userSlice = createSlice({
     ) => {
       state.email = action.payload;
     },
+    setProfilePic: (
+      state: Draft<typeof initialState>,
+      action: PayloadAction<typeof initialState.email>
+    ) => {
+      state.profilePic = action.payload;
+    },
+    setCountry: (
+      state: Draft<typeof initialState>,
+      action: PayloadAction<typeof initialState.email>
+    ) => {
+      state.country = action.payload;
+    },
     setUserInfo: (
       state: Draft<typeof initialState>,
       action: PayloadAction<UserState>
@@ -59,6 +71,6 @@ export const userSlice = createSlice({
 export const getUserState = (state: { user: UserState }) => state.user;
 
 // Exports all actions
-export const { setName, setEmail, setUserInfo } = userSlice.actions;
+export const { setName, setEmail, setUserInfo, setProfilePic, setCountry } = userSlice.actions;
 
 export default userSlice.reducer;
