@@ -6,7 +6,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ImageIcon from '@mui/icons-material/Image';
-const UserInfoArea = (props) => {
+const UserInfoArea = (props: any) => {
 
   const { userAvatar, userName, email, country, languages, leetcode_url, blog, github_url, linkedin_url } = props;
   console.log("props: ", props)
