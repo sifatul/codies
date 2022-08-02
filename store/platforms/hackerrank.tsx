@@ -46,6 +46,7 @@ export const userSlice = createSlice({
       state.country = action.payload.country;
       state.leetcode_url = action.payload.leetcode_url;
       state.linkedin_url = action.payload.linkedin_url;
+      state.blog = action.payload.blog;
     },
   },
 });

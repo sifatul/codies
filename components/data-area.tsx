@@ -126,7 +126,7 @@ const DataArea = (props: any) => {
         }}>
 
             <Grid container spacing={2} >
-                <Grid item lg={8} md={10} xs={10} p={2}>
+                <Grid item lg={10} md={12} xs={12} p={2}>
                     {(githubUserInfo.topRepos || [])?.length > 0 && (
                         <>
                             <Typography variant='h5' component='div'>
@@ -147,21 +147,7 @@ const DataArea = (props: any) => {
                     <CodePenArea {...searchVal} />
                     <LeetCodeArea {...searchVal} />
                 </Grid>
-                <Grid item lg={4} md={8} xs={8} p={10} >
 
-                    <UserInfoArea
-                        userAvatar={userAvatar}
-                        userName={hackerrankUserInfo.name}
-                        email={githubUserInfo?.email}
-                        country={hackerrankUserInfo?.country}
-                        blog={githubUserInfo?.blog}
-                        github_url={hackerrankUserInfo?.github_url}
-                        linkedin_url={hackerrankUserInfo?.linkedin_url}
-                        leetcode_url={hackerrankUserInfo?.leetcode_url}
-                        languages={hackerrankUserInfo?.languages}
-
-                    />
-                </Grid>
             </Grid>
         </Container>
     );

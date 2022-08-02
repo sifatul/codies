@@ -5,7 +5,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import React from "react";
 import { useAppSelector } from "../../store";
-import { getUserState, setName } from '../../store/user/basicInfo';
+import { getUserState } from '../../store/user/basicInfo';
+import { getGithubUserInfo } from '../../store/platforms/github';
+import ImageIcon from '@mui/icons-material/Image';
+import LanguageIcon from '@mui/icons-material/Language';
 
 type Anchor = 'left';
 const codingPlatforms = [
@@ -54,6 +57,7 @@ const ShowFromList = ({ codingPlatforms }: { codingPlatforms: any[] }) => {
 const drawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) => {
 
   const UserInfoState = useAppSelector(getUserState);
+  const { blog } = useAppSelector(getGithubUserInfo);
   const { profilePic = '', name = '', country = '' } = UserInfoState
 
   return <Box sx={{ width: 250 }}
@@ -62,16 +66,31 @@ const drawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) =
     onKeyDown={toggleDrawer(false)}
   >
     <ListItem>
+
+
       <ListItemAvatar>
         <Avatar alt='avatar' src={profilePic} />
       </ListItemAvatar>
       <ListItemText primary={name} secondary={country} />
     </ListItem>
+
+    {blog && (
+      <ListItem>
+        <ListItemIcon>
+          <Avatar>
+            <LanguageIcon />
+          </Avatar>
+        </ListItemIcon>
+        <ListItemText primary='Blog' secondary={blog} />
+      </ListItem>
+    )}
+
     <Divider />
 
     <ShowFromList codingPlatforms={otherPlatforms} />
     <Divider />
     <ShowFromList codingPlatforms={codingPlatforms} />
+
   </ Box>
 
 };

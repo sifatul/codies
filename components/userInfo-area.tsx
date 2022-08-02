@@ -56,7 +56,7 @@ const UserInfoArea = (props: any) => {
         </ListItem>
       )}
 
-      {linkedin_url && (
+      {/* {linkedin_url && (
         <ListItem>
           <ListItemAvatar>
             <Avatar>
@@ -68,7 +68,7 @@ const UserInfoArea = (props: any) => {
             secondary={linkedin_url}
           />
         </ListItem>
-      )}
+      )} */}
 
       {leetcode_url && (
         <ListItem>
