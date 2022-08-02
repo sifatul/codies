@@ -1,14 +1,12 @@
-import { Avatar, Box, Collapse, ListItem, ListItemAvatar, ListItemText, Stack } from "@mui/material";
-import { userInfo } from "os"
-import React from "react";
-import MailIcon from '@mui/icons-material/Mail';
-import LanguageIcon from '@mui/icons-material/Language';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ImageIcon from '@mui/icons-material/Image';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import MailIcon from '@mui/icons-material/Mail';
+import { Avatar, Box, Collapse, ListItem, ListItemAvatar, ListItemText, Stack } from "@mui/material";
+import React from "react";
 const UserInfoArea = (props: any) => {
 
-  const { userAvatar, userName, email, country, languages, leetcode_url, blog, github_url, linkedin_url } = props;
+  const { email, languages, leetcode_url, blog, github_url, linkedin_url } = props;
   console.log("props: ", props)
   return <>
 
@@ -20,14 +18,7 @@ const UserInfoArea = (props: any) => {
         // bgcolor: 'blue'
       }}
     >
-      {/* {(userAvatar || userName) && (
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar alt='avatar' src={userAvatar} />
-          </ListItemAvatar>
-          <ListItemText primary='Name' secondary={userName} />
-        </ListItem>
-      )} */}
+
 
       {email && (
         <ListItem>
