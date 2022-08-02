@@ -25,7 +25,7 @@ interface hackerRankDataType {
     country: string;
     languages: string[];
     avatar: string;
-    name: string;
+    username: string;
 }
 
 
@@ -58,8 +58,9 @@ const DataArea = (props: any) => {
         const postApiForwardingApi = '/api/forward-api';
         const data: any = await PostData(postApiForwardingApi, userProfileApi);
         const hackerRankdata: hackerRankDataType = data?.model || {};
-        const { name, avatar, country } = hackerRankdata
-        if (name) dispatch(setName(name))
+        console.log("hackerRankdata", hackerRankdata)
+        const { username, avatar, country } = hackerRankdata
+        if (username) dispatch(setName(username))
         if (avatar) dispatch(setProfilePic(avatar))
         if (country) dispatch(setCountry(country))
         dispatch(setHackerRankInfo(hackerRankdata))
@@ -76,7 +77,8 @@ const DataArea = (props: any) => {
             getGithubInfoByName(userProfileApi),
             getRepoList(getRepoListApi),
         ]);
-        dispatch(setGithubUserInfo({ ...gitHubBasicInfo, topRepos: githubRepos }))
+
+        dispatch(setGithubUserInfo({ ...gitHubBasicInfo, topRepos: githubRepos, github_url: gitHubBasicInfo?.html_url }))
     }, []);
 
     const getDataFromUrl = useCallback(() => {

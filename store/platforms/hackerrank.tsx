@@ -8,7 +8,7 @@ export interface hackerRankDataType {
   country: string;
   languages?: string[];
   avatar: string;
-  name: string;
+  username: string;
 }
 
 
@@ -22,7 +22,7 @@ const initialState: hackerRankDataType = {
   leetcode_url: '',
   country: '',
   avatar: '',
-  name: '',
+  username: '',
 } as const;
 
 /**
@@ -41,7 +41,7 @@ export const userSlice = createSlice({
       action: PayloadAction<hackerRankDataType>
     ) => {
       console.log("setHackerRankInfo, payload ", action.payload)
-      state.name = action.payload.name;
+      state.username = action.payload.username;
       state.avatar = action.payload.avatar;
       state.country = action.payload.country;
       state.leetcode_url = action.payload.leetcode_url;

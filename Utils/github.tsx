@@ -15,6 +15,7 @@ export interface githubDataType {
     blog: string;
     email: string;
     avatar_url: string;
+    html_url: string;
     topRepos?: githubTopRepoType[];
 }
 
@@ -22,8 +23,8 @@ const forwardApiPath = '/api/forward-api';
 const getGithubInfoByName = async (userProfileApi: string) => {
     const data: any = await PostData(forwardApiPath, userProfileApi);
     const githubData: githubDataType = data || {};
-    const { blog = '', email = '', avatar_url = '' } = githubData;
-    return { blog, email, avatar_url };
+    const { blog = '', email = '', avatar_url = '', html_url = '' } = githubData;
+    return { blog, email, avatar_url, html_url };
 };
 
 const getRepoList = async (getRepoListApi: string) => {

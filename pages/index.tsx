@@ -21,7 +21,7 @@ const Home: NextPage = () => {
   });
 
 
-  const [state, setState] = React.useState(false);
+  const [state, setState] = React.useState(true);
 
   const toggleDrawer =
     (open: boolean) =>
