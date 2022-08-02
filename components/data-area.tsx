@@ -1,29 +1,23 @@
-import GitHubIcon from '@mui/icons-material/GitHub';
-import ImageIcon from '@mui/icons-material/Image';
+
 import {
-    Avatar,
-    Chip,
     Container,
     Divider,
     Grid,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    Stack,
-    Typography,
+    Typography
 } from '@mui/material';
-import Box from '@mui/material/Box';
-import Collapse from '@mui/material/Collapse';
 import React, { useCallback, useEffect, useState } from 'react';
+import LeetCodeArea from '../components/leetcode-area';
+import { UseAppDispatch, UseAppSelector } from '../store';
+import { getHackerRankUserInfo, setHackerRankInfo } from '../store/platforms/hackerrank';
+import { getUserState, setCountry, setName, setProfilePic } from '../store/user/basicInfo';
+import { getGithubUserInfo, setGithubUserInfo } from '../store/platforms/github';
 import { SearchByType } from '../types/common.types';
 import { PostData } from '../Utils/fetchData';
-import { getGithubInfoByName, getRepoList, githubDataType } from '../Utils/github';
+import { getGithubInfoByName, getRepoList } from '../Utils/github';
 import CodePenArea from './codepen-area';
 import CardGithub from './common/card';
-import LeetCodeArea from '../components/leetcode-area';
-import MailIcon from '@mui/icons-material/Mail';
-import LanguageIcon from '@mui/icons-material/Language';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import UserInfoArea from './userInfo-area';
+
 interface hackerRankDataType {
     linkedin_url: string;
     github_url: string;
@@ -31,25 +25,9 @@ interface hackerRankDataType {
     country: string;
     languages: string[];
     avatar: string;
-    name: string;
+    username: string;
 }
-const initialState = {
-    hackerrank: {
-        linkedin_url: '',
-        github_url: '',
-        leetcode_url: '',
-        country: '',
-        languages: [],
-        avatar: '',
-        name: '',
-    },
-    github: {
-        blog: '',
-        email: '',
-        avatar_url: '',
-        topRepos: [],
-    },
-};
+
 
 const domainList: any = {
     hackerrank: {
@@ -63,13 +41,16 @@ const domainList: any = {
     },
 };
 const DataArea = (props: any) => {
+    const dispatch = UseAppDispatch();
+    const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
+    const githubUserInfo = UseAppSelector(getGithubUserInfo);
+    console.log("hackerrankUserInfo: ", hackerrankUserInfo)
+    console.log("github: ", githubUserInfo)
+
     const { searchVal } = props;
     const { hostname = '', pathname = '', searchBy, originalSearchVal } = searchVal;
     console.log(searchVal);
-    const [userInfo, setUserInfo] = useState<{
-        hackerrank: hackerRankDataType;
-        github: githubDataType;
-    }>(initialState);
+
 
     const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
         const getUserProfileApi = domainList.hackerrank.userInfoApi;
@@ -77,33 +58,14 @@ const DataArea = (props: any) => {
         const postApiForwardingApi = '/api/forward-api';
         const data: any = await PostData(postApiForwardingApi, userProfileApi);
         const hackerRankdata: hackerRankDataType = data?.model || {};
+        console.log("hackerRankdata", hackerRankdata)
+        const { username, avatar, country } = hackerRankdata
+        if (username) dispatch(setName(username))
+        if (avatar) dispatch(setProfilePic(avatar))
+        if (country) dispatch(setCountry(country))
+        dispatch(setHackerRankInfo(hackerRankdata))
+        return hackerRankdata
 
-        const {
-            linkedin_url = '',
-            country = '',
-            github_url = '',
-            languages = [],
-            avatar = '',
-            leetcode_url = '',
-            name = '',
-        } = hackerRankdata;
-
-        setUserInfo((prevState) => {
-            return {
-                ...prevState,
-                hackerrank: {
-                    linkedin_url,
-                    country,
-                    github_url,
-                    languages,
-                    avatar,
-                    leetcode_url,
-                    name,
-                },
-            };
-        });
-
-        return hackerRankdata;
     }, []);
 
     const getGithubData = React.useCallback(async (name: string) => {
@@ -115,15 +77,8 @@ const DataArea = (props: any) => {
             getGithubInfoByName(userProfileApi),
             getRepoList(getRepoListApi),
         ]);
-        setUserInfo((prevState) => {
-            return {
-                ...prevState,
-                github: {
-                    ...gitHubBasicInfo,
-                    topRepos: githubRepos,
-                },
-            };
-        });
+
+        dispatch(setGithubUserInfo({ ...gitHubBasicInfo, topRepos: githubRepos, github_url: gitHubBasicInfo?.html_url }))
     }, []);
 
     const getDataFromUrl = useCallback(() => {
@@ -161,13 +116,11 @@ const DataArea = (props: any) => {
     }, [searchBy, originalSearchVal]);
 
     const userAvatar = React.useMemo(() => {
-        if (userInfo.github.avatar_url) return userInfo.github.avatar_url;
-        return userInfo.hackerrank.avatar;
-    }, [userInfo.github.avatar_url, userInfo.hackerrank.avatar]);
+        if (githubUserInfo.avatar_url) return githubUserInfo.avatar_url;
+        return hackerrankUserInfo.avatar;
+    }, [githubUserInfo.avatar_url, hackerrankUserInfo.avatar]);
 
-    const userName = React.useMemo(() => {
-        return userInfo.hackerrank.name;
-    }, [userInfo.hackerrank.name]);
+
 
     return (
         <Container maxWidth="md" sx={{
@@ -175,8 +128,8 @@ const DataArea = (props: any) => {
         }}>
 
             <Grid container spacing={2} >
-                <Grid item lg={8} md={10} xs={10} p={2}>
-                    {(userInfo.github.topRepos || [])?.length > 0 && (
+                <Grid item lg={10} md={12} xs={12} p={2}>
+                    {(githubUserInfo.topRepos || [])?.length > 0 && (
                         <>
                             <Typography variant='h5' component='div'>
                                 Projects
@@ -185,7 +138,7 @@ const DataArea = (props: any) => {
                             <Divider sx={{ mb: 5 }} />
 
                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                {userInfo.github.topRepos?.map((repo, idx) => (
+                                {githubUserInfo.topRepos?.map((repo, idx) => (
                                     <CardGithub topRepo={repo} key={'repo' + idx} />
                                 ))}
                             </div>
@@ -196,130 +149,7 @@ const DataArea = (props: any) => {
                     <CodePenArea {...searchVal} />
                     <LeetCodeArea {...searchVal} />
                 </Grid>
-                <Grid item lg={4} md={8} xs={8} p={10} >
-                    <Box
-                        sx={{
-                            width: 'auto',
-                            height: 'auto',
-                            borderColor: 'primary.dark',
-                            // bgcolor: 'blue'
-                        }}
-                    >
-                        {(userAvatar || userName) && (
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar alt='avatar' src={userAvatar} />
-                                </ListItemAvatar>
-                                <ListItemText primary='Name' secondary={userName} />
-                            </ListItem>
-                        )}
 
-                        {userInfo.github?.email && (
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <MailIcon />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText primary='Email' secondary={userInfo.github?.email} />
-                            </ListItem>
-                        )}
-                        {userInfo.hackerrank?.country && (
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <LanguageIcon color="primary" />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary='Country'
-                                    secondary={userInfo.hackerrank?.country}
-                                />
-                            </ListItem>
-                        )}
-
-                        {userInfo.github?.blog && (
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <ImageIcon />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText primary='Blog' secondary={userInfo.github?.blog} />
-                            </ListItem>
-                        )}
-                        {userInfo.hackerrank?.github_url && (
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <GitHubIcon />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary='Github'
-                                    secondary={userInfo.hackerrank?.github_url}
-                                />
-                            </ListItem>
-                        )}
-
-                        {userInfo.hackerrank?.linkedin_url && (
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <LinkedInIcon />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary='LinkedIn'
-                                    secondary={userInfo.hackerrank?.linkedin_url}
-                                />
-                            </ListItem>
-                        )}
-
-                        {userInfo.hackerrank?.leetcode_url && (
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <ImageIcon />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary='LeetCode'
-                                    secondary={userInfo.hackerrank?.leetcode_url}
-                                />
-                            </ListItem>
-                        )}
-
-                        {userInfo.hackerrank?.languages?.length > 0 && (
-                            <>
-                                <ListItem>
-                                    <ListItemAvatar>
-                                        <Avatar>
-                                            <ImageIcon />
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <ListItemText primary='Language' />
-                                </ListItem>
-
-                                <Collapse in={true} timeout='auto' unmountOnExit>
-                                    <Stack spacing={1} alignItems='center'>
-                                        {/* <Stack direction='row' spacing={1}>
-                                            {userInfo.hackerrank.languages.map((item, idx) => {
-                                                return (
-                                                    <Chip
-                                                        label={item[0]}
-                                                        color='primary'
-                                                        key={idx}
-                                                    />
-                                                );
-                                            })}
-                                        </Stack> */}
-                                    </Stack>
-                                </Collapse>
-                            </>
-                        )}
-                    </Box>
-                </Grid>
             </Grid>
         </Container>
     );

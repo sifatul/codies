@@ -10,6 +10,7 @@ import SearchInput from '../components/common/search.input';
 import LeftSideDrawer from '../components/drawer/index';
 import styles from '../styles/Home.module.css';
 import { SearchByType } from '../types/common.types';
+
 const Home: NextPage = () => {
   const [searchVal, setSearchVal] = useState({
     protocol: '',
@@ -19,7 +20,8 @@ const Home: NextPage = () => {
     searchBy: SearchByType.NONE,
   });
 
-  const [state, setState] = React.useState(false);
+
+  const [state, setState] = React.useState(true);
 
   const toggleDrawer =
     (open: boolean) =>
