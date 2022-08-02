@@ -1,3 +1,5 @@
+import MenuIcon from '@mui/icons-material/Menu';
+import { IconButton } from '@mui/material';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import * as React from 'react';
@@ -5,11 +7,9 @@ import { useState } from 'react';
 import Footer from '../components/common/footer';
 import Hint from '../components/common/hint';
 import SearchInput from '../components/common/search.input';
-import DataArea from '../components/data-area';
-import MiniDrawer from '../components/mini-variant-drawer';
+import LeftSideDrawer from '../components/drawer/index';
 import styles from '../styles/Home.module.css';
 import { SearchByType } from '../types/common.types';
-
 const Home: NextPage = () => {
   const [searchVal, setSearchVal] = useState({
     protocol: '',
@@ -19,7 +19,21 @@ const Home: NextPage = () => {
     searchBy: SearchByType.NONE,
   });
 
-  console.log('searchVal');
+  const [state, setState] = React.useState(false);
+
+  const toggleDrawer =
+    (open: boolean) =>
+      (event: React.KeyboardEvent | React.MouseEvent) => {
+        if (
+          event.type === 'keydown' &&
+          ((event as React.KeyboardEvent).key === 'Tab' ||
+            (event as React.KeyboardEvent).key === 'Shift')
+        ) {
+          return;
+        }
+
+        setState(open);
+      };
 
   const searchInputHandler = async (searchVal: string) => {
     if (!searchVal) return;
@@ -57,15 +71,26 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        {searchVal.searchBy === SearchByType.NONE && <div className={styles.seachContainer}>
-          <SearchInput callback={searchInputHandler} />
+        {<div className={styles.seachContainer}>
+          {(searchVal.searchBy !== SearchByType.NONE) && <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={toggleDrawer(!state)}
+            edge="start"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>}
+          <SearchInput callback={searchInputHandler} value={searchVal.originalSearchVal} />
         </div>}
         {searchVal.searchBy === SearchByType.NONE && <Hint />}
-        {searchVal.searchBy !== SearchByType.NONE && <MiniDrawer
+        {(searchVal.searchBy !== SearchByType.NONE) && <LeftSideDrawer
+          state={state}
+          toggleDrawer={toggleDrawer}
+          searchInputHandler={searchInputHandler}
+          searchVal={searchVal}>
 
-          searchInputHandler={searchInputHandler} searchVal={searchVal}>
-
-        </MiniDrawer>}
+        </LeftSideDrawer>}
       </main>
 
 

@@ -170,7 +170,9 @@ const DataArea = (props: any) => {
     }, [userInfo.hackerrank.name]);
 
     return (
-        <Container maxWidth="lg">
+        <Container maxWidth="md" sx={{
+            paddingTop: '50px',
+        }}>
 
             <Grid container spacing={2} >
                 <Grid item lg={8} md={10} xs={10} p={2}>

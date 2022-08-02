@@ -63,7 +63,7 @@
     "no-var-requires": false,
     "no-string-literal": false,
     "no-empty": false,
-    "quotemark": [true, "double", "avoid-escape", "avoid-template"],
+    "quotemark": [true, "single", "avoid-escape", "avoid-template"],
     "interface-name": [false, "always-prefix"],
     "prettier": true
   },
