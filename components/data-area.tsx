@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import LeetCodeArea from '../components/leetcode-area';
-import { useAppDispatch, useAppSelector } from '../store';
+import { UseAppDispatch, UseAppSelector } from '../store';
 import { getHackerRankUserInfo, setHackerRankInfo } from '../store/platforms/hackerrank';
 import { getUserState, setCountry, setName, setProfilePic } from '../store/user/basicInfo';
 import { getGithubUserInfo, setGithubUserInfo } from '../store/platforms/github';
@@ -41,9 +41,9 @@ const domainList: any = {
     },
 };
 const DataArea = (props: any) => {
-    const dispatch = useAppDispatch();
-    const hackerrankUserInfo = useAppSelector(getHackerRankUserInfo);
-    const githubUserInfo = useAppSelector(getGithubUserInfo);
+    const dispatch = UseAppDispatch();
+    const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
+    const githubUserInfo = UseAppSelector(getGithubUserInfo);
     console.log("hackerrankUserInfo: ", hackerrankUserInfo)
     console.log("github: ", githubUserInfo)
 

@@ -1,14 +1,13 @@
+import LanguageIcon from '@mui/icons-material/Language';
 import { Avatar, Box, ListItem, ListItemAvatar } from "@mui/material";
 import Divider from '@mui/material/Divider';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import React from "react";
-import { useAppSelector } from "../../store";
-import { getUserState } from '../../store/user/basicInfo';
+import { UseAppSelector } from "../../store";
 import { getGithubUserInfo } from '../../store/platforms/github';
-import ImageIcon from '@mui/icons-material/Image';
-import LanguageIcon from '@mui/icons-material/Language';
+import { getUserState } from '../../store/user/basicInfo';
 
 type Anchor = 'left';
 const codingPlatforms = [
@@ -56,8 +55,8 @@ const ShowFromList = ({ codingPlatforms }: { codingPlatforms: any[] }) => {
 
 const drawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) => {
 
-  const UserInfoState = useAppSelector(getUserState);
-  const { blog } = useAppSelector(getGithubUserInfo);
+  const UserInfoState = UseAppSelector(getUserState);
+  const { blog } = UseAppSelector(getGithubUserInfo);
   const { profilePic = '', name = '', country = '' } = UserInfoState
 
   return <Box sx={{ width: 250 }}
