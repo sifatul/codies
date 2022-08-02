@@ -23,6 +23,11 @@ const Hint = () => {
                 src='https://img.shields.io/badge/Codepen-000000?style=for-the-badge&logo=codepen&logoColor=white'
                 height='30px'
             />
+            <img
+                alt='leetcode icon'
+                src='https://img.shields.io/badge/LeetCode-grey?style=for-the-badge&logo=LeetCode&logoColor=#d16c06'
+                height='30px'
+            />
         </div>
     );
 };

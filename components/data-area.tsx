@@ -3,6 +3,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import {
     Avatar,
     Chip,
+    Container,
     Divider,
     Grid,
     ListItem,
@@ -20,6 +21,9 @@ import { getGithubInfoByName, getRepoList, githubDataType } from '../Utils/githu
 import CodePenArea from './codepen-area';
 import CardGithub from './common/card';
 import LeetCodeArea from '../components/leetcode-area';
+import MailIcon from '@mui/icons-material/Mail';
+import LanguageIcon from '@mui/icons-material/Language';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 interface hackerRankDataType {
     linkedin_url: string;
     github_url: string;
@@ -103,6 +107,7 @@ const DataArea = (props: any) => {
     }, []);
 
     const getGithubData = React.useCallback(async (name: string) => {
+        if (window == undefined) return;
         const getRepoListApi = domainList.github.repoListApi.replace('userName', name);
         const userProfileApi = domainList.github.userInfoApi.replace('userName', name);
 
@@ -165,9 +170,12 @@ const DataArea = (props: any) => {
     }, [userInfo.hackerrank.name]);
 
     return (
-        <>
-            <Grid container spacing={2} sx={{ paddingTop: '100px' }}>
-                <Grid item xs={8} p={2}>
+        <Container maxWidth="md" sx={{
+            paddingTop: '50px',
+        }}>
+
+            <Grid container spacing={2} >
+                <Grid item lg={8} md={10} xs={10} p={2}>
                     {(userInfo.github.topRepos || [])?.length > 0 && (
                         <>
                             <Typography variant='h5' component='div'>
@@ -188,12 +196,13 @@ const DataArea = (props: any) => {
                     <CodePenArea {...searchVal} />
                     <LeetCodeArea {...searchVal} />
                 </Grid>
-                <Grid item xs={4} p={10}>
+                <Grid item lg={4} md={8} xs={8} p={10} >
                     <Box
                         sx={{
                             width: 'auto',
                             height: 'auto',
                             borderColor: 'primary.dark',
+                            // bgcolor: 'blue'
                         }}
                     >
                         {(userAvatar || userName) && (
@@ -209,7 +218,7 @@ const DataArea = (props: any) => {
                             <ListItem>
                                 <ListItemAvatar>
                                     <Avatar>
-                                        <ImageIcon />
+                                        <MailIcon />
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText primary='Email' secondary={userInfo.github?.email} />
@@ -219,7 +228,7 @@ const DataArea = (props: any) => {
                             <ListItem>
                                 <ListItemAvatar>
                                     <Avatar>
-                                        <ImageIcon />
+                                        <LanguageIcon color="primary" />
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
@@ -257,7 +266,7 @@ const DataArea = (props: any) => {
                             <ListItem>
                                 <ListItemAvatar>
                                     <Avatar>
-                                        <ImageIcon />
+                                        <LinkedInIcon />
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
@@ -294,7 +303,7 @@ const DataArea = (props: any) => {
 
                                 <Collapse in={true} timeout='auto' unmountOnExit>
                                     <Stack spacing={1} alignItems='center'>
-                                        <Stack direction='row' spacing={1}>
+                                        {/* <Stack direction='row' spacing={1}>
                                             {userInfo.hackerrank.languages.map((item, idx) => {
                                                 return (
                                                     <Chip
@@ -304,7 +313,7 @@ const DataArea = (props: any) => {
                                                     />
                                                 );
                                             })}
-                                        </Stack>
+                                        </Stack> */}
                                     </Stack>
                                 </Collapse>
                             </>
@@ -312,7 +321,7 @@ const DataArea = (props: any) => {
                     </Box>
                 </Grid>
             </Grid>
-        </>
+        </Container>
     );
 };
 

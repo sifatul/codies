@@ -8,9 +8,10 @@ import * as React from 'react';
 
 interface propsType {
     callback: Function;
+    value: string;
 }
 const passedPlaceholderList = ['profile link', 'username'];
-export default function CustomizedInputBase({ callback }: propsType) {
+export default function CustomizedInputBase({ callback, value }: propsType) {
     const [searchVal, setSearchVal] = React.useState('');
 
     const inputSubmitHandler = React.useCallback(() => {
@@ -58,6 +59,7 @@ export default function CustomizedInputBase({ callback }: propsType) {
                 sx={{ ml: 1, flex: 1 }}
                 placeholder={'type a ' + placeholder}
                 inputProps={{ 'aria-label': 'search google maps' }}
+                defaultValue={value}
                 onChange={(e) => {
                     setSearchVal(e.target.value);
                 }}
