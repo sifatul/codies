@@ -5,18 +5,17 @@ import {
     Grid,
     Typography
 } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import LeetCodeArea from '../components/leetcode-area';
 import { UseAppDispatch, UseAppSelector } from '../store';
-import { getHackerRankUserInfo, setHackerRankInfo } from '../store/platforms/hackerrank';
-import { getUserState, setCountry, setName, setProfilePic } from '../store/user/basicInfo';
 import { getGithubUserInfo, setGithubUserInfo } from '../store/platforms/github';
+import { getHackerRankUserInfo, setHackerRankInfo } from '../store/platforms/hackerrank';
+import { setCountry, setName, setProfilePic } from '../store/user/basicInfo';
 import { SearchByType } from '../types/common.types';
 import { PostData } from '../Utils/fetchData';
 import { getGithubInfoByName, getRepoList } from '../Utils/github';
 import CodePenArea from './codepen-area';
 import CardGithub from './common/card';
-import UserInfoArea from './userInfo-area';
 
 interface hackerRankDataType {
     linkedin_url: string;
