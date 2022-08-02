@@ -8,8 +8,11 @@ import Footer from '../components/common/footer';
 import Hint from '../components/common/hint';
 import SearchInput from '../components/common/search.input';
 import LeftSideDrawer from '../components/drawer/index';
+import { useAppDispatch, useAppSelector } from '../store';
+import { getUserState } from '../store/user/basicInfo';
 import styles from '../styles/Home.module.css';
 import { SearchByType } from '../types/common.types';
+
 const Home: NextPage = () => {
   const [searchVal, setSearchVal] = useState({
     protocol: '',
@@ -18,6 +21,10 @@ const Home: NextPage = () => {
     originalSearchVal: '',
     searchBy: SearchByType.NONE,
   });
+
+  const dispatch = useAppDispatch();
+  const { name, email } = useAppSelector(getUserState);
+  console.log(name)
 
   const [state, setState] = React.useState(false);
 
