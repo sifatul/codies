@@ -61,12 +61,12 @@ const ShowFromList = ({ codingPlatforms }: { codingPlatforms: any[] }) => {
 const drawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) => {
 
   const UserInfoState = UseAppSelector(getUserState);
-  const { blog = '--', github_url = '--' } = UseAppSelector(getGithubUserInfo);
-  const { username = '' } = UseAppSelector(getHackerRankUserInfo);
-  const { profilePic = '', name = '--', country = '--' } = UserInfoState
+  const { blog = '--', html_url = '--' } = UseAppSelector(getGithubUserInfo);
+  const { profile_url = '--' } = UseAppSelector(getHackerRankUserInfo);
+  const { profilePic = '', name = '--', country = '--', email = '--' } = UserInfoState
 
-  if (github_url) otherPlatforms[0].secondary = github_url.replace('https://', '');
-  if (username) codingPlatforms[0].secondary = "hackerrank.com/userName".replace('userName', username)
+  otherPlatforms[0].secondary = html_url.replace('https://', '');
+  codingPlatforms[0].secondary = profile_url
 
 
   return <Box sx={{ width: 250 }}
@@ -81,6 +81,14 @@ const drawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) =
       <ListItemText primary={name} secondary={country} />
     </ListItem>
 
+    <ListItem disablePadding>
+      <ListItemButton>
+        <ListItemIcon>
+          <img src={'/icons/email.png'} alt={'email address'} height={40} width={40} />
+        </ListItemIcon>
+        <ListItemText primary={'Email'} secondary={email} />
+      </ListItemButton>
+    </ListItem>
 
     <ListItem>
       <ListItemIcon>

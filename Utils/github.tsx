@@ -23,8 +23,7 @@ const forwardApiPath = '/api/forward-api';
 const getGithubInfoByName = async (userProfileApi: string) => {
     const data: any = await PostData(forwardApiPath, userProfileApi);
     const githubData: githubDataType = data || {};
-    const { blog = '', email = '', avatar_url = '', html_url = '' } = githubData;
-    return { blog, email, avatar_url, html_url };
+    return githubData
 };
 
 const getRepoList = async (getRepoListApi: string) => {

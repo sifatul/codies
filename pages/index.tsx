@@ -7,6 +7,7 @@ import { useState } from 'react';
 import Footer from '../components/common/footer';
 import Hint from '../components/common/hint';
 import SearchInput from '../components/common/search.input';
+import DataArea from '../components/data-area';
 import LeftSideDrawer from '../components/drawer/index';
 import styles from '../styles/Home.module.css';
 import { SearchByType } from '../types/common.types';
@@ -21,7 +22,7 @@ const Home: NextPage = () => {
   });
 
 
-  const [state, setState] = React.useState(true);
+  const [state, setState] = React.useState(false);
 
   const toggleDrawer =
     (open: boolean) =>
@@ -92,6 +93,7 @@ const Home: NextPage = () => {
           toggleDrawer={toggleDrawer}
           searchInputHandler={searchInputHandler}
           searchVal={searchVal}>
+          <DataArea searchVal={searchVal} />
 
         </LeftSideDrawer>}
       </main>

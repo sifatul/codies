@@ -2,13 +2,27 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 
 export interface hackerRankDataType {
+  username: string;
+  name: string;
   linkedin_url: string;
   github_url: string;
   leetcode_url: string;
   country: string;
   languages?: string[];
   avatar: string;
-  username: string;
+  school?: string;
+  created_at: string;
+  level: number;
+  website: string;
+  short_bio: string;
+  personal_first_name: string;
+  personal_last_name: string;
+  company: string;
+  local_language: string;
+  job_title: string;
+  jobs_headline: string;
+  followers_count: 0
+
 }
 
 
@@ -17,12 +31,24 @@ export interface hackerRankDataType {
  * Default state object with initial values.
  */
 const initialState: hackerRankDataType = {
+  username: '',
+  name: '',
   linkedin_url: '',
   github_url: '',
   leetcode_url: '',
   country: '',
   avatar: '',
-  username: '',
+  created_at: '',
+  level: 0,
+  website: '',
+  personal_first_name: " ",
+  personal_last_name: "",
+  company: "",
+  local_language: " ",
+  job_title: "",
+  jobs_headline: "",
+  followers_count: 0,
+  short_bio: ""
 } as const;
 
 /**
@@ -31,7 +57,7 @@ const initialState: hackerRankDataType = {
  * In this example actions are included in the slice. It is fine and can be
  * changed based on your needs.
  */
-export const userSlice = createSlice({
+export const hackerRankUser = createSlice({
   name: 'user',
   initialState,
   reducers: {
@@ -39,24 +65,18 @@ export const userSlice = createSlice({
     setHackerRankInfo: (
       state: Draft<typeof initialState>,
       action: PayloadAction<hackerRankDataType>
-    ) => {
-      console.log("setHackerRankInfo, payload ", action.payload)
-      state.username = action.payload.username;
-      state.avatar = action.payload.avatar;
-      state.country = action.payload.country;
-      state.leetcode_url = action.payload.leetcode_url;
-      state.linkedin_url = action.payload.linkedin_url;
-    },
+    ) => action.payload,
   },
 });
 
 // A small helper of user state for `useSelector` function.
 export const getHackerRankUserInfo = (state: any) => {
-  console.log("getHackerRankUserInfo", state)
-  return state.hackerrank
+
+  const profile_url = "hackerrank.com/userName".replace('userName', state.hackerrank?.username)
+  return { ...state.hackerrank, profile_url }
 }
 
 // Exports all actions
-export const { setHackerRankInfo } = userSlice.actions;
+export const { setHackerRankInfo } = hackerRankUser.actions;
 
-export default userSlice.reducer;
+export default hackerRankUser.reducer;

@@ -7,7 +7,7 @@ import DrawerList from './drawer.list';
 
 
 export default function LeftSideDrawer(props: any) {
-  const { toggleDrawer, state, searchVal } = props
+  const { toggleDrawer, state, children } = props
 
 
   const list = () => (
@@ -24,10 +24,10 @@ export default function LeftSideDrawer(props: any) {
 
   return (
     <div>
-      <React.Fragment key={'left'}>
+      <React.Fragment key='left-drawer'>
 
         {<Drawer
-          anchor={'left'}
+          anchor='left'
           open={state}
           onClose={toggleDrawer(false)}
           variant="persistent"
@@ -39,14 +39,14 @@ export default function LeftSideDrawer(props: any) {
         {<Drawer
           sx={{ display: { sm: 'block', md: 'none', lg: 'none' } }}
 
-          anchor={'left'}
+          anchor='left'
           open={state}
           onClose={toggleDrawer(false)}
           variant="temporary"
         >
           {list()}
         </Drawer>}
-        <DataArea searchVal={searchVal} />
+        {children}
       </React.Fragment>
     </div >
   );

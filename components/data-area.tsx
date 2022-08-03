@@ -9,23 +9,15 @@ import React, { useCallback, useEffect } from 'react';
 import LeetCodeArea from '../components/leetcode-area';
 import { UseAppDispatch, UseAppSelector } from '../store';
 import { getGithubUserInfo, setGithubUserInfo } from '../store/platforms/github';
-import { getHackerRankUserInfo, setHackerRankInfo } from '../store/platforms/hackerrank';
-import { setCountry, setName, setProfilePic } from '../store/user/basicInfo';
+import { getHackerRankUserInfo, hackerRankDataType, setHackerRankInfo } from '../store/platforms/hackerrank';
+import { setCountry, setEmail, setName, setProfilePic } from '../store/user/basicInfo';
 import { SearchByType } from '../types/common.types';
 import { PostData } from '../Utils/fetchData';
 import { getGithubInfoByName, getRepoList } from '../Utils/github';
 import CodePenArea from './codepen-area';
 import CardGithub from './common/card';
 
-interface hackerRankDataType {
-    linkedin_url: string;
-    github_url: string;
-    leetcode_url: string;
-    country: string;
-    languages: string[];
-    avatar: string;
-    username: string;
-}
+
 
 
 const domainList: any = {
@@ -58,8 +50,8 @@ const DataArea = (props: any) => {
         const data: any = await PostData(postApiForwardingApi, userProfileApi);
         const hackerRankdata: hackerRankDataType = data?.model || {};
         console.log("hackerRankdata", hackerRankdata)
-        const { username, avatar, country } = hackerRankdata
-        if (username) dispatch(setName(username))
+        const { username, avatar, country, name } = hackerRankdata
+        if (name) dispatch(setName(name))
         if (avatar) dispatch(setProfilePic(avatar))
         if (country) dispatch(setCountry(country))
         dispatch(setHackerRankInfo(hackerRankdata))
@@ -76,8 +68,9 @@ const DataArea = (props: any) => {
             getGithubInfoByName(userProfileApi),
             getRepoList(getRepoListApi),
         ]);
-
-        dispatch(setGithubUserInfo({ ...gitHubBasicInfo, topRepos: githubRepos, github_url: gitHubBasicInfo?.html_url }))
+        const { email } = gitHubBasicInfo;
+        if (email) dispatch(setEmail(email))
+        dispatch(setGithubUserInfo({ ...gitHubBasicInfo, topRepos: githubRepos }))
     }, []);
 
     const getDataFromUrl = useCallback(() => {
@@ -114,10 +107,6 @@ const DataArea = (props: any) => {
         }
     }, [searchBy, originalSearchVal]);
 
-    const userAvatar = React.useMemo(() => {
-        if (githubUserInfo.avatar_url) return githubUserInfo.avatar_url;
-        return hackerrankUserInfo.avatar;
-    }, [githubUserInfo.avatar_url, hackerrankUserInfo.avatar]);
 
 
 

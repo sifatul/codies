@@ -16,8 +16,9 @@ export interface GithubUserInfoType {
   blog: string;
   email: string;
   avatar_url: string;
-  github_url: string;
   topRepos?: githubTopRepoType[];
+  html_url: string;
+
   // profile links
 
 }
@@ -29,7 +30,8 @@ const initialState: GithubUserInfoType = {
   blog: '',
   email: '',
   avatar_url: '',
-  github_url: ''
+  html_url: ''
+
   // topRepos: [],
 } as const;
 
@@ -47,25 +49,8 @@ export const userSlice = createSlice({
     setGithubUserInfo: (
       state: Draft<typeof initialState>,
       action: PayloadAction<GithubUserInfoType>
-    ) => {
-      console.log("setGithub", action.payload)
-      state.blog = action.payload.blog,
-        state.email = action.payload.email,
-        state.github_url = action.payload.github_url,
-        state.avatar_url = action.payload.avatar_url
-      if (action.payload.topRepos) {
-        state.topRepos = action.payload.topRepos
-      }
+    ) => action.payload,
 
-    },
-    setGithubProfileUrl: (
-      state: Draft<typeof initialState>,
-      action: PayloadAction<string>
-    ) => {
-      console.log("setGithub", action.payload)
-      state.github_url = action.payload
-
-    },
   },
 });
 
