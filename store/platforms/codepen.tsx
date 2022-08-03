@@ -15,7 +15,12 @@ export interface codepenUserInfoType {
 /**
  * Default state object with initial values.
  */
-const initialState: codepenUserInfoType[] = [] as codepenUserInfoType[];
+const initialState: { pens: codepenUserInfoType[], username: string } = {
+  username: '',
+  pens: [] as codepenUserInfoType[]
+
+  // topRepos: [],
+} as const;
 
 /**
  * Create a slice as a reducer containing actions.
@@ -30,14 +35,17 @@ export const codepenSlice = createSlice({
 
     setcodepenUserInfo: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<codepenUserInfoType[]>
+      action: PayloadAction<{ pens: codepenUserInfoType[], username: string }>
     ) => action.payload,
 
   },
 });
 
 // A small helper of user state for `useSelector` function.
-export const getcodepenUserInfo = (state: { codepen: codepenUserInfoType[] }) => state.codepen;
+export const getcodepenUserInfo = (state: { codepen: { pens: codepenUserInfoType[], username: string } }) => {
+  const profile_url = "codepen.io/userName".replace("userName", state.codepen?.username)
+  return { ...state.codepen, profile_url }
+};
 
 // Exports all actions
 export const { setcodepenUserInfo } = codepenSlice.actions;

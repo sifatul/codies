@@ -37,7 +37,11 @@ const CodePenArea = (props: any) => {
                 return timeB - timeA;
             }
         );
-        dispatch(setcodepenUserInfo(sortedData))
+        const codepenData = {
+            pens: sortedData,
+            username: codePenUserName
+        }
+        dispatch(setcodepenUserInfo(codepenData))
         setPopularPen(sortedData.slice(0, 2));
     }, []);
 

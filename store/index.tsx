@@ -3,6 +3,7 @@ import userSlice from './user/basicInfo';
 import hackerrank from './platforms/hackerrank';
 import github from './platforms/github';
 import leetcode from './platforms/leetcode';
+import codepen from './platforms/codepen';
 import {
   TypedUseSelectorHook,
   useDispatch,
@@ -16,8 +17,9 @@ export const store = configureStore({
   reducer: {
     user: userSlice,
     hackerrank: hackerrank,
-    github: github,
-    leetcode: leetcode
+    github,
+    leetcode,
+    codepen
   },
 });
 
