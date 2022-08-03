@@ -20,7 +20,7 @@ export interface LeetcodeUserProfileType {
   postViewCount: number;
   reputation: number;
   solutionCount: number;
-  websites?: string[]
+  websites: string[]
 
 }
 
@@ -30,8 +30,8 @@ export interface LeetcodeUserInfoType {
   linkedinUrl: string | null;
   username: string | null;
   profile: LeetcodeUserProfileType;
-  languageProblemCount?: LanguageProblemCountType[];
-  tagProblemCounts?: {
+  languageProblemCount: LanguageProblemCountType[];
+  tagProblemCounts: {
     advanced: TagProblemItemType[],
     medium: TagProblemItemType[],
     fundamental: TagProblemItemType[],
@@ -57,13 +57,14 @@ const initialState: LeetcodeUserInfoType = {
     postViewCount: 0,
     reputation: 0,
     solutionCount: 0,
+    websites: [] as string[]
 
   },
-  languageProblemCount: [],
+  languageProblemCount: [] as LanguageProblemCountType[],
   tagProblemCounts: {
-    advanced: [],
-    medium: [],
-    fundamental: [],
+    advanced: [] as TagProblemItemType[],
+    medium: [] as TagProblemItemType[],
+    fundamental: [] as TagProblemItemType[],
   }
 
 } as const;
@@ -110,7 +111,12 @@ export const leetcodeUser = createSlice({
 });
 
 // A small helper of user state for `useSelector` function.
-export const getLeetcodeUserInfo = (state: { leetcode: LeetcodeUserInfoType }) => state.leetcode;
+export const getLeetcodeUserInfo = (state: { leetcode: LeetcodeUserInfoType }) => {
+  let profile_url = ""
+  if (state.leetcode?.username) profile_url = "leetcode.com/userName".replace('userName', state.leetcode?.username)
+
+  return { ...state.leetcode, profile_url };
+}
 
 // Exports all actions
 export const { setLeetcodeUserInfo, setLeetcodeLanguageProblemCount, setLeetcodeTagProblemCounts } = leetcodeUser.actions;

@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import userSlice from './user/basicInfo';
 import hackerrank from './platforms/hackerrank';
 import github from './platforms/github';
+import leetcode from './platforms/leetcode';
 import {
   TypedUseSelectorHook,
   useDispatch,
@@ -16,6 +17,7 @@ export const store = configureStore({
     user: userSlice,
     hackerrank: hackerrank,
     github: github,
+    leetcode: leetcode
   },
 });
 

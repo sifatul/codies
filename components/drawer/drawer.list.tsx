@@ -8,6 +8,7 @@ import React from "react";
 import { UseAppSelector } from "../../store";
 import { getGithubUserInfo } from '../../store/platforms/github';
 import { getHackerRankUserInfo } from '../../store/platforms/hackerrank';
+import { getLeetcodeUserInfo } from '../../store/platforms/leetcode';
 import { getUserState } from '../../store/user/basicInfo';
 
 const codingPlatforms = [
@@ -61,12 +62,14 @@ const ShowFromList = ({ codingPlatforms }: { codingPlatforms: any[] }) => {
 const drawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) => {
 
   const UserInfoState = UseAppSelector(getUserState);
+  const { profile_url: leetcode_profile_url } = UseAppSelector(getLeetcodeUserInfo);
   const { blog = '--', html_url = '--' } = UseAppSelector(getGithubUserInfo);
   const { profile_url = '--' } = UseAppSelector(getHackerRankUserInfo);
   const { profilePic = '', name = '--', country = '--', email = '--' } = UserInfoState
 
   otherPlatforms[0].secondary = html_url.replace('https://', '');
-  codingPlatforms[0].secondary = profile_url
+  codingPlatforms[0].secondary = profile_url;
+  codingPlatforms[1].secondary = leetcode_profile_url;
 
 
   return <Box sx={{ width: 250 }}
