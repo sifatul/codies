@@ -8,7 +8,7 @@ import {
 import React, { useCallback, useEffect } from 'react';
 import LeetCodeArea from '../components/leetcode-area';
 import { UseAppDispatch, UseAppSelector } from '../store';
-import { getGithubUserInfo, setGithubUserInfo } from '../store/platforms/github';
+import { getGithubUserInfo, setGithubUserInfo, setGithubUsername } from '../store/platforms/github';
 import { getHackerRankUserInfo, hackerRankDataType, setHackerRankInfo } from '../store/platforms/hackerrank';
 import { setCountry, setEmail, setName, setProfilePic } from '../store/user/basicInfo';
 import { SearchByType } from '../types/common.types';
@@ -16,6 +16,7 @@ import { PostData } from '../Utils/fetchData';
 import { getGithubInfoByName, getRepoList } from '../Utils/github';
 import CodePenArea from './codepen-area';
 import CardGithub from './common/card';
+import GithubArea from './github-area';
 
 
 
@@ -59,19 +60,7 @@ const DataArea = (props: any) => {
 
     }, []);
 
-    const getGithubData = React.useCallback(async (name: string) => {
-        if (window == undefined) return;
-        const getRepoListApi = domainList.github.repoListApi.replace('userName', name);
-        const userProfileApi = domainList.github.userInfoApi.replace('userName', name);
 
-        const [gitHubBasicInfo, githubRepos] = await Promise.all([
-            getGithubInfoByName(userProfileApi),
-            getRepoList(getRepoListApi),
-        ]);
-        const { email } = gitHubBasicInfo;
-        if (email) dispatch(setEmail(email))
-        dispatch(setGithubUserInfo({ ...gitHubBasicInfo, topRepos: githubRepos }))
-    }, []);
 
     const getDataFromUrl = useCallback(() => {
         if (!hostname || !pathname) return;
@@ -81,11 +70,12 @@ const DataArea = (props: any) => {
             getHackerRankInfo(nameFromUrl).then((output) => {
                 const { github_url } = output;
                 const githubUserName = github_url?.split('/').pop() || nameFromUrl;
-                getGithubData(githubUserName);
+                dispatch(setGithubUsername(githubUserName))
+                // getGithubData(githubUserName);
             });
         } else if (new RegExp('github.com').test(hostname)) {
             getHackerRankInfo(nameFromUrl);
-            getGithubData(nameFromUrl);
+            // getGithubData(nameFromUrl);
         }
         return;
     }, [hostname, pathname]);
@@ -94,8 +84,8 @@ const DataArea = (props: any) => {
 
         const hackerRankInfo = await getHackerRankInfo(originalSearchVal);
         const { github_url } = hackerRankInfo;
-        const githubUserName = github_url?.split('/').pop() || originalSearchVal;
-        getGithubData(githubUserName);
+        // const githubUserName = github_url?.split('/').pop() || originalSearchVal;
+        // getGithubData(githubUserName);
     }, [originalSearchVal]);
 
     useEffect(() => {
@@ -117,21 +107,7 @@ const DataArea = (props: any) => {
 
             <Grid container spacing={2} >
                 <Grid item lg={10} md={12} xs={12} p={2}>
-                    {(githubUserInfo.topRepos || [])?.length > 0 && (
-                        <>
-                            <Typography variant='h5' component='div'>
-                                Projects
-                            </Typography>
-
-                            <Divider sx={{ mb: 5 }} />
-
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                {githubUserInfo.topRepos?.map((repo, idx) => (
-                                    <CardGithub topRepo={repo} key={'repo' + idx} />
-                                ))}
-                            </div>
-                        </>
-                    )}
+                    <GithubArea {...searchVal} />
 
                     {/* {userInfo?.hackerrank.linkedin_url && <LinkedinArea linkedin_url={userInfo?.hackerrank.linkedin_url} />} */}
                     <CodePenArea {...searchVal} />
