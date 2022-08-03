@@ -1,55 +1,27 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, } from "react"
+import { UseAppDispatch } from "../store"
 import { SearchByType } from "../types/common.types"
+import { setLeetcodeLanguageProblemCount, setLeetcodeTagProblemCounts, setLeetcodeUserInfo } from '../store/platforms/leetcode';
+import { getLeetCodeProfileInfo, QueryType } from "../Utils/leetcode";
 
-const LeetCodeApi = "https://leetcode.com/graphql/"
+
 const LeetCodeArea = (props: any) => {
 
   const { originalSearchVal, searchBy, pathname, hostname } = props
-  const [leetcodeInfo, setLeetcodeInfo] = useState({
-    aboutMe: '',
-    company: '',
-    jobTitle: '',
-    school: ''
-  })
+  const dispatch = UseAppDispatch();
+
 
   const getLeetCodeInfo = React.useCallback(async (nameFromUrl: string) => {
-    const query = `
-    query userProfile($username: String!) {
-      matchedUser(username: $username) {
-        profile {
-          aboutMe
-          company
-          jobTitle
-          school
-        }
-      }
-    }
-  `
-    const variables = { username: nameFromUrl }
-
-
-    const param = JSON.stringify({
-      query,
-      variables,
-      url: LeetCodeApi
+    getLeetCodeProfileInfo(nameFromUrl, QueryType.userProfileQuery).then((output: any) => {
+      dispatch(setLeetcodeUserInfo({ ...output, username: nameFromUrl }));
     })
 
-    fetch('/api/leetcode-api', { method: "POST", body: param })
-      .then(function (res) {
-        return res.json();
-      })
-      .then(function (json) {
-        // resolve(json)
-        console.log(json)
-        if (!json) return
-        const { matchedUser } = json
-        if (!matchedUser) return
-        const { profile } = matchedUser
-
-        if (!profile) return
-        setLeetcodeInfo(profile)
-      })
-
+    getLeetCodeProfileInfo(nameFromUrl, QueryType.LangugaeProblemSolvedQuery).then((output: any) => {
+      dispatch(setLeetcodeLanguageProblemCount(output));
+    })
+    getLeetCodeProfileInfo(nameFromUrl, QueryType.TagProblemsCountQuery).then((output: any) => {
+      dispatch(setLeetcodeTagProblemCounts(output));
+    })
 
   }, [])
 
@@ -89,10 +61,7 @@ const LeetCodeArea = (props: any) => {
 
 
   return <>
-    {leetcodeInfo.aboutMe && <>
-      <h1>Leetcode : about me </h1>
-      <p>{leetcodeInfo.aboutMe}</p>
-    </>}
+
 
   </>
 }

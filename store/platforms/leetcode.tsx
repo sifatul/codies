@@ -1,24 +1,71 @@
 
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
+interface LanguageProblemCountType {
+  languageName: string,
+  problemsSolved: number
+}
+interface TagProblemItemType {
+  tagName: string,
+  tagSlug: number
+  problemsSolved: number
+}
+export interface LeetcodeUserProfileType {
+  userAvatar: string | null;
+  realName: string | null;
+  aboutMe: string | null;
+  school: string | null;
+  countryName: string | null;
+  company: string | null;
+  jobTitle: string | null;
+  postViewCount: number;
+  reputation: number;
+  solutionCount: number;
+  websites?: string[]
 
+}
 
 export interface LeetcodeUserInfoType {
-  blog: string;
-  email: string;
-  avatar_url: string;
-  leetcode_url: string;
-  // profile links
-
+  githubUrl: string | null;
+  twitterUrl: string | null;
+  linkedinUrl: string | null;
+  username: string | null;
+  profile: LeetcodeUserProfileType;
+  languageProblemCount?: LanguageProblemCountType[];
+  tagProblemCounts?: {
+    advanced: TagProblemItemType[],
+    medium: TagProblemItemType[],
+    fundamental: TagProblemItemType[],
+  }
 }
 
 /**
  * Default state object with initial values.
  */
 const initialState: LeetcodeUserInfoType = {
-  blog: '',
-  email: '',
-  avatar_url: '',
-  leetcode_url: ''
+  githubUrl: null,
+  twitterUrl: null,
+  linkedinUrl: null,
+  username: "",
+  profile: {
+    userAvatar: "",
+    realName: "",
+    aboutMe: "",
+    school: null,
+    countryName: null,
+    company: null,
+    jobTitle: null,
+    postViewCount: 0,
+    reputation: 0,
+    solutionCount: 0,
+
+  },
+  languageProblemCount: [],
+  tagProblemCounts: {
+    advanced: [],
+    medium: [],
+    fundamental: [],
+  }
+
 } as const;
 
 /**
@@ -27,27 +74,38 @@ const initialState: LeetcodeUserInfoType = {
  * In this example actions are included in the slice. It is fine and can be
  * changed based on your needs.
  */
-export const userSlice = createSlice({
+export const leetcodeUser = createSlice({
   name: 'user',
   initialState,
   reducers: {
 
-    setleetcodeUserInfo: (
+    setLeetcodeUserInfo: (
       state: Draft<typeof initialState>,
       action: PayloadAction<LeetcodeUserInfoType>
     ) => {
-      console.log("setleetcode", action.payload)
-      state.blog = action.payload.blog
-
+      state.githubUrl = action.payload.githubUrl;
+      state.twitterUrl = action.payload.twitterUrl;
+      state.linkedinUrl = action.payload.linkedinUrl;
+      state.profile = action.payload.profile;
+      state.username = action.payload.username;
     },
-    setleetcodeProfileUrl: (
+    setLeetcodeLanguageProblemCount: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<string>
+      action: PayloadAction<LanguageProblemCountType[]>
     ) => {
-      console.log("setleetcode", action.payload)
-      state.leetcode_url = action.payload
-
+      state.languageProblemCount = action.payload;
     },
+    setLeetcodeTagProblemCounts: (
+      state: Draft<typeof initialState>,
+      action: PayloadAction<{
+        advanced: TagProblemItemType[],
+        medium: TagProblemItemType[],
+        fundamental: TagProblemItemType[],
+
+      }>
+    ) => {
+      state.tagProblemCounts = action.payload;
+    }
   },
 });
 
@@ -55,6 +113,6 @@ export const userSlice = createSlice({
 export const getLeetcodeUserInfo = (state: { leetcode: LeetcodeUserInfoType }) => state.leetcode;
 
 // Exports all actions
-export const { setleetcodeUserInfo } = userSlice.actions;
+export const { setLeetcodeUserInfo, setLeetcodeLanguageProblemCount, setLeetcodeTagProblemCounts } = leetcodeUser.actions;
 
-export default userSlice.reducer;
+export default leetcodeUser.reducer;
