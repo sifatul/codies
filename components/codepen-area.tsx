@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
+import { UseAppDispatch } from '../store';
+import { setcodepenUserInfo } from '../store/platforms/codepen';
 import { SearchByType } from '../types/common.types';
 import { GetData } from '../Utils/fetchData';
 interface codepenItemType {
@@ -11,6 +13,8 @@ interface codepenItemType {
 const codepenInfoFetchUrl =
     'https://api.rss2json.com/v1/api.json?rss_url=https://codepen.io/userName/popular/feed/';
 const CodePenArea = (props: any) => {
+    const dispatch = UseAppDispatch();
+
     const { originalSearchVal, searchBy, pathname } = props;
     const [popularPen, setPopularPen] = useState<codepenItemType[]>([]);
     let codePenUserName = originalSearchVal;
@@ -24,6 +28,8 @@ const CodePenArea = (props: any) => {
     const getCodepenData = useCallback(async () => {
         const data: any = await GetData(codepenInfoFetchApi);
         const { items = [] } = data;
+
+
         const sortedData: codepenItemType[] = items.sort(
             (a: { pubDate: string }, b: { pubDate: string }) => {
                 const timeA = new Date(a.pubDate).getTime();
@@ -31,6 +37,11 @@ const CodePenArea = (props: any) => {
                 return timeB - timeA;
             }
         );
+        const codepenData = {
+            pens: sortedData,
+            username: codePenUserName
+        }
+        dispatch(setcodepenUserInfo(codepenData))
         setPopularPen(sortedData.slice(0, 2));
     }, []);
 

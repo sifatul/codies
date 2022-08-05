@@ -5,28 +5,20 @@ import {
     Grid,
     Typography
 } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import LeetCodeArea from '../components/leetcode-area';
 import { UseAppDispatch, UseAppSelector } from '../store';
-import { getHackerRankUserInfo, setHackerRankInfo } from '../store/platforms/hackerrank';
-import { getUserState, setCountry, setName, setProfilePic } from '../store/user/basicInfo';
-import { getGithubUserInfo, setGithubUserInfo } from '../store/platforms/github';
+import { getGithubUserInfo, setGithubUserInfo, setGithubUsername } from '../store/platforms/github';
+import { getHackerRankUserInfo, hackerRankDataType, setHackerRankInfo } from '../store/platforms/hackerrank';
+import { setCountry, setEmail, setName, setProfilePic } from '../store/user/basicInfo';
 import { SearchByType } from '../types/common.types';
 import { PostData } from '../Utils/fetchData';
 import { getGithubInfoByName, getRepoList } from '../Utils/github';
 import CodePenArea from './codepen-area';
 import CardGithub from './common/card';
-import UserInfoArea from './userInfo-area';
+import GithubArea from './github-area';
 
-interface hackerRankDataType {
-    linkedin_url: string;
-    github_url: string;
-    leetcode_url: string;
-    country: string;
-    languages: string[];
-    avatar: string;
-    username: string;
-}
+
 
 
 const domainList: any = {
@@ -59,8 +51,8 @@ const DataArea = (props: any) => {
         const data: any = await PostData(postApiForwardingApi, userProfileApi);
         const hackerRankdata: hackerRankDataType = data?.model || {};
         console.log("hackerRankdata", hackerRankdata)
-        const { username, avatar, country } = hackerRankdata
-        if (username) dispatch(setName(username))
+        const { username, avatar, country, name } = hackerRankdata
+        if (name) dispatch(setName(name))
         if (avatar) dispatch(setProfilePic(avatar))
         if (country) dispatch(setCountry(country))
         dispatch(setHackerRankInfo(hackerRankdata))
@@ -68,18 +60,7 @@ const DataArea = (props: any) => {
 
     }, []);
 
-    const getGithubData = React.useCallback(async (name: string) => {
-        if (window == undefined) return;
-        const getRepoListApi = domainList.github.repoListApi.replace('userName', name);
-        const userProfileApi = domainList.github.userInfoApi.replace('userName', name);
 
-        const [gitHubBasicInfo, githubRepos] = await Promise.all([
-            getGithubInfoByName(userProfileApi),
-            getRepoList(getRepoListApi),
-        ]);
-
-        dispatch(setGithubUserInfo({ ...gitHubBasicInfo, topRepos: githubRepos, github_url: gitHubBasicInfo?.html_url }))
-    }, []);
 
     const getDataFromUrl = useCallback(() => {
         if (!hostname || !pathname) return;
@@ -89,11 +70,12 @@ const DataArea = (props: any) => {
             getHackerRankInfo(nameFromUrl).then((output) => {
                 const { github_url } = output;
                 const githubUserName = github_url?.split('/').pop() || nameFromUrl;
-                getGithubData(githubUserName);
+                dispatch(setGithubUsername(githubUserName))
+                // getGithubData(githubUserName);
             });
         } else if (new RegExp('github.com').test(hostname)) {
             getHackerRankInfo(nameFromUrl);
-            getGithubData(nameFromUrl);
+            // getGithubData(nameFromUrl);
         }
         return;
     }, [hostname, pathname]);
@@ -102,8 +84,8 @@ const DataArea = (props: any) => {
 
         const hackerRankInfo = await getHackerRankInfo(originalSearchVal);
         const { github_url } = hackerRankInfo;
-        const githubUserName = github_url?.split('/').pop() || originalSearchVal;
-        getGithubData(githubUserName);
+        // const githubUserName = github_url?.split('/').pop() || originalSearchVal;
+        // getGithubData(githubUserName);
     }, [originalSearchVal]);
 
     useEffect(() => {
@@ -115,10 +97,6 @@ const DataArea = (props: any) => {
         }
     }, [searchBy, originalSearchVal]);
 
-    const userAvatar = React.useMemo(() => {
-        if (githubUserInfo.avatar_url) return githubUserInfo.avatar_url;
-        return hackerrankUserInfo.avatar;
-    }, [githubUserInfo.avatar_url, hackerrankUserInfo.avatar]);
 
 
 
@@ -129,21 +107,7 @@ const DataArea = (props: any) => {
 
             <Grid container spacing={2} >
                 <Grid item lg={10} md={12} xs={12} p={2}>
-                    {(githubUserInfo.topRepos || [])?.length > 0 && (
-                        <>
-                            <Typography variant='h5' component='div'>
-                                Projects
-                            </Typography>
-
-                            <Divider sx={{ mb: 5 }} />
-
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                {githubUserInfo.topRepos?.map((repo, idx) => (
-                                    <CardGithub topRepo={repo} key={'repo' + idx} />
-                                ))}
-                            </div>
-                        </>
-                    )}
+                    <GithubArea {...searchVal} />
 
                     {/* {userInfo?.hackerrank.linkedin_url && <LinkedinArea linkedin_url={userInfo?.hackerrank.linkedin_url} />} */}
                     <CodePenArea {...searchVal} />

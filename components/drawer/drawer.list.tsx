@@ -8,52 +8,59 @@ import React from "react";
 import { UseAppSelector } from "../../store";
 import { getGithubUserInfo } from '../../store/platforms/github';
 import { getHackerRankUserInfo } from '../../store/platforms/hackerrank';
+import { getLeetcodeUserInfo } from '../../store/platforms/leetcode';
+import { getcodepenUserInfo } from '../../store/platforms/codepen';
+
 import { getUserState } from '../../store/user/basicInfo';
 
-const codingPlatforms = [
-  {
+const codingPlatforms = {
+  hackerrank: {
     name: 'HackerRank',
     icon: '/icons/hackerrank.png',
     secondary: '--'
   },
-  {
+  leetcode: {
     name: 'Leetcode',
     icon: '/icons/leetcode.png',
     secondary: '--'
   },
-  {
+  codepen: {
     name: 'Codepen',
     icon: '/icons/codepen.svg',
     secondary: '--'
   }
-]
+}
 
-const otherPlatforms = [
-  {
+const otherPlatforms = {
+  github: {
     name: 'Github',
     icon: '/icons/github.svg',
     secondary: '--'
   },
-  {
+  linkedin: {
     name: 'Linkedin',
     icon: '/icons/linkedin.svg',
     secondary: '--'
   },
 
-]
+}
 
-const ShowFromList = ({ codingPlatforms }: { codingPlatforms: any[] }) => {
+const ShowFromList = ({ codingPlatforms }: { codingPlatforms: any }) => {
+  const platforms = Object.keys(codingPlatforms)
   return <> {
-    codingPlatforms.map(({ name, icon, secondary }) => (
-      <ListItem key={name} disablePadding>
-        <ListItemButton>
-          <ListItemIcon>
-            <img src={icon} alt={name} height={40} width={40} />
-          </ListItemIcon>
-          <ListItemText primary={name} secondary={secondary} />
-        </ListItemButton>
-      </ListItem>
-    ))
+    platforms.map((name) => {
+      const { icon, secondary } = codingPlatforms[name]
+      return (
+        <ListItem key={name} disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <img src={icon} alt={name} height={40} width={40} />
+            </ListItemIcon>
+            <ListItemText primary={name} secondary={secondary} />
+          </ListItemButton>
+        </ListItem>
+      )
+    })
   }
   </>
 }
@@ -61,12 +68,21 @@ const ShowFromList = ({ codingPlatforms }: { codingPlatforms: any[] }) => {
 const drawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) => {
 
   const UserInfoState = UseAppSelector(getUserState);
-  const { blog = '--', github_url = '--' } = UseAppSelector(getGithubUserInfo);
-  const { username = '' } = UseAppSelector(getHackerRankUserInfo);
-  const { profilePic = '', name = '--', country = '--' } = UserInfoState
+  const { profile_url: leetcode_profile_url } = UseAppSelector(getLeetcodeUserInfo);
+  const { blog = '--', html_url = '--' } = UseAppSelector(getGithubUserInfo);
+  const { profile_url = '--', linkedin_url = "" } = UseAppSelector(getHackerRankUserInfo);
+  const { profile_url: codepen_profile_url = '--' } = UseAppSelector(getcodepenUserInfo);
+  const { profilePic = '', name = '--', country = '--', email = '--' } = UserInfoState
+  if (linkedin_url) {
+    const { hostname: linkedinHost, pathname: linkedinPath } = new URL(linkedin_url);
+    otherPlatforms.linkedin.secondary = linkedinHost + linkedinPath;
 
-  if (github_url) otherPlatforms[0].secondary = github_url.replace('https://', '');
-  if (username) codingPlatforms[0].secondary = "hackerrank.com/userName".replace('userName', username)
+  }
+
+  otherPlatforms.github.secondary = html_url.replace('https://', '');
+  codingPlatforms.hackerrank.secondary = profile_url;
+  codingPlatforms.leetcode.secondary = leetcode_profile_url;
+  codingPlatforms.codepen.secondary = codepen_profile_url;
 
 
   return <Box sx={{ width: 250 }}
@@ -81,6 +97,14 @@ const drawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) =
       <ListItemText primary={name} secondary={country} />
     </ListItem>
 
+    <ListItem disablePadding>
+      <ListItemButton>
+        <ListItemIcon>
+          <img src={'/icons/email.png'} alt={'email address'} height={40} width={40} />
+        </ListItemIcon>
+        <ListItemText primary={'Email'} secondary={email} />
+      </ListItemButton>
+    </ListItem>
 
     <ListItem>
       <ListItemIcon>

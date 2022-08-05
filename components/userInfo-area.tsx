@@ -1,6 +1,5 @@
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ImageIcon from '@mui/icons-material/Image';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import MailIcon from '@mui/icons-material/Mail';
 import { Avatar, Box, Collapse, ListItem, ListItemAvatar, ListItemText, Stack } from "@mui/material";
 import React from "react";
