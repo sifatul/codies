@@ -45,11 +45,11 @@ const otherPlatforms = {
 
 }
 
-const ShowFromList = ({ codingPlatforms }: { codingPlatforms: any }) => {
-  const platforms = Object.keys(codingPlatforms)
+const ShowFromList = ({ platformsList }: { platformsList: any }) => {
+  const platforms = Object.keys(platformsList)
   return <> {
     platforms.map((name) => {
-      const { icon, secondary } = codingPlatforms[name]
+      const { icon, secondary } = platformsList[name]
       return (
         <ListItem key={name} disablePadding>
           <ListItemButton>
@@ -97,14 +97,14 @@ const drawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) =
       <ListItemText primary={name} secondary={country} />
     </ListItem>
 
-    <ListItem disablePadding>
-      <ListItemButton>
-        <ListItemIcon>
-          <img src={'/icons/email.png'} alt={'email address'} height={40} width={40} />
-        </ListItemIcon>
-        <ListItemText primary={'Email'} secondary={email} />
-      </ListItemButton>
-    </ListItem>
+
+    <ShowFromList platformsList={{
+      Email: {
+        name: 'Email',
+        icon: '/icons/email.png',
+        secondary: email
+      },
+    }} />
 
     <ListItem>
       <ListItemIcon>
@@ -118,9 +118,9 @@ const drawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) =
 
     <Divider />
 
-    <ShowFromList codingPlatforms={otherPlatforms} />
+    <ShowFromList platformsList={otherPlatforms} />
     <Divider />
-    <ShowFromList codingPlatforms={codingPlatforms} />
+    <ShowFromList platformsList={codingPlatforms} />
 
   </ Box>
 
