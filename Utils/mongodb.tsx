@@ -1,10 +1,7 @@
 import { ConnectOptions, Db, MongoClient } from 'mongodb';
 
-// let uri = process.env.MONGODB_URI
-// let dbName = process.env.MONGODB_DB
-let uri =
-    'mongodb+srv://juaid22:Z4Ji7J81BPWRXSxc@cluster0.ojy89xm.mongodb.net/?retryWrites=true&w=majority';
-let dbName = 'find_profiles';
+let uri = process.env.MONGODB_URI || '';
+let dbName = process.env.MONGODB_DB || '';
 
 let cachedClient: MongoClient | null = null;
 let cachedDb: Db | null = null;
