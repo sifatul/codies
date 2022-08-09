@@ -100,15 +100,12 @@ const DataArea = (props: any) => {
             {loading ? (
                 <CircularProgress />
             ) : (
-                <Grid container spacing={2}>
-                    <Grid item lg={10} md={12} xs={12} p={2}>
-                        <GithubArea {...searchVal} />
-
-                        {/* {userInfo?.hackerrank.linkedin_url && <LinkedinArea linkedin_url={userInfo?.hackerrank.linkedin_url} />} */}
-                        <CodePenArea {...searchVal} />
-                        <LeetCodeArea {...searchVal} />
-                    </Grid>
-                </Grid>
+                <>
+                    <GithubArea {...searchVal} />
+                    {/* {userInfo?.hackerrank.linkedin_url && <LinkedinArea linkedin_url={userInfo?.hackerrank.linkedin_url} />} */}
+                    <CodePenArea {...searchVal} />
+                    <LeetCodeArea {...searchVal} />
+                </>
             )}
         </Container>
     );
