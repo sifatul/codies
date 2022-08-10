@@ -10,5 +10,5 @@ export default async (req, res) => {
     .limit(20)
     .toArray();
 
-  res.json(movies);
+  return res.json(movies);
 };
