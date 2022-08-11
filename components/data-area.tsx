@@ -2,6 +2,7 @@ import { CircularProgress, Container, Grid } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import LeetCodeArea from '../components/leetcode-area';
 import { UseAppDispatch, UseAppSelector } from '../store';
+import { getFilterState } from '../store/filter';
 import { getGithubUserInfo, setGithubUsername } from '../store/platforms/github';
 import {
     getHackerRankUserInfo,
@@ -30,6 +31,7 @@ const DataArea = (props: any) => {
     const [loading, setLoading] = useState(false);
     const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
     const githubUserInfo = UseAppSelector(getGithubUserInfo);
+    const filterState = UseAppSelector(getFilterState);
     console.log('hackerrankUserInfo: ', hackerrankUserInfo);
     console.log('github: ', githubUserInfo);
 
@@ -82,6 +84,25 @@ const DataArea = (props: any) => {
         // getGithubData(githubUserName);
     }, [originalSearchVal]);
 
+    const renderData = (currentFilter: null | string) => {
+        switch (currentFilter) {
+            case null:
+                return (
+                    <>
+                        <GithubArea {...searchVal} />
+                        <CodePenArea {...searchVal} />
+                        <LeetCodeArea {...searchVal} />
+                    </>
+                );
+            case 'LEETCODE':
+                return <LeetCodeArea {...searchVal} />;
+            case 'CODEPEN':
+                return <CodePenArea {...searchVal} />;
+            case 'GITHUB':
+                return <GithubArea {...searchVal} />;
+        }
+    };
+
     useEffect(() => {
         if (searchBy === SearchByType.URL) {
             getDataFromUrl();
@@ -102,11 +123,7 @@ const DataArea = (props: any) => {
             ) : (
                 <Grid container spacing={2}>
                     <Grid item lg={10} md={12} xs={12} p={2}>
-                        <GithubArea {...searchVal} />
-
-                        {/* {userInfo?.hackerrank.linkedin_url && <LinkedinArea linkedin_url={userInfo?.hackerrank.linkedin_url} />} */}
-                        <CodePenArea {...searchVal} />
-                        <LeetCodeArea {...searchVal} />
+                        {renderData(filterState.currentFilter)}
                     </Grid>
                 </Grid>
             )}
