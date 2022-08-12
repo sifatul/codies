@@ -1,85 +1,17 @@
-import { CircularProgress, Container, Grid } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import { Container, Grid } from '@mui/material';
+import React from 'react';
 import LeetCodeArea from '../components/leetcode-area';
-import { UseAppDispatch, UseAppSelector } from '../store';
+import { UseAppSelector } from '../store';
 import { getFilterState } from '../store/filter';
-import { getGithubUserInfo, setGithubUsername } from '../store/platforms/github';
-import {
-    getHackerRankUserInfo,
-    hackerRankDataType,
-    setHackerRankInfo,
-} from '../store/platforms/hackerrank';
-import { setCountry, setName, setProfilePic } from '../store/user/basicInfo';
-import { Filter, SearchByType } from '../types/common.types';
-import { PostData } from '../Utils/fetchData';
+import { Filter } from '../types/common.types';
 import CodePenArea from './codepen-area';
 import GithubArea from './github-area';
+import HackerrankArea from './hackerrank-area';
 
-const domainList: any = {
-    hackerrank: {
-        name: 'hackerrank',
-        userInfoApi: 'https://www.hackerrank.com/rest/contests/master/hackers/userName/profile',
-    },
-    github: {
-        name: 'github',
-        userInfoApi: 'https://api.github.com/users/userName',
-        repoListApi: 'https://api.github.com/users/userName/repos',
-    },
-};
+
 const DataArea = (props: any) => {
-    const dispatch = UseAppDispatch();
-    const [loading, setLoading] = useState(false);
-    const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
-    const githubUserInfo = UseAppSelector(getGithubUserInfo);
-    const filterState = UseAppSelector(getFilterState);
     const { searchVal } = props;
-    const { hostname = '', pathname = '', searchBy, originalSearchVal } = searchVal;
-
-    const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
-        const getUserProfileApi = domainList.hackerrank.userInfoApi;
-        const userProfileApi = getUserProfileApi.replace('userName', nameFromUrl);
-        const postApiForwardingApi = '/api/forward-api';
-        const data: any = await PostData(postApiForwardingApi, userProfileApi);
-        const hackerRankdata: hackerRankDataType = data?.model || {};
-        const { username, avatar, country, name } = hackerRankdata;
-        if (name) dispatch(setName(name));
-        if (avatar) dispatch(setProfilePic(avatar));
-        if (country) dispatch(setCountry(country));
-        dispatch(setHackerRankInfo(hackerRankdata));
-        return hackerRankdata;
-    }, []);
-
-    const getDataFromUrl = useCallback(() => {
-        if (!hostname || !pathname) return;
-        const nameFromUrl = pathname.split('/').pop();
-        setLoading(true);
-        if (new RegExp('hackerrank.com').test(hostname)) {
-            getHackerRankInfo(nameFromUrl).then((output) => {
-                const { github_url } = output;
-                const githubUserName = github_url?.split('/').pop() || nameFromUrl;
-                dispatch(setGithubUsername(githubUserName));
-                setLoading(false);
-                // getGithubData(githubUserName);
-            });
-        } else if (new RegExp('github.com').test(hostname)) {
-            getHackerRankInfo(nameFromUrl);
-            setLoading(false);
-            // getGithubData(nameFromUrl);
-        } else {
-            setLoading(false);
-        }
-
-        return;
-    }, [hostname, pathname]);
-
-    const getDataFromName = useCallback(async () => {
-        if (!originalSearchVal) return;
-
-        const hackerRankInfo = await getHackerRankInfo(originalSearchVal);
-        const { github_url } = hackerRankInfo;
-        // const githubUserName = github_url?.split('/').pop() || originalSearchVal;
-        // getGithubData(githubUserName);
-    }, [originalSearchVal]);
+    const filterState = UseAppSelector(getFilterState);
 
     const renderData = (currentFilter: null | string) => {
         switch (currentFilter) {
@@ -89,6 +21,7 @@ const DataArea = (props: any) => {
                         <GithubArea {...searchVal} />
                         <CodePenArea {...searchVal} />
                         <LeetCodeArea {...searchVal} />
+                        <HackerrankArea {...searchVal} />
                     </>
                 );
             case Filter.LEETCODE:
@@ -97,16 +30,12 @@ const DataArea = (props: any) => {
                 return <CodePenArea {...searchVal} />;
             case Filter.GITHUB:
                 return <GithubArea {...searchVal} />;
+            case Filter.HACKERRANK:
+                return <HackerrankArea {...searchVal} />;
         }
     };
 
-    useEffect(() => {
-        if (searchBy === SearchByType.URL) {
-            getDataFromUrl();
-        } else if (searchBy === SearchByType.NAME) {
-            getDataFromName();
-        }
-    }, [searchBy, originalSearchVal]);
+
 
     return (
         <Container
@@ -115,15 +44,13 @@ const DataArea = (props: any) => {
                 paddingTop: '50px',
             }}
         >
-            {loading ? (
-                <CircularProgress />
-            ) : (
-                    <Grid container spacing={2}>
-                        <Grid item lg={10} md={12} xs={12} p={2}>
-                            {renderData(filterState.currentFilter)}
-                        </Grid>
-                    </Grid>
-                )}
+
+            <Grid container spacing={2}>
+                <Grid item lg={10} md={12} xs={12} p={2}>
+                    {renderData(filterState.currentFilter)}
+                </Grid>
+            </Grid>
+
         </Container>
     );
 };
