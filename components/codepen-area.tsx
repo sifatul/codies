@@ -48,7 +48,6 @@ const CodePenArea = (props: any) => {
     useEffect(() => {
         getCodepenData();
     }, []);
-    console.log(popularPen);
     if (!codePenUserName) return <></>;
 
     return (

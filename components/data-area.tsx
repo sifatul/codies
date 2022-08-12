@@ -32,12 +32,8 @@ const DataArea = (props: any) => {
     const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
     const githubUserInfo = UseAppSelector(getGithubUserInfo);
     const filterState = UseAppSelector(getFilterState);
-    console.log('hackerrankUserInfo: ', hackerrankUserInfo);
-    console.log('github: ', githubUserInfo);
-
     const { searchVal } = props;
     const { hostname = '', pathname = '', searchBy, originalSearchVal } = searchVal;
-    console.log(searchVal);
 
     const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
         const getUserProfileApi = domainList.hackerrank.userInfoApi;
@@ -45,7 +41,6 @@ const DataArea = (props: any) => {
         const postApiForwardingApi = '/api/forward-api';
         const data: any = await PostData(postApiForwardingApi, userProfileApi);
         const hackerRankdata: hackerRankDataType = data?.model || {};
-        console.log('hackerRankdata', hackerRankdata);
         const { username, avatar, country, name } = hackerRankdata;
         if (name) dispatch(setName(name));
         if (avatar) dispatch(setProfilePic(avatar));
@@ -57,7 +52,6 @@ const DataArea = (props: any) => {
     const getDataFromUrl = useCallback(() => {
         if (!hostname || !pathname) return;
         const nameFromUrl = pathname.split('/').pop();
-        console.log(nameFromUrl);
         setLoading(true);
         if (new RegExp('hackerrank.com').test(hostname)) {
             getHackerRankInfo(nameFromUrl).then((output) => {
@@ -71,7 +65,10 @@ const DataArea = (props: any) => {
             getHackerRankInfo(nameFromUrl);
             setLoading(false);
             // getGithubData(nameFromUrl);
+        } else {
+            setLoading(false);
         }
+
         return;
     }, [hostname, pathname]);
 
@@ -121,12 +118,12 @@ const DataArea = (props: any) => {
             {loading ? (
                 <CircularProgress />
             ) : (
-                <Grid container spacing={2}>
-                    <Grid item lg={10} md={12} xs={12} p={2}>
-                        {renderData(filterState.currentFilter)}
+                    <Grid container spacing={2}>
+                        <Grid item lg={10} md={12} xs={12} p={2}>
+                            {renderData(filterState.currentFilter)}
+                        </Grid>
                     </Grid>
-                </Grid>
-            )}
+                )}
         </Container>
     );
 };
