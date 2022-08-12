@@ -3,4 +3,12 @@ enum SearchByType {
     URL = 'url',
     NONE = 'none',
 }
-export { SearchByType };
+
+enum Filter {
+    GITHUB = 'GITHUB',
+    LINKEDIN = 'LINKEDIN',
+    CODEPEN = 'CODEPEN',
+    HACKERRANK = 'HACKERRANK',
+    LEETCODE = 'LEETCODE',
+}
+export { SearchByType, Filter };

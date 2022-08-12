@@ -10,7 +10,7 @@ import {
     setHackerRankInfo,
 } from '../store/platforms/hackerrank';
 import { setCountry, setName, setProfilePic } from '../store/user/basicInfo';
-import { SearchByType } from '../types/common.types';
+import { Filter, SearchByType } from '../types/common.types';
 import { PostData } from '../Utils/fetchData';
 import CodePenArea from './codepen-area';
 import GithubArea from './github-area';
@@ -94,11 +94,11 @@ const DataArea = (props: any) => {
                         <LeetCodeArea {...searchVal} />
                     </>
                 );
-            case 'LEETCODE':
+            case Filter.LEETCODE:
                 return <LeetCodeArea {...searchVal} />;
-            case 'CODEPEN':
+            case Filter.CODEPEN:
                 return <CodePenArea {...searchVal} />;
-            case 'GITHUB':
+            case Filter.GITHUB:
                 return <GithubArea {...searchVal} />;
         }
     };

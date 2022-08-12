@@ -1,17 +1,10 @@
-// import LanguageIcon from '@mui/icons-material/Language';
-import { Avatar, Box, ListItem, ListItemAvatar } from '@mui/material';
+import { Box, ListItem } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import React, { useState } from 'react';
-import { UseAppDispatch, UseAppSelector } from '../../store';
-// import { getGithubUserInfo } from '../../store/platforms/github';
-// import { getHackerRankUserInfo } from '../../store/platforms/hackerrank';
-// import { getLeetcodeUserInfo } from '../../store/platforms/leetcode';
-// import { getcodepenUserInfo } from '../../store/platforms/codepen';
-
-// import { getUserState } from '../../store/user/basicInfo';
+import { UseAppDispatch } from '../../store';
 import { setFilter } from '../../store/filter';
 
 const codingPlatforms = {
@@ -76,12 +69,6 @@ const ShowFromList = ({ platformsList, onClick }: { platformsList: any; onClick:
 
 const DrawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) => {
     const [activeDrawerItem, setActiveDrawerItem] = useState('CODEPEN');
-    // const UserInfoState = UseAppSelector(getUserState);
-    // const { profile_url: leetcode_profile_url } = UseAppSelector(getLeetcodeUserInfo);
-    // const { blog = '--', html_url = '--' } = UseAppSelector(getGithubUserInfo);
-    // const { profile_url = '--', linkedin_url = '' } = UseAppSelector(getHackerRankUserInfo);
-    // const { profile_url: codepen_profile_url = '--' } = UseAppSelector(getcodepenUserInfo);
-    // const { profilePic = '', name = '--', country = '--', email = '--' } = UserInfoState;
     const dispatch = UseAppDispatch();
 
     return (
@@ -91,31 +78,6 @@ const DrawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) =
             onClick={toggleDrawer(false)}
             onKeyDown={toggleDrawer(false)}
         >
-            {/* <ListItem>
-                <ListItemAvatar>
-                    <Avatar alt='avatar' src={profilePic} />
-                </ListItemAvatar>
-                <ListItemText primary={name} secondary={country} />
-            </ListItem> */}
-
-            {/* <ShowFromList
-                platformsList={{
-                    Email: {
-                        name: 'Email',
-                        icon: '/icons/email.png',
-                        secondary: email,
-                    },
-                }}
-            /> */}
-
-            {/* <ListItem>
-                <ListItemIcon>
-                    <Avatar>
-                        <LanguageIcon />
-                    </Avatar>
-                </ListItemIcon>
-                <ListItemText primary='Blog' secondary={blog} />
-            </ListItem> */}
             <ListItem
                 disablePadding
                 onClick={() => {
