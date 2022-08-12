@@ -12,17 +12,20 @@ const HackerrankArea = (props: any) => {
   const dispatch = UseAppDispatch();
   const [loading, setLoading] = useState(false);
   const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
-  const { hostname = '', pathname = '', searchBy, originalSearchVal } = props;
+  const { hostname = '', pathname = '', searchBy, originalSearchVal, userFound } = props;
   console.log(props)
   useEffect(() => {
-    if (new RegExp('hackerrank.com').test(hostname) === false) return
 
+    const { hackerrank_url } = userFound
     if (searchBy === SearchByType.URL) {
-      getDataFromUrl();
+      getDataFromUrl(originalSearchVal);
     } else if (searchBy === SearchByType.NAME) {
-      getDataFromName();
+      getDataFromName(originalSearchVal);
+    } else if (searchBy === SearchByType.EMAIL && hackerrank_url) {
+      console.log("hackerrank_url: ", hackerrank_url)
+      getDataFromUrl(hackerrank_url);
     }
-  }, [searchBy, originalSearchVal]);
+  }, [searchBy, originalSearchVal, userFound]);
 
 
   const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
@@ -40,26 +43,42 @@ const HackerrankArea = (props: any) => {
     return hackerRankdata;
   }, []);
 
-  const getDataFromUrl = useCallback(async () => {
-    if (!hostname || !pathname) return;
-    const nameFromUrl = pathname.split('/').pop();
+  const getDataFromUrl = useCallback(async (hackerRankUrl: string) => {
+
+    let UrlIfno;
+    try {
+      UrlIfno = new URL(hackerRankUrl);
+    } catch (e) {
+      console.error(e);
+    }
+    if (!UrlIfno) return console.warn("hackerrank area> UrlIfno: not found")
+    let { pathname, hostname } = UrlIfno;
+    console.warn("hackerrank area> pathname, hostname", pathname, hostname)
+
+    if (!pathname || !hostname) return console.warn("hackerrank area> hostname: not found")
+
+    const nameFromUrl = pathname.split('/').filter(item => item).pop()
+    if (!nameFromUrl) return console.warn("hackerrank area> nameFromUrl: not found")
+
+    if (new RegExp('hackerrank.com').test(hostname) === false) return
+
     setLoading(true);
     const { github_url } = await getHackerRankInfo(nameFromUrl);
     setLoading(false);
-    if (!github_url) return
+    if (!github_url) return console.warn("hackerrank area> github_url: not found")
 
-    const githubUserName = github_url?.split('/').pop() || nameFromUrl;
+    const githubUserName = github_url?.split('/').pop();
+    if (!githubUserName) return console.warn("hackerrank area> githubUserName: not found")
     dispatch(setGithubUsername(githubUserName));
-  }, [hostname, pathname]);
+  }, []);
 
-  const getDataFromName = useCallback(async () => {
-    if (!originalSearchVal) return;
+  const getDataFromName = useCallback(async (name: string) => {
+    if (!name) return;
 
-    const { github_url } = await getHackerRankInfo(originalSearchVal);
+    const { github_url } = await getHackerRankInfo(name);
     setLoading(false);
     if (!github_url) return
-    const githubUserName = github_url?.split('/').pop() || originalSearchVal;
-    dispatch(setGithubUsername(githubUserName));
+    dispatch(setGithubUsername(github_url));
   }, [originalSearchVal]);
 
 

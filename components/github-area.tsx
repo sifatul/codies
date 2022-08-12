@@ -1,5 +1,5 @@
 import { Divider, Typography } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
 import { getGithubUserInfo, setGithubUserInfo, setGithubUsername } from '../store/platforms/github';
 import { setEmail } from '../store/user/basicInfo';
@@ -14,7 +14,7 @@ const githubApi = {
 }
 
 const GithubArea = (props: any) => {
-  const { hostname = '', pathname = '', searchBy, originalSearchVal } = props;
+  const { hostname = '', pathname = '', searchBy, originalSearchVal, userFound } = props;
 
   const githubUserInfo = UseAppSelector(getGithubUserInfo);
   const { username } = githubUserInfo
@@ -23,17 +23,30 @@ const GithubArea = (props: any) => {
   useEffect(() => {
     if (username) return
     let githubUserName = originalSearchVal
+    const { github_url } = userFound
     if (searchBy === SearchByType.URL) {
-      if (!hostname || !pathname) return;
-      githubUserName = pathname.split('/').pop();
+      getGithubUserByUrl(originalSearchVal)
+    } else if (searchBy === SearchByType.EMAIL) {
+      getGithubUserByUrl(github_url)
+    } else {
+      dispatch(setGithubUsername(githubUserName))
     }
-    dispatch(setGithubUsername(githubUserName))
 
   }, [originalSearchVal]);
 
+  const getGithubUserByUrl = useCallback((githubUrl: string) => {
+
+    if (!githubUrl) return
+    let { pathname: githubUserName } = new URL(githubUrl);
+    if (!githubUserName) return
+
+    const nameFromUrl = githubUserName.split('/').pop();
+    if (!nameFromUrl) return
+    dispatch(setGithubUsername(githubUserName))
+  }, [])
+
   useEffect(() => {
     if (!username) return
-
     getGithubData(username)
   }, [username]);
 
@@ -51,9 +64,6 @@ const GithubArea = (props: any) => {
     if (email) dispatch(setEmail(email))
     dispatch(setGithubUserInfo({ ...gitHubBasicInfo, topRepos: githubRepos, username: name }))
   }, []);
-
-
-
 
   return <>
 
