@@ -68,6 +68,7 @@ const LeetCodeArea = (props: any) => {
 
   }, [leetcodeUserInfo.githubUrl]);
 
+  console.log(leetcodeUserInfo)
   return <>
     <h1>Leetcode page</h1>
 
@@ -78,17 +79,17 @@ const LeetCodeArea = (props: any) => {
     username: {leetcodeUserInfo.username}<br />
 
 
-    userAvatar: {leetcodeUserInfo.profile.userAvatar}<br />
-    realName: {leetcodeUserInfo.profile.realName}<br />
-    aboutMe: {leetcodeUserInfo.profile.aboutMe}<br />
-    school: {leetcodeUserInfo.profile.school}<br />
-    countryName: {leetcodeUserInfo.profile.countryName}<br />
-    company: {leetcodeUserInfo.profile.company}<br />
-    jobTitle: {leetcodeUserInfo.profile.jobTitle}<br />
-    postViewCount: {leetcodeUserInfo.profile.postViewCount}<br />
-    reputation: {leetcodeUserInfo.profile.reputation}<br />
-    solutionCount: {leetcodeUserInfo.profile.solutionCount}<br />
-    websites: {leetcodeUserInfo.profile.websites.map(website => <div key={website}>{website}</div>)}<br />
+    userAvatar: {leetcodeUserInfo.profile?.userAvatar}<br />
+    realName: {leetcodeUserInfo.profile?.realName}<br />
+    aboutMe: {leetcodeUserInfo.profile?.aboutMe}<br />
+    school: {leetcodeUserInfo.profile?.school}<br />
+    countryName: {leetcodeUserInfo.profile?.countryName}<br />
+    company: {leetcodeUserInfo.profile?.company}<br />
+    jobTitle: {leetcodeUserInfo.profile?.jobTitle}<br />
+    postViewCount: {leetcodeUserInfo.profile?.postViewCount}<br />
+    reputation: {leetcodeUserInfo.profile?.reputation}<br />
+    solutionCount: {leetcodeUserInfo.profile?.solutionCount}<br />
+    websites: {leetcodeUserInfo.profile?.websites.map(website => <div key={website}>{website}</div>)}<br />
 
     <h2>problem solving</h2>
     TODO

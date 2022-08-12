@@ -8,28 +8,18 @@ import { SearchByType } from "../types/common.types";
 import { PostData } from "../Utils/fetchData";
 
 
-const domainList: any = {
-  hackerrank: {
-    name: 'hackerrank',
-    userInfoApi: 'https://www.hackerrank.com/rest/contests/master/hackers/userName/profile',
-  },
-  github: {
-    name: 'github',
-    userInfoApi: 'https://api.github.com/users/userName',
-    repoListApi: 'https://api.github.com/users/userName/repos',
-  },
-};
+
 
 const HackerrankArea = (props: any) => {
 
   const dispatch = UseAppDispatch();
   const [loading, setLoading] = useState(false);
   const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
-  const { searchVal = {} } = props;
-  const { hostname = '', pathname = '', searchBy, originalSearchVal } = searchVal;
-
-  debugger
+  const { hostname = '', pathname = '', searchBy, originalSearchVal } = props;
+  console.log(props)
   useEffect(() => {
+    if (new RegExp('hackerrank.com').test(hostname) === false) return
+
     if (searchBy === SearchByType.URL) {
       getDataFromUrl();
     } else if (searchBy === SearchByType.NAME) {
@@ -39,49 +29,40 @@ const HackerrankArea = (props: any) => {
 
 
   const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
-    const getUserProfileApi = domainList.hackerrank.userInfoApi;
+    const getUserProfileApi = 'https://www.hackerrank.com/rest/contests/master/hackers/userName/profile'
     const userProfileApi = getUserProfileApi.replace('userName', nameFromUrl);
     const postApiForwardingApi = '/api/forward-api';
     const data: any = await PostData(postApiForwardingApi, userProfileApi);
     const hackerRankdata: hackerRankDataType = data?.model || {};
-    const { username, avatar, country, name } = hackerRankdata;
+    const { avatar, country, name } = hackerRankdata;
     if (name) dispatch(setName(name));
     if (avatar) dispatch(setProfilePic(avatar));
     if (country) dispatch(setCountry(country));
     dispatch(setHackerRankInfo(hackerRankdata));
+    console.log(hackerRankdata)
     return hackerRankdata;
   }, []);
 
-  const getDataFromUrl = useCallback(() => {
+  const getDataFromUrl = useCallback(async () => {
     if (!hostname || !pathname) return;
     const nameFromUrl = pathname.split('/').pop();
     setLoading(true);
-    if (new RegExp('hackerrank.com').test(hostname)) {
-      getHackerRankInfo(nameFromUrl).then((output) => {
-        const { github_url } = output;
-        const githubUserName = github_url?.split('/').pop() || nameFromUrl;
-        dispatch(setGithubUsername(githubUserName));
-        setLoading(false);
-        // getGithubData(githubUserName);
-      });
-    } else if (new RegExp('github.com').test(hostname)) {
-      getHackerRankInfo(nameFromUrl);
-      setLoading(false);
-      // getGithubData(nameFromUrl);
-    } else {
-      setLoading(false);
-    }
+    const { github_url } = await getHackerRankInfo(nameFromUrl);
+    setLoading(false);
+    if (!github_url) return
 
-    return;
+    const githubUserName = github_url?.split('/').pop() || nameFromUrl;
+    dispatch(setGithubUsername(githubUserName));
   }, [hostname, pathname]);
 
   const getDataFromName = useCallback(async () => {
     if (!originalSearchVal) return;
 
-    const hackerRankInfo = await getHackerRankInfo(originalSearchVal);
-    const { github_url } = hackerRankInfo;
-    // const githubUserName = github_url?.split('/').pop() || originalSearchVal;
-    // getGithubData(githubUserName);
+    const { github_url } = await getHackerRankInfo(originalSearchVal);
+    setLoading(false);
+    if (!github_url) return
+    const githubUserName = github_url?.split('/').pop() || originalSearchVal;
+    dispatch(setGithubUsername(githubUserName));
   }, [originalSearchVal]);
 
 
