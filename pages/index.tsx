@@ -11,6 +11,8 @@ import DataArea from '../components/data-area';
 import LeftSideDrawer from '../components/drawer/index';
 import styles from '../styles/Home.module.css';
 import { SearchByType } from '../types/common.types';
+import { getDomain, hasValidUrlProtocol, isEmail } from 'js-string-helper'
+import { PostData } from '../Utils/fetchData';
 
 const Home: NextPage = () => {
     const [searchVal, setSearchVal] = useState({
@@ -37,6 +39,11 @@ const Home: NextPage = () => {
 
     const searchInputHandler = async (searchVal: string) => {
         if (!searchVal) return;
+        debugger
+        if (isEmail(searchVal)) {
+            const userInfo = await PostData('api/getUserNyEmail', searchVal)
+
+        }
         try {
             let { protocol, hostname, pathname } = new URL(searchVal);
 

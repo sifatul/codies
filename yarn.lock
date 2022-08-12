@@ -1839,6 +1839,11 @@ jest-docblock@^21.0.0:
   resolved "https://registry.yarnpkg.com/jest-docblock/-/jest-docblock-21.2.0.tgz#51529c3b30d5fd159da60c27ceedc195faf8d414"
   integrity sha512-5IZ7sY9dBAYSV+YjQ0Ovb540Ku7AO9Z5o2Cg789xj167iQuZ2cG+z0f3Uct6WeYLbU6aQiM2pCs7sZ+4dotydw==
 
+js-string-helper@^0.0.36:
+  version "0.0.36"
+  resolved "https://registry.yarnpkg.com/js-string-helper/-/js-string-helper-0.0.36.tgz#50faf413cbea236c813045eab8637456bfc05e85"
+  integrity sha512-K4QZaSPkR5ECNzWmWSdg7HJ4XebDKRHmsb9plPNWPCrwAz3Gf3DRvy1E5h2th3rB9Ce5Ijb4gJcSR92hXNTCTQ==
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz"

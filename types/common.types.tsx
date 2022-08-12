@@ -2,6 +2,7 @@ enum SearchByType {
     NAME = 'name',
     URL = 'url',
     NONE = 'none',
+    EMAIL = 'email',
 }
 
 enum Filter {
