@@ -1,6 +1,7 @@
 import { CircularProgress } from '@mui/material';
 import React, { useCallback, useEffect, useState } from "react";
 import { UseAppDispatch, UseAppSelector } from "../store";
+import { setGithubUsername } from '../store/platforms/github';
 import { getHackerRankUserInfo, hackerRankDataType, setHackerRankInfo } from "../store/platforms/hackerrank";
 import { setCountry, setName, setProfilePic } from "../store/user/basicInfo";
 import { SearchByType } from "../types/common.types";
