@@ -7,9 +7,6 @@ import { setCountry, setName, setProfilePic } from "../store/user/basicInfo";
 import { SearchByType } from "../types/common.types";
 import { PostData } from "../Utils/fetchData";
 
-
-
-
 const HackerrankArea = (props: any) => {
 
   const dispatch = UseAppDispatch();
@@ -72,24 +69,24 @@ const HackerrankArea = (props: any) => {
       <h1>Hackerrank Page</h1>
       username:  {hackerrankUserInfo.username} <br />
 
-name: {hackerrankUserInfo.name} <br />
+      name: {hackerrankUserInfo.name} <br />
 
-linkedin_url: { hackerrankUserInfo.linkedin_url} <br />
-github_url: { hackerrankUserInfo.github_url} <br />
-leetcode_url: { hackerrankUserInfo.leetcode_url} <br />
-country: { hackerrankUserInfo.country} <br />
-avatar: { hackerrankUserInfo.avatar} <br />
-created_at: { hackerrankUserInfo.created_at} <br />
-level: : { hackerrankUserInfo.level} <br />
-website: : { hackerrankUserInfo.website} <br />
-personal_first_name: : { hackerrankUserInfo.personal_first_name} <br />
-personal_last_name: : { hackerrankUserInfo.personal_last_name} <br />
-company: : { hackerrankUserInfo.company} <br />
-local_language: : { hackerrankUserInfo.local_language} <br />
-job_title: : { hackerrankUserInfo.job_title} <br />
-jobs_headline: : { hackerrankUserInfo.jobs_headline} <br />
-followers_count: : { hackerrankUserInfo.followers_count} <br />
-short_bio: : { hackerrankUserInfo.short_bio} <br />
+      linkedin_url: { hackerrankUserInfo.linkedin_url} <br />
+      github_url: { hackerrankUserInfo.github_url} <br />
+      leetcode_url: { hackerrankUserInfo.leetcode_url} <br />
+      country: { hackerrankUserInfo.country} <br />
+      avatar: { hackerrankUserInfo.avatar} <br />
+      created_at: { hackerrankUserInfo.created_at} <br />
+      level: : { hackerrankUserInfo.level} <br />
+      website: : { hackerrankUserInfo.website} <br />
+      personal_first_name: : { hackerrankUserInfo.personal_first_name} <br />
+      personal_last_name: : { hackerrankUserInfo.personal_last_name} <br />
+      company: : { hackerrankUserInfo.company} <br />
+      local_language: : { hackerrankUserInfo.local_language} <br />
+      job_title: : { hackerrankUserInfo.job_title} <br />
+      jobs_headline: : { hackerrankUserInfo.jobs_headline} <br />
+      followers_count: : { hackerrankUserInfo.followers_count} <br />
+      short_bio: : { hackerrankUserInfo.short_bio} <br />
     </>}
 
   </>

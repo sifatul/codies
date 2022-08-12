@@ -30,6 +30,7 @@ const getRepoList = async (getRepoListApi: string) => {
     const data: any = await PostData(forwardApiPath, getRepoListApi);
     if (data.message === 'Not Found') return [];
     if (!data || data?.length <= 0) return [];
+    if (typeof data !== 'object') return [];
 
     const onlyPublicRepo: githubTopRepoType[] = (data || []).filter(
         (item: githubTopRepoType) => item.visibility === 'public'
