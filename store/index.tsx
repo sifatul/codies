@@ -1,26 +1,24 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userSlice from './user/basicInfo';
+import filter from './filter';
 import hackerrank from './platforms/hackerrank';
 import github from './platforms/github';
 import leetcode from './platforms/leetcode';
 import codepen from './platforms/codepen';
-import {
-  TypedUseSelectorHook,
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 /**
  * Creates a store and includes all the slices as reducers.
  */
 export const store = configureStore({
-  reducer: {
-    user: userSlice,
-    hackerrank: hackerrank,
-    github,
-    leetcode,
-    codepen
-  },
+    reducer: {
+        user: userSlice,
+        hackerrank: hackerrank,
+        github,
+        leetcode,
+        codepen,
+        filter,
+    },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
