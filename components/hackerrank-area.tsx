@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { UseAppDispatch, UseAppSelector } from "../store";
 import { setGithubUsername } from '../store/platforms/github';
 import { getHackerRankUserInfo, hackerRankDataType, setHackerRankInfo } from "../store/platforms/hackerrank";
+import { getSearchState } from '../store/search';
 import { setCountry, setName, setProfilePic } from "../store/user/basicInfo";
 import { SearchByType } from "../types/common.types";
 import { PostData } from "../Utils/fetchData";
@@ -12,7 +13,8 @@ const HackerrankArea = (props: any) => {
   const dispatch = UseAppDispatch();
   const [loading, setLoading] = useState(false);
   const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
-  const { hostname = '', pathname = '', searchBy, originalSearchVal, userFound } = props;
+  const { searchBy, originalSearchVal, userFound, } = UseAppSelector(getSearchState);
+
   console.log(props)
   useEffect(() => {
 

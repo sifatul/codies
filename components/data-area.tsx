@@ -17,8 +17,7 @@ import GithubArea from './github-area';
 import HackerrankArea from './hackerrank-area';
 
 
-const DataArea = (props: any) => {
-    const { searchVal } = props;
+const DataArea = () => {
     const filterState = UseAppSelector(getFilterState);
 
     const renderData = (currentFilter: null | string) => {
@@ -26,20 +25,20 @@ const DataArea = (props: any) => {
             case null:
                 return (
                     <>
-                        <GithubArea {...searchVal} />
-                        <CodePenArea {...searchVal} />
-                        <LeetCodeArea {...searchVal} />
-                        <HackerrankArea {...searchVal} />
+                        <GithubArea />
+                        <CodePenArea />
+                        <LeetCodeArea />
+                        <HackerrankArea />
                     </>
                 );
             case Filter.LEETCODE:
-                return <LeetCodeArea {...searchVal} />;
+                return <LeetCodeArea />;
             case Filter.CODEPEN:
-                return <CodePenArea {...searchVal} />;
+                return <CodePenArea />;
             case Filter.GITHUB:
-                return <GithubArea {...searchVal} />;
+                return <GithubArea />;
             case Filter.HACKERRANK:
-                return <HackerrankArea {...searchVal} />;
+                return <HackerrankArea />;
         }
     };
 

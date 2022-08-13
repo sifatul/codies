@@ -5,19 +5,55 @@ import InputBase from '@mui/material/InputBase';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import { UseAppDispatch, UseAppSelector } from '../../store';
+import { getSearchState, setSearchTypeEmail, setSearchTypeName, setSearchTypeUrl, userInfoType } from '../../store/search';
+import { PostData } from '../../Utils/fetchData';
+import { isEmail } from 'js-string-helper';
 
 
 
 interface propsType {
     callback: Function;
-    value: string;
 }
 const passedPlaceholderList = ['profile link', 'username'];
-export default function CustomizedInputBase({ callback, value }: propsType) {
+export default function CustomizedInputBase({ callback }: propsType) {
     const [searchVal, setSearchVal] = React.useState('');
+    const { originalSearchVal } = UseAppSelector(getSearchState);
+    const dispatch = UseAppDispatch();
+
+    const searchInputHandler = async (searchVal: string) => {
+        if (!searchVal) return;
+
+        if (isEmail(searchVal)) {
+            const userInfo = await PostData('api/getUserNyEmail', searchVal)
+            if (userInfo) {
+
+                setSearchTypeEmail(userInfo as userInfoType)
+                return
+            }
+        }
+        // if search val was not an email || userinfo not found
+        try {
+            let { protocol, hostname, pathname } = new URL(searchVal);
+
+            //remove trailing slash
+            if (pathname.substr(-1) === '/') pathname = pathname.slice(0, -1);
+
+            dispatch(setSearchTypeUrl({
+                protocol,
+                hostname,
+                pathname,
+                originalSearchVal: searchVal,
+            }))
+        } catch (e) {
+            console.error(e);
+            dispatch(setSearchTypeName(searchVal))
+
+        }
+    };
 
     const inputSubmitHandler = React.useCallback(() => {
-        return callback(searchVal);
+        return searchInputHandler(searchVal);
     }, [searchVal]);
 
     const [placeholder, setPlaceholder] = React.useState('');
@@ -61,7 +97,7 @@ export default function CustomizedInputBase({ callback, value }: propsType) {
                 sx={{ ml: 1, flex: 1 }}
                 placeholder={'type a ' + placeholder}
                 inputProps={{ 'aria-label': 'search google maps' }}
-                defaultValue={value}
+                defaultValue={originalSearchVal}
                 onChange={(e) => {
                     setSearchVal(e.target.value);
                 }}

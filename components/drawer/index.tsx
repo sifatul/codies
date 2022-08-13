@@ -86,9 +86,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function MiniDrawer(props) {
+export default function MiniDrawer() {
     const theme = useTheme();
-    const { searchVal } = props
     const [open, setOpen] = React.useState(false);
 
     const handleDrawerOpen = () => {
@@ -119,7 +118,7 @@ export default function MiniDrawer(props) {
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
-                <DataArea searchVal={searchVal} />
+                <DataArea />
 
             </Box>
         </Box>

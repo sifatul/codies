@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userSlice from './user/basicInfo';
 import filter from './filter';
+import search from './search';
 import hackerrank from './platforms/hackerrank';
 import github from './platforms/github';
 import leetcode from './platforms/leetcode';
@@ -13,11 +14,12 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 export const store = configureStore({
     reducer: {
         user: userSlice,
-        hackerrank: hackerrank,
+        hackerrank,
         github,
         leetcode,
         codepen,
         filter,
+        search
     },
 });
 

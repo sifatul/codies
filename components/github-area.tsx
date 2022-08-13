@@ -1,7 +1,9 @@
 import { Divider, Typography } from '@mui/material';
+import { userInfo } from 'os';
 import React, { useCallback, useEffect } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
 import { getGithubUserInfo, setGithubUserInfo, setGithubUsername } from '../store/platforms/github';
+import { getSearchState, userInfoType } from '../store/search';
 import { setEmail } from '../store/user/basicInfo';
 import { SearchByType } from '../types/common.types';
 import { getGithubInfoByName, getRepoList } from '../Utils/github';
@@ -13,8 +15,10 @@ const githubApi = {
   repoListApi: 'https://api.github.com/users/userName/repos',
 }
 
-const GithubArea = (props: any) => {
-  const { hostname = '', pathname = '', searchBy, originalSearchVal, userFound } = props;
+const GithubArea = () => {
+  const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
+
+
 
   const githubUserInfo = UseAppSelector(getGithubUserInfo);
   const { username } = githubUserInfo
@@ -23,10 +27,11 @@ const GithubArea = (props: any) => {
   useEffect(() => {
     if (username) return
     let githubUserName = originalSearchVal
-    const { github_url } = userFound
+
     if (searchBy === SearchByType.URL) {
       getGithubUserByUrl(originalSearchVal)
     } else if (searchBy === SearchByType.EMAIL) {
+      const { github_url } = userFound
       getGithubUserByUrl(github_url)
     } else {
       dispatch(setGithubUsername(githubUserName))

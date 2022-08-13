@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { UseAppDispatch } from '../store';
+import { UseAppDispatch, UseAppSelector } from '../store';
 import { setcodepenUserInfo } from '../store/platforms/codepen';
+import { getSearchState } from '../store/search';
 import { SearchByType } from '../types/common.types';
 import { GetData } from '../Utils/fetchData';
 interface codepenItemType {
@@ -15,13 +16,15 @@ const codepenInfoFetchUrl =
 const CodePenArea = (props: any) => {
     const dispatch = UseAppDispatch();
 
-    const { originalSearchVal, searchBy, pathname } = props;
+    const { searchBy, originalSearchVal, pathname } = UseAppSelector(getSearchState);
+
     const [popularPen, setPopularPen] = useState<codepenItemType[]>([]);
     let codePenUserName = originalSearchVal;
     // considering the input to be a name
-    if (searchBy === SearchByType.URL) {
+    if (searchBy === SearchByType.URL && pathname) {
         //extract name from the url
-        codePenUserName = pathname.split('/').pop();
+        const _codePenUserName = pathname.split('/').pop();
+        if (_codePenUserName) codePenUserName = _codePenUserName
     }
     const codepenInfoFetchApi = codepenInfoFetchUrl.replace('userName', codePenUserName);
 

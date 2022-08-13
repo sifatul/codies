@@ -4,11 +4,12 @@ import { SearchByType } from "../types/common.types"
 import { getLeetcodeUserInfo, setLeetcodeLanguageProblemCount, setLeetcodeTagProblemCounts, setLeetcodeUserInfo } from '../store/platforms/leetcode';
 import { setGithubUsername } from '../store/platforms/github';
 import { getLeetCodeProfileInfo, QueryType } from "../Utils/leetcode";
+import { getSearchState } from "../store/search";
 
 
 const LeetCodeArea = (props: any) => {
+  const { originalSearchVal, searchBy, pathname, hostname, userFound } = UseAppSelector(getSearchState);
 
-  const { originalSearchVal, searchBy, pathname, hostname, userFound } = props
   const dispatch = UseAppDispatch();
   const leetcodeUserInfo = UseAppSelector(getLeetcodeUserInfo);
 
@@ -33,7 +34,7 @@ const LeetCodeArea = (props: any) => {
 
     if (!name) return
 
-    const leetCodeData = await getLeetCodeInfo(name)
+    await getLeetCodeInfo(name)
 
 
   }, [originalSearchVal])
