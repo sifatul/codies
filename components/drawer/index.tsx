@@ -11,6 +11,7 @@ import { CSSObject, styled, Theme, useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import CustomToolbar from '../common/toolbar';
 import DataArea from '../data-area';
 import DrawerList from './drawer.list';
 
@@ -102,23 +103,10 @@ export default function MiniDrawer(props) {
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar position="fixed" open={open}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: 5,
-                            ...(open && { display: 'none' }),
-                        }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        Find Profile
-          </Typography>
-                </Toolbar>
+                <CustomToolbar
+                    handleDrawerOpen={handleDrawerOpen}
+                    open={open}
+                />
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
