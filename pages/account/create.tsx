@@ -12,7 +12,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Checkout from '../../components/form/createProfileMain';
+import PreateProfileMain from '../../components/form/createProfileMain';
 
 function Copyright(props: any) {
   return (
@@ -70,7 +70,7 @@ export default function UserDataInputForm() {
 
 
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-              <Checkout />
+              <PreateProfileMain />
 
 
               <Copyright sx={{ mt: 5 }} />

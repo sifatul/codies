@@ -30,7 +30,7 @@ function getStepContent(step: number) {
 
 const theme = createTheme();
 
-export default function Checkout() {
+export default function PreateProfileMain() {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = () => {
@@ -61,12 +61,11 @@ export default function Checkout() {
             {activeStep === steps.length ? (
               <React.Fragment>
                 <Typography variant="h5" gutterBottom>
-                  Thank you for your order.
+                  Thank you for registering with us.
                 </Typography>
                 <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order
-                  confirmation, and will send you an update when your order has
-                  shipped.
+                  To cook your profile we have sent you an email for
+                  confirmation, and your profile will be served as soon as the verification is complete.
                 </Typography>
               </React.Fragment>
             ) : (

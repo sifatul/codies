@@ -1,5 +1,5 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import { Toolbar, Typography } from "@mui/material";
+import { Button, Toolbar, Typography } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import React from "react";
 import SearchToolbar from '../search/search.toolbar';
@@ -19,12 +19,14 @@ const CustomToolbar = ({ handleDrawerOpen, open }: { handleDrawerOpen: any, open
     >
       <MenuIcon />
     </IconButton>
-    <Typography variant="h6" noWrap component="div">
+    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
       Find Profile
   </Typography>
 
 
     <SearchToolbar />
+
+    {/* <Button color="inherit">Create a profile</Button> */}
 
   </Toolbar>
 }

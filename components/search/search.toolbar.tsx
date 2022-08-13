@@ -60,7 +60,7 @@ const SearchToolbar = () => {
     debugger
     return searchInputHandler(searchVal);
   }, [searchVal]);
-  return <Search>
+  return <Search >
     <SearchIconWrapper onClick={inputSubmitHandler}>
       <SearchIcon />
     </SearchIconWrapper>

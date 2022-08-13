@@ -2,8 +2,19 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 export default function AddressForm() {
+
+  const [gender, setgender] = React.useState('');
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setgender(event.target.value);
+  };
   return (
     <React.Fragment>
       {/* <Typography variant="h6" gutterBottom>
@@ -43,23 +54,26 @@ export default function AddressForm() {
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            id="linkedin-url"
-            name="linkedin-url"
-            label="Linkedin profile url"
-            fullWidth
-            variant="standard"
-          />
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id="demo-simple-select-helper-label">Gender</InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              value={gender}
+              label="Gender"
+              onChange={handleChange}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={10}>Male</MenuItem>
+              <MenuItem value={20}>Female</MenuItem>
+              <MenuItem value={30}>Other</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="github"
-            name="github"
-            label="Github profile link"
-            fullWidth
-            variant="standard"
-          />
-        </Grid>
+
+
       </Grid>
     </React.Fragment>
   );

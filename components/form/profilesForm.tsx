@@ -11,6 +11,26 @@ export default function AddressForm() {
       </Typography> */}
       <Grid container spacing={3}>
 
+        <Grid item xs={12}>
+          <TextField
+            id="linkedin-url"
+            name="linkedin-url"
+            label="Linkedin profile url"
+            fullWidth
+            variant="standard"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id="github"
+            name="github"
+            label="Github profile link"
+            fullWidth
+            variant="standard"
+          />
+        </Grid>
+
+
 
         <Grid item xs={12}>
           <TextField
