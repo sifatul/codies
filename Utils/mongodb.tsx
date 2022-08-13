@@ -36,20 +36,4 @@ export async function connectToDatabase() {
 
   return { client, db: dbConnect }
 
-  // client.connect(err => {
-  //   const collection = client.db(dbName).collection("users");
-
-  //   console.log(collection)
-  //   // perform actions on the collection object
-  //   client.close();
-  // });
-  if (!client) return { client: null, db: null }
-
-
-  const db = await client.db(dbName)
-
-  cachedClient = client
-  cachedDb = db
-
-  return { client, db }
 }

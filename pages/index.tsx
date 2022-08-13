@@ -7,6 +7,7 @@ import { getSearchState } from '../store/search';
 import { SearchByType } from '../types/common.types';
 const Home: NextPage = () => {
     const SearchState = UseAppSelector(getSearchState);
+    console.log(SearchState)
 
     return (
         <>

@@ -8,13 +8,12 @@ export default function SearchHelper() {
   const searchInputHandler = async (searchVal: string) => {
     if (!searchVal) return;
     dispatch(resetSearchType)
-    debugger
 
     if (isEmail(searchVal)) {
       const userInfo = await PostData('api/getUserNyEmail', searchVal)
-      if (userInfo) {
 
-        setSearchTypeEmail(userInfo as userInfoType)
+      if (userInfo) {
+        dispatch(setSearchTypeEmail(userInfo as userInfoType))
         return
       }
     }

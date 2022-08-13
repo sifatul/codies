@@ -10,7 +10,6 @@ export default async (req: any, res: any) => {
         if (!db) return res.json({ error: 'database connection failed' });
 
         await db.collection('users').insertOne({ item: 'card', qty: 15 });
-        console.log('write');
     } catch (e) {
         console.error(e);
     } finally {

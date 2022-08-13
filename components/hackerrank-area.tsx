@@ -15,7 +15,6 @@ const HackerrankArea = (props: any) => {
   const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
   const { searchBy, originalSearchVal, userFound, } = UseAppSelector(getSearchState);
 
-  console.log(props)
   useEffect(() => {
 
     const { hackerrank_url } = userFound
