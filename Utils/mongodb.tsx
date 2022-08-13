@@ -1,4 +1,5 @@
-import { Db, MongoClient, MongoClientOptions } from 'mongodb'
+import { Db, MongoClient, MongoClientOptions, ServerApiVersion } from 'mongodb'
+
 
 let uri = process.env.MONGODB_URI
 let dbName = process.env.MONGODB_DB
@@ -19,19 +20,30 @@ if (!dbName) {
 }
 
 export async function connectToDatabase() {
+
   if (cachedClient && cachedDb) {
     return { client: cachedClient, db: cachedDb }
   }
   if (!uri) return { client: null, db: null }
 
-  const opts = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  };
-  const client = await MongoClient.connect(uri as string, opts as MongoClientOptions).catch(error => {
-    console.log('error during connecting to mongo: ');
-    console.error(error);
-  })
+  const uri2 = "mongodb+srv://admin:NjSyboR9bqfWXu7C@cluster0.okzo4lj.mongodb.net/?retryWrites=true&w=majority";
+  const client = new MongoClient(uri2, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
+  // Connect the client to the server (optional starting in v4.7)
+  await client.connect();
+  // Establish and verify connection
+  const dbConnect = await client.db(dbName)
+  console.log("Connected successfully to server");
+
+  return { client, db: dbConnect }
+
+  // client.connect(err => {
+  //   const collection = client.db(dbName).collection("users");
+
+  //   console.log(collection)
+  //   // perform actions on the collection object
+  //   client.close();
+  // });
   if (!client) return { client: null, db: null }
 
 
