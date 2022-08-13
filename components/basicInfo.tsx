@@ -1,5 +1,4 @@
 import { UseAppSelector } from "../store";
-import { getSearchState } from "../store/search";
 import { getUserState } from "../store/user/basicInfo";
 
 const BasicInfo = () => {

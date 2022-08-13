@@ -1,21 +1,13 @@
-import { CircularProgress, Container, Grid } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import { Container, Grid } from '@mui/material';
+import React from 'react';
 import LeetCodeArea from '../components/leetcode-area';
-import { UseAppDispatch, UseAppSelector } from '../store';
+import { UseAppSelector } from '../store';
 import { getFilterState } from '../store/filter';
-import { getGithubUserInfo, setGithubUsername } from '../store/platforms/github';
-import {
-    getHackerRankUserInfo,
-    hackerRankDataType,
-    setHackerRankInfo,
-} from '../store/platforms/hackerrank';
-import { setCountry, setName, setProfilePic } from '../store/user/basicInfo';
-import { Filter, SearchByType } from '../types/common.types';
-import { PostData } from '../Utils/fetchData';
+import { Filter } from '../types/common.types';
+import BasicInfo from './basicInfo';
 import CodePenArea from './codepen-area';
 import GithubArea from './github-area';
 import HackerrankArea from './hackerrank-area';
-import BasicInfo from './BasicInfo'
 
 const DataArea = () => {
     const filterState = UseAppSelector(getFilterState);
