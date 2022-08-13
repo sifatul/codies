@@ -36,7 +36,6 @@ const DataArea = () => {
     };
 
 
-
     return (
         <Container
             maxWidth='md'

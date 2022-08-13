@@ -12,9 +12,12 @@ const Home: NextPage = () => {
     return (
         <>
 
+
+
             {SearchState.searchBy === SearchByType.NONE && <InitialPage />}
 
             {SearchState.searchBy !== SearchByType.NONE && <MiniDrawer />}
+
         </>
     );
 };
