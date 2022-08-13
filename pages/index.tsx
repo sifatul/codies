@@ -13,6 +13,9 @@ import styles from '../styles/Home.module.css';
 import { SearchByType } from '../types/common.types';
 import { getDomain, hasValidUrlProtocol, isEmail } from 'js-string-helper'
 import { PostData } from '../Utils/fetchData';
+import PrimarySearchAppBar from '../components/wordWrapper';
+import InitialPage from "../components/initalPage"
+import MiniDrawer from '../components/drawer';
 interface userInfoType {
     "email": string,
     "first_name": string,
@@ -44,17 +47,7 @@ const Home: NextPage = () => {
 
     const [state, setState] = React.useState(false);
 
-    const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-        if (
-            event.type === 'keydown' &&
-            ((event as React.KeyboardEvent).key === 'Tab' ||
-                (event as React.KeyboardEvent).key === 'Shift')
-        ) {
-            return;
-        }
 
-        setState(open);
-    };
 
 
     const searchInputHandler = async (searchVal: string) => {
@@ -101,54 +94,17 @@ const Home: NextPage = () => {
     };
 
     return (
-        <div className={styles.container}>
-            <Head>
-                <title>Find Profile</title>
-                <meta
-                    name='description'
-                    content='Find any developer details with their name or profile link'
-                />
-                <meta
-                    name='keywords'
-                    content='developer profile, integrated platform, open source, crawler'
-                />
-                <link rel='icon' href='/favicon.ico' />
-            </Head>
+        <>
 
-            <main className={styles.main}>
-                <div className={styles.seachContainer}>
-                    {searchVal.searchBy !== SearchByType.NONE && (
-                        <IconButton
-                            color='inherit'
-                            aria-label='open drawer'
-                            onClick={toggleDrawer(!state)}
-                            edge='start'
-                            sx={{ mr: 2 }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                    )}
-                    <SearchInput
-                        callback={searchInputHandler}
-                        value={searchVal.originalSearchVal}
-                    />
-                </div>
+            {searchVal.searchBy === SearchByType.NONE && <InitialPage
+                searchInputHandler={searchInputHandler}
+                searchVal={searchVal}
+                setSearchVal={setSearchVal}
 
-                {searchVal.searchBy === SearchByType.NONE && <Hint />}
-                {searchVal.searchBy !== SearchByType.NONE && (
-                    <LeftSideDrawer
-                        state={state}
-                        toggleDrawer={toggleDrawer}
-                        searchInputHandler={searchInputHandler}
-                        searchVal={searchVal}
-                    >
-                        <DataArea searchVal={searchVal} />
-                    </LeftSideDrawer>
-                )}
-            </main>
+            />}
 
-            <Footer />
-        </div>
+            {searchVal.searchBy !== SearchByType.NONE && <MiniDrawer searchVal={searchVal} />}
+        </>
     );
 };
 

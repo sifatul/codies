@@ -12,4 +12,5 @@ enum Filter {
     HACKERRANK = 'HACKERRANK',
     LEETCODE = 'LEETCODE',
 }
+
 export { SearchByType, Filter };

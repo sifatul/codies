@@ -1,9 +1,17 @@
-import { Container, Grid } from '@mui/material';
-import React from 'react';
+import { CircularProgress, Container, Grid } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react';
 import LeetCodeArea from '../components/leetcode-area';
-import { UseAppSelector } from '../store';
+import { UseAppDispatch, UseAppSelector } from '../store';
 import { getFilterState } from '../store/filter';
-import { Filter } from '../types/common.types';
+import { getGithubUserInfo, setGithubUsername } from '../store/platforms/github';
+import {
+    getHackerRankUserInfo,
+    hackerRankDataType,
+    setHackerRankInfo,
+} from '../store/platforms/hackerrank';
+import { setCountry, setName, setProfilePic } from '../store/user/basicInfo';
+import { Filter, SearchByType } from '../types/common.types';
+import { PostData } from '../Utils/fetchData';
 import CodePenArea from './codepen-area';
 import GithubArea from './github-area';
 import HackerrankArea from './hackerrank-area';

@@ -38,7 +38,7 @@ const otherPlatforms = {
     },
 };
 
-const ShowFromList = ({ platformsList, onClick }: { platformsList: any; onClick: Function }) => {
+const ShowFromList = ({ platformsList, onClick, open }: { platformsList: any; onClick: Function, open: boolean }) => {
     const platforms = Object.keys(platformsList);
     const dispatch = UseAppDispatch();
     return (
@@ -54,11 +54,23 @@ const ShowFromList = ({ platformsList, onClick }: { platformsList: any; onClick:
                             onClick(name.toUpperCase());
                         }}
                     >
-                        <ListItemButton>
-                            <ListItemIcon>
+                        <ListItemButton
+                            sx={{
+                                minHeight: 48,
+                                justifyContent: open ? 'initial' : 'center',
+                                px: 2.5,
+                            }}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: 0,
+                                    mr: open ? 3 : 'auto',
+                                    justifyContent: 'center',
+                                }}
+                            >
                                 <img src={icon} alt={name} height={40} width={40} />
                             </ListItemIcon>
-                            <ListItemText primary={name} secondary={secondary} />
+                            {open && <ListItemText primary={name} secondary={secondary} />}
                         </ListItemButton>
                     </ListItem>
                 );
@@ -67,7 +79,7 @@ const ShowFromList = ({ platformsList, onClick }: { platformsList: any; onClick:
     );
 };
 
-const DrawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) => {
+const DrawerList = ({ toggleDrawer, open }: { toggleDrawer: (bol: boolean) => any, open: boolean }) => {
     const [activeDrawerItem, setActiveDrawerItem] = useState('CODEPEN');
     const dispatch = UseAppDispatch();
 
@@ -75,8 +87,8 @@ const DrawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) =
         <Box
             sx={{ width: 250 }}
             role='presentation'
-            onClick={toggleDrawer(false)}
-            onKeyDown={toggleDrawer(false)}
+            onClick={e => toggleDrawer(false)}
+            onKeyDown={() => toggleDrawer(false)}
         >
             <ListItem
                 disablePadding
@@ -85,14 +97,20 @@ const DrawerList = ({ toggleDrawer }: { toggleDrawer: (bol: boolean) => any }) =
                     setActiveDrawerItem('ALL');
                 }}
             >
-                <ListItemButton>
+                <ListItemButton
+                    sx={{
+                        minHeight: 48,
+                        justifyContent: open ? 'initial' : 'center',
+                        px: 2.5,
+                    }}
+                >
                     <ListItemText primary={'All'} />
                 </ListItemButton>
             </ListItem>
             <Divider />
-            <ShowFromList platformsList={otherPlatforms} onClick={setActiveDrawerItem} />
+            <ShowFromList platformsList={otherPlatforms} onClick={setActiveDrawerItem} open={open} />
             <Divider />
-            <ShowFromList platformsList={codingPlatforms} onClick={setActiveDrawerItem} />
+            <ShowFromList platformsList={codingPlatforms} onClick={setActiveDrawerItem} open={open} />
         </Box>
     );
 };
