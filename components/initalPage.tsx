@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Footer from '../components/common/footer';
 import Hint from '../components/common/hint';
-import SearchInput from '../components/common/search.input';
+import SearchInput from './search/search.input';
 import styles from '../styles/Home.module.css';
 
-const InitialPage = (searchInputHandler: any) => {
+const InitialPage = () => {
 
 
   return (
@@ -14,9 +14,7 @@ const InitialPage = (searchInputHandler: any) => {
 
         <main className={styles.main}>
           <div className={styles.seachContainer}>
-            <SearchInput
-              callback={searchInputHandler}
-            />
+            <SearchInput />
           </div>
 
           <Hint />

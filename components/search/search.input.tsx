@@ -3,54 +3,19 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import { UseAppDispatch, UseAppSelector } from '../../store';
-import { getSearchState, setSearchTypeEmail, setSearchTypeName, setSearchTypeUrl, userInfoType } from '../../store/search';
-import { PostData } from '../../Utils/fetchData';
-import { isEmail } from 'js-string-helper';
+import SearchHelper from '../../Hooks/search.hook';
+import { UseAppSelector } from '../../store';
+import { getSearchState } from '../../store/search';
 
 
 
-interface propsType {
-    callback: Function;
-}
 const passedPlaceholderList = ['profile link', 'username'];
-export default function CustomizedInputBase({ callback }: propsType) {
+export default function CustomizedInputBase() {
     const [searchVal, setSearchVal] = React.useState('');
     const { originalSearchVal } = UseAppSelector(getSearchState);
-    const dispatch = UseAppDispatch();
+    const { searchInputHandler } = SearchHelper()
 
-    const searchInputHandler = async (searchVal: string) => {
-        if (!searchVal) return;
-
-        if (isEmail(searchVal)) {
-            const userInfo = await PostData('api/getUserNyEmail', searchVal)
-            if (userInfo) {
-
-                setSearchTypeEmail(userInfo as userInfoType)
-                return
-            }
-        }
-        // if search val was not an email || userinfo not found
-        try {
-            let { protocol, hostname, pathname } = new URL(searchVal);
-
-            //remove trailing slash
-            if (pathname.substr(-1) === '/') pathname = pathname.slice(0, -1);
-
-            dispatch(setSearchTypeUrl({
-                protocol,
-                hostname,
-                pathname,
-                originalSearchVal: searchVal,
-            }))
-        } catch (e) {
-            console.error(e);
-            dispatch(setSearchTypeName(searchVal))
-
-        }
-    };
 
     const inputSubmitHandler = React.useCallback(() => {
         return searchInputHandler(searchVal);
@@ -118,7 +83,7 @@ export default function CustomizedInputBase({ callback }: propsType) {
                 color='primary'
                 sx={{ p: '10px' }}
                 aria-label='directions'
-                onClick={inputSubmitHandler}
+                onClick={() => inputSubmitHandler()}
             >
                 <SearchIcon />
             </IconButton>

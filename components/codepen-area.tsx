@@ -51,43 +51,46 @@ const CodePenArea = (props: any) => {
     useEffect(() => {
         getCodepenData();
     }, []);
-    if (!codePenUserName) return <></>;
+    if (!codePenUserName) return <>No codepen username </>;
 
     return (
-        <div style={{ display: 'flex' }}>
-            {popularPen.map((item, idx) => {
-                if (!item) return <></>;
+        <>
+            <h1>Codepen data</h1>
+            <div style={{ display: 'flex' }}>
+                {popularPen.map((item, idx) => {
+                    if (!item) return <></>;
 
-                const codepenLink = item?.link;
-                if (!codepenLink) return <></>;
-                const { pathname } = new URL(codepenLink);
-                if (!pathname) return <></>;
-                const pathnameArr = pathname.split('/').filter((item) => item != '');
+                    const codepenLink = item?.link;
+                    if (!codepenLink) return <></>;
+                    const { pathname } = new URL(codepenLink);
+                    if (!pathname) return <></>;
+                    const pathnameArr = pathname.split('/').filter((item) => item != '');
 
-                // const parts = ['protocol', 'hostname', 'pathname'];
+                    // const parts = ['protocol', 'hostname', 'pathname'];
 
-                const userName = pathnameArr[0];
-                const projectName = pathnameArr.pop();
-                const previewUrl = `https://codepen.io/${userName}/embed/preview/${projectName}`;
-                return (
-                    <iframe
-                        height='300'
-                        key={'ifram-' + idx}
-                        scrolling='no'
-                        title={item?.title}
-                        src={previewUrl}
-                        frameBorder='no'
-                        loading='lazy'
-                        allowTransparency={true}
-                        allowFullScreen={true}
-                    >
-                        See the Pen <a href={codepenLink}>Stacking Cards (Motion One Version)</a> by
+                    const userName = pathnameArr[0];
+                    const projectName = pathnameArr.pop();
+                    const previewUrl = `https://codepen.io/${userName}/embed/preview/${projectName}`;
+                    return (
+                        <iframe
+                            height='300'
+                            key={'ifram-' + idx}
+                            scrolling='no'
+                            title={item?.title}
+                            src={previewUrl}
+                            frameBorder='no'
+                            loading='lazy'
+                            allowTransparency={true}
+                            allowFullScreen={true}
+                        >
+                            See the Pen <a href={codepenLink}>Stacking Cards (Motion One Version)</a> by
                         Bramus (<a href={codepenLink}>@bramus</a>) on{' '}
-                        <a href={codepenLink}>CodePen</a>.
-                    </iframe>
-                );
-            })}
-        </div>
+                            <a href={codepenLink}>CodePen</a>.
+                        </iframe>
+                    );
+                })}
+            </div>
+        </>
     );
 };
 export default CodePenArea;

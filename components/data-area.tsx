@@ -15,7 +15,7 @@ import { PostData } from '../Utils/fetchData';
 import CodePenArea from './codepen-area';
 import GithubArea from './github-area';
 import HackerrankArea from './hackerrank-area';
-
+import BasicInfo from './BasicInfo'
 
 const DataArea = () => {
     const filterState = UseAppSelector(getFilterState);
@@ -25,6 +25,7 @@ const DataArea = () => {
             case null:
                 return (
                     <>
+                        <BasicInfo />
                         <GithubArea />
                         <CodePenArea />
                         <LeetCodeArea />

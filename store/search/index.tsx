@@ -75,11 +75,16 @@ export const SearchSlice = createSlice({
             state.searchBy = SearchByType.NAME;
             state.originalSearchVal = action.payload;
         },
+        resetSearchType: (
+
+        ) => {
+            initialState
+        },
     },
 });
 
 export const getSearchState = (state: { search: SearchStateType }) => state.search;
 
-export const { setSearchTypeEmail, setSearchTypeName, setSearchTypeUrl } = SearchSlice.actions;
+export const { setSearchTypeEmail, setSearchTypeName, setSearchTypeUrl, resetSearchType } = SearchSlice.actions;
 
 export default SearchSlice.reducer;

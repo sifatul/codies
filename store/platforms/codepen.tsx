@@ -1,8 +1,6 @@
 
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 
-
-
 export interface codepenUserInfoType {
   pubDate: string;
   link: string;

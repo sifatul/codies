@@ -18,7 +18,7 @@ const githubApi = {
 const GithubArea = () => {
   const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
 
-
+  console.log("github-area>originalSearchVal ", originalSearchVal)
 
   const githubUserInfo = UseAppSelector(getGithubUserInfo);
   const { username } = githubUserInfo
