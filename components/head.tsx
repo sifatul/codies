@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-const Head = () => {
+const HeadComponent = () => {
   return <Head>
     <title>Find Profile</title>
     <meta
@@ -14,4 +14,4 @@ const Head = () => {
     <link rel='icon' href='/favicon.ico' />
   </Head>
 }
-export default Head
+export default HeadComponent
