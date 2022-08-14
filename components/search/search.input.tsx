@@ -3,21 +3,22 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import SearchHelper from '../../Hooks/search.hook';
+import { UseAppSelector } from '../../store';
+import { getSearchState } from '../../store/search';
 
 
 
-interface propsType {
-    callback: Function;
-    value: string;
-}
 const passedPlaceholderList = ['profile link', 'username'];
-export default function CustomizedInputBase({ callback, value }: propsType) {
+export default function CustomizedInputBase() {
     const [searchVal, setSearchVal] = React.useState('');
+    const { originalSearchVal } = UseAppSelector(getSearchState);
+    const { searchInputHandler } = SearchHelper()
+
 
     const inputSubmitHandler = React.useCallback(() => {
-        return callback(searchVal);
+        return searchInputHandler(searchVal);
     }, [searchVal]);
 
     const [placeholder, setPlaceholder] = React.useState('');
@@ -61,7 +62,7 @@ export default function CustomizedInputBase({ callback, value }: propsType) {
                 sx={{ ml: 1, flex: 1 }}
                 placeholder={'type a ' + placeholder}
                 inputProps={{ 'aria-label': 'search google maps' }}
-                defaultValue={value}
+                defaultValue={originalSearchVal}
                 onChange={(e) => {
                     setSearchVal(e.target.value);
                 }}
@@ -82,7 +83,7 @@ export default function CustomizedInputBase({ callback, value }: propsType) {
                 color='primary'
                 sx={{ p: '10px' }}
                 aria-label='directions'
-                onClick={inputSubmitHandler}
+                onClick={() => inputSubmitHandler()}
             >
                 <SearchIcon />
             </IconButton>

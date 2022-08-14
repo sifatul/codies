@@ -1,4 +1,5 @@
-import { ConnectOptions, Db, MongoClient } from 'mongodb';
+import { Db, MongoClient, MongoClientOptions, ServerApiVersion } from 'mongodb'
+
 
 let uri = process.env.MONGODB_URI || '';
 let dbName = process.env.MONGODB_DB || '';
@@ -15,19 +16,20 @@ if (!dbName) {
 }
 
 export async function connectToDatabase() {
-    if (cachedClient && cachedDb) {
-        return { client: cachedClient, db: cachedDb };
-    }
 
-    const client = await MongoClient.connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    } as ConnectOptions);
+  if (cachedClient && cachedDb) {
+    return { client: cachedClient, db: cachedDb }
+  }
+  if (!uri) return { client: null, db: null }
+  const options = { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 }
+  const client = new MongoClient(uri, options);
 
-    const db = await client.db(dbName);
+  // Connect the client to the server (optional starting in v4.7)
+  await client.connect();
+  // Establish and verify connection
+  const dbConnect = await client.db(dbName)
+  console.log("Connected successfully to server");
 
-    cachedClient = client;
-    cachedDb = db;
+  return { client, db: dbConnect }
 
-    return { client, db };
 }

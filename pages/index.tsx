@@ -1,116 +1,24 @@
-import MenuIcon from '@mui/icons-material/Menu';
-import { IconButton } from '@mui/material';
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import * as React from 'react';
-import { useState } from 'react';
-import Footer from '../components/common/footer';
-import Hint from '../components/common/hint';
-import SearchInput from '../components/common/search.input';
-import DataArea from '../components/data-area';
-import LeftSideDrawer from '../components/drawer/index';
-import styles from '../styles/Home.module.css';
+import MiniDrawer from '../components/drawer';
+import InitialPage from "../components/initalPage";
+import { UseAppSelector } from '../store';
+import { getSearchState } from '../store/search';
 import { SearchByType } from '../types/common.types';
-
 const Home: NextPage = () => {
-    const [searchVal, setSearchVal] = useState({
-        protocol: '',
-        hostname: '',
-        pathname: '',
-        originalSearchVal: '',
-        searchBy: SearchByType.NONE,
-    });
-
-    const [state, setState] = React.useState(false);
-
-    const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-        if (
-            event.type === 'keydown' &&
-            ((event as React.KeyboardEvent).key === 'Tab' ||
-                (event as React.KeyboardEvent).key === 'Shift')
-        ) {
-            return;
-        }
-
-        setState(open);
-    };
-
-    const searchInputHandler = async (searchVal: string) => {
-        if (!searchVal) return;
-        try {
-            let { protocol, hostname, pathname } = new URL(searchVal);
-
-            //remove trailing slash
-            if (pathname.substr(-1) === '/') pathname = pathname.slice(0, -1);
-
-            setSearchVal({
-                protocol,
-                hostname,
-                pathname,
-                originalSearchVal: searchVal,
-                searchBy: SearchByType.URL,
-            });
-        } catch (e) {
-            console.error(e);
-            setSearchVal((prevState) => {
-                return {
-                    ...prevState,
-                    searchBy: SearchByType.NAME,
-                    originalSearchVal: searchVal,
-                };
-            });
-        }
-    };
+    const SearchState = UseAppSelector(getSearchState);
+    console.log(SearchState)
 
     return (
-        <div className={styles.container}>
-            <Head>
-                <title>Find Profile</title>
-                <meta
-                    name='description'
-                    content='Find any developer details with their name or profile link'
-                />
-                <meta
-                    name='keywords'
-                    content='developer profile, integrated platform, open source, crawler'
-                />
-                <link rel='icon' href='/favicon.ico' />
-            </Head>
+        <>
 
-            <main className={styles.main}>
-                <div className={styles.seachContainer}>
-                    {searchVal.searchBy !== SearchByType.NONE && (
-                        <IconButton
-                            color='inherit'
-                            aria-label='open drawer'
-                            onClick={toggleDrawer(!state)}
-                            edge='start'
-                            sx={{ mr: 2 }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                    )}
-                    <SearchInput
-                        callback={searchInputHandler}
-                        value={searchVal.originalSearchVal}
-                    />
-                </div>
 
-                {searchVal.searchBy === SearchByType.NONE && <Hint />}
-                {searchVal.searchBy !== SearchByType.NONE && (
-                    <LeftSideDrawer
-                        state={state}
-                        toggleDrawer={toggleDrawer}
-                        searchInputHandler={searchInputHandler}
-                        searchVal={searchVal}
-                    >
-                        <DataArea searchVal={searchVal} />
-                    </LeftSideDrawer>
-                )}
-            </main>
 
-            <Footer />
-        </div>
+            {SearchState.searchBy === SearchByType.NONE && <InitialPage />}
+
+            {SearchState.searchBy !== SearchByType.NONE && <MiniDrawer />}
+
+        </>
     );
 };
 
