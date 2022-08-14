@@ -75,7 +75,7 @@ const CodePenArea = (props: any) => {
                     const projectName = pathnameArr.pop();
                     const previewUrl = `https://codepen.io/${userName}/embed/preview/${projectName}`;
                     return (
-                        <Grid item xs={12} md={12} lg={6}>
+                        <Grid item xs={12} md={12} lg={6} key={projectName}>
                             <iframe
                                 height='300'
                                 key={'ifram-' + idx}
