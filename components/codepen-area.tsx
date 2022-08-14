@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Box, Divider, Grid, Typography } from '@mui/material';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { UseAppDispatch } from '../store';
@@ -52,43 +52,49 @@ const CodePenArea = (props: any) => {
     if (!codePenUserName) return <></>;
 
     return (
-        <Grid container spacing={3} my={2}>
-            {popularPen.map((item, idx) => {
-                if (!item) return <></>;
+        <Box my={3}>
+            <Typography variant='h5' py={1} color='primary'>
+                Codepen
+            </Typography>
+            <Divider sx={{ mb: 3 }} />
+            <Grid container spacing={3} my={2}>
+                {popularPen.map((item, idx) => {
+                    if (!item) return <></>;
 
-                const codepenLink = item?.link;
-                if (!codepenLink) return <></>;
-                const { pathname } = new URL(codepenLink);
-                if (!pathname) return <></>;
-                const pathnameArr = pathname.split('/').filter((item) => item != '');
+                    const codepenLink = item?.link;
+                    if (!codepenLink) return <></>;
+                    const { pathname } = new URL(codepenLink);
+                    if (!pathname) return <></>;
+                    const pathnameArr = pathname.split('/').filter((item) => item != '');
 
-                // const parts = ['protocol', 'hostname', 'pathname'];
+                    // const parts = ['protocol', 'hostname', 'pathname'];
 
-                const userName = pathnameArr[0];
-                const projectName = pathnameArr.pop();
-                const previewUrl = `https://codepen.io/${userName}/embed/preview/${projectName}`;
-                return (
-                    <Grid item xs={12} md={12} lg={6}>
-                        <iframe
-                            height='300'
-                            key={'ifram-' + idx}
-                            scrolling='no'
-                            title={item?.title}
-                            src={previewUrl}
-                            frameBorder='no'
-                            loading='lazy'
-                            allowTransparency={true}
-                            allowFullScreen={true}
-                        >
-                            See the Pen{' '}
-                            <a href={codepenLink}>Stacking Cards (Motion One Version)</a> by Bramus
-                            (<a href={codepenLink}>@bramus</a>) on <a href={codepenLink}>CodePen</a>
-                            .
-                        </iframe>
-                    </Grid>
-                );
-            })}
-        </Grid>
+                    const userName = pathnameArr[0];
+                    const projectName = pathnameArr.pop();
+                    const previewUrl = `https://codepen.io/${userName}/embed/preview/${projectName}`;
+                    return (
+                        <Grid item xs={12} md={12} lg={6}>
+                            <iframe
+                                height='300'
+                                key={'ifram-' + idx}
+                                scrolling='no'
+                                title={item?.title}
+                                src={previewUrl}
+                                frameBorder='no'
+                                loading='lazy'
+                                allowTransparency={true}
+                                allowFullScreen={true}
+                            >
+                                See the Pen{' '}
+                                <a href={codepenLink}>Stacking Cards (Motion One Version)</a> by
+                                Bramus (<a href={codepenLink}>@bramus</a>) on{' '}
+                                <a href={codepenLink}>CodePen</a>.
+                            </iframe>
+                        </Grid>
+                    );
+                })}
+            </Grid>
+        </Box>
     );
 };
 export default CodePenArea;

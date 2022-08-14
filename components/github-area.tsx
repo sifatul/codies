@@ -54,7 +54,7 @@ const GithubArea = (props: any) => {
         <>
             {(githubUserInfo.topRepos || [])?.length > 0 && (
                 <>
-                    <Typography variant='h5' component='div' py={1}>
+                    <Typography variant='h5' component='div' py={1} color='primary'>
                         Projects
                     </Typography>
 

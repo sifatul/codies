@@ -8,11 +8,12 @@ import {
     hackerRankDataType,
     setHackerRankInfo,
 } from '../store/platforms/hackerrank';
-import { setCountry, setName, setProfilePic } from '../store/user/basicInfo';
+import { setCountry, setName, setProfilePic, setEmail } from '../store/user/basicInfo';
 import { SearchByType } from '../types/common.types';
 import { PostData } from '../Utils/fetchData';
 import CodePenArea from './codepen-area';
 import GithubArea from './github-area';
+import UserBasicInfo from './userBasicInfo';
 
 const domainList: any = {
     hackerrank: {
@@ -101,6 +102,7 @@ const DataArea = (props: any) => {
                 <CircularProgress />
             ) : (
                 <>
+                    <UserBasicInfo />
                     <GithubArea {...searchVal} />
                     {/* {userInfo?.hackerrank.linkedin_url && <LinkedinArea linkedin_url={userInfo?.hackerrank.linkedin_url} />} */}
                     <CodePenArea {...searchVal} />

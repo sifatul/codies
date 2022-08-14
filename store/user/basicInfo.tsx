@@ -1,27 +1,27 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
-  email: string;
-  name: string;
-  country: string;
-  gender: string;
-  dob: string;
-  profilePic: string;
-  // profile links
-
+    email: string;
+    name: string;
+    country: string;
+    gender: string;
+    dob: string;
+    profilePic: string;
+    mobile: string;
+    // profile links
 }
 
 /**
  * Default state object with initial values.
  */
 const initialState: UserState = {
-  name: '',
-  email: '',
-  country: '',
-  gender: '',
-  dob: '',
-  profilePic: '',
-
+    name: '',
+    email: '',
+    country: '',
+    gender: '',
+    dob: '',
+    profilePic: '',
+    mobile: '',
 } as const;
 
 /**
@@ -31,40 +31,43 @@ const initialState: UserState = {
  * changed based on your needs.
  */
 export const userSlice = createSlice({
-  name: 'user',
-  initialState,
-  reducers: {
-    setName: (
-      state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.name>
-    ) => {
-      state.name = action.payload;
+    name: 'user',
+    initialState,
+    reducers: {
+        setName: (
+            state: Draft<typeof initialState>,
+            action: PayloadAction<typeof initialState.name>
+        ) => {
+            state.name = action.payload;
+        },
+        setEmail: (
+            state: Draft<typeof initialState>,
+            action: PayloadAction<typeof initialState.email>
+        ) => {
+            state.email = action.payload;
+        },
+        setProfilePic: (
+            state: Draft<typeof initialState>,
+            action: PayloadAction<typeof initialState.email>
+        ) => {
+            state.profilePic = action.payload;
+        },
+        setCountry: (
+            state: Draft<typeof initialState>,
+            action: PayloadAction<typeof initialState.email>
+        ) => {
+            state.country = action.payload;
+        },
+        setMobile: (
+            state: Draft<typeof initialState>,
+            action: PayloadAction<typeof initialState.mobile>
+        ) => {
+            state.mobile = action.payload;
+        },
+        setUserInfo: (state: Draft<typeof initialState>, action: PayloadAction<UserState>) => {
+            state = action.payload;
+        },
     },
-    setEmail: (
-      state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.email>
-    ) => {
-      state.email = action.payload;
-    },
-    setProfilePic: (
-      state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.email>
-    ) => {
-      state.profilePic = action.payload;
-    },
-    setCountry: (
-      state: Draft<typeof initialState>,
-      action: PayloadAction<typeof initialState.email>
-    ) => {
-      state.country = action.payload;
-    },
-    setUserInfo: (
-      state: Draft<typeof initialState>,
-      action: PayloadAction<UserState>
-    ) => {
-      state = action.payload
-    },
-  },
 });
 
 // A small helper of user state for `useSelector` function.
