@@ -11,10 +11,11 @@ import IconButton from '@mui/material/IconButton';
 
 import StarIcon from '@mui/icons-material/Star';
 import { Chip } from '@mui/material';
+
 export default function OutlinedCard({ topRepo }: { topRepo: githubTopRepoType }) {
     const updatedAt = new Date(topRepo.updated_at).toLocaleString();
     return (
-        <Box sx={{ minWidth: 275, mb: 1.5, maxWidth: '50%' }}>
+        <Box sx={{ minWidth: 275, mb: 1.5}}>
             <Card variant='outlined'>
                 <React.Fragment>
                     <CardContent>

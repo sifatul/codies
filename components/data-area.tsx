@@ -8,6 +8,7 @@ import BasicInfo from './basicInfo';
 import CodePenArea from './codepen-area';
 import GithubArea from './github-area';
 import HackerrankArea from './hackerrank-area';
+import UserBasicInfo from './userBasicInfo';
 
 const DataArea = () => {
     const filterState = UseAppSelector(getFilterState);
@@ -17,7 +18,7 @@ const DataArea = () => {
             case null:
                 return (
                     <>
-                        <BasicInfo />
+                        <UserBasicInfo />
                         <GithubArea />
                         <CodePenArea />
                         <LeetCodeArea />
@@ -35,7 +36,6 @@ const DataArea = () => {
         }
     };
 
-
     return (
         <Container
             maxWidth='md'
@@ -43,13 +43,11 @@ const DataArea = () => {
                 paddingTop: '50px',
             }}
         >
-
             <Grid container spacing={2}>
                 <Grid item lg={10} md={12} xs={12} p={2}>
                     {renderData(filterState.currentFilter)}
                 </Grid>
             </Grid>
-
         </Container>
     );
 };
