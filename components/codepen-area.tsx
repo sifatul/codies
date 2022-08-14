@@ -1,3 +1,4 @@
+import { Box, Divider, Grid, Typography } from '@mui/material';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
@@ -32,7 +33,6 @@ const CodePenArea = (props: any) => {
         const data: any = await GetData(codepenInfoFetchApi);
         const { items = [] } = data;
 
-
         const sortedData: codepenItemType[] = items.sort(
             (a: { pubDate: string }, b: { pubDate: string }) => {
                 const timeA = new Date(a.pubDate).getTime();
@@ -42,9 +42,9 @@ const CodePenArea = (props: any) => {
         );
         const codepenData = {
             pens: sortedData,
-            username: codePenUserName
-        }
-        dispatch(setcodepenUserInfo(codepenData))
+            username: codePenUserName,
+        };
+        dispatch(setcodepenUserInfo(codepenData));
         setPopularPen(sortedData.slice(0, 2));
     }, []);
 
@@ -54,9 +54,12 @@ const CodePenArea = (props: any) => {
     if (!codePenUserName) return <>No codepen username </>;
 
     return (
-        <>
-            <h1>Codepen data</h1>
-            <div style={{ display: 'flex' }}>
+        <Box my={3}>
+            <Typography variant='h5' py={1} color='primary'>
+                Codepen
+            </Typography>
+            <Divider sx={{ mb: 3 }} />
+            <Grid container spacing={3} my={2}>
                 {popularPen.map((item, idx) => {
                     if (!item) return <></>;
 
@@ -72,25 +75,28 @@ const CodePenArea = (props: any) => {
                     const projectName = pathnameArr.pop();
                     const previewUrl = `https://codepen.io/${userName}/embed/preview/${projectName}`;
                     return (
-                        <iframe
-                            height='300'
-                            key={'ifram-' + idx}
-                            scrolling='no'
-                            title={item?.title}
-                            src={previewUrl}
-                            frameBorder='no'
-                            loading='lazy'
-                            allowTransparency={true}
-                            allowFullScreen={true}
-                        >
-                            See the Pen <a href={codepenLink}>Stacking Cards (Motion One Version)</a> by
-                        Bramus (<a href={codepenLink}>@bramus</a>) on{' '}
-                            <a href={codepenLink}>CodePen</a>.
-                        </iframe>
+                        <Grid item xs={12} md={12} lg={6}>
+                            <iframe
+                                height='300'
+                                key={'ifram-' + idx}
+                                scrolling='no'
+                                title={item?.title}
+                                src={previewUrl}
+                                frameBorder='no'
+                                loading='lazy'
+                                allowTransparency={true}
+                                allowFullScreen={true}
+                            >
+                                See the Pen{' '}
+                                <a href={codepenLink}>Stacking Cards (Motion One Version)</a> by
+                                Bramus (<a href={codepenLink}>@bramus</a>) on{' '}
+                                <a href={codepenLink}>CodePen</a>.
+                            </iframe>
+                        </Grid>
                     );
                 })}
-            </div>
-        </>
+            </Grid>
+        </Box>
     );
 };
 export default CodePenArea;

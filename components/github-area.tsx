@@ -10,10 +10,10 @@ import { getGithubInfoByName, getRepoList } from '../Utils/github';
 import CardGithub from './common/card';
 
 const githubApi = {
-  name: 'github',
-  userInfoApi: 'https://api.github.com/users/userName',
-  repoListApi: 'https://api.github.com/users/userName/repos',
-}
+    name: 'github',
+    userInfoApi: 'https://api.github.com/users/userName',
+    repoListApi: 'https://api.github.com/users/userName/repos',
+};
 
 const GithubArea = () => {
   const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
