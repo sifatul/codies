@@ -2,6 +2,7 @@ import { getDomain, isEmail } from 'js-string-helper';
 import { useCallback } from 'react';
 import { UseAppDispatch } from '../store';
 import { resetSearchType, setSearchTypeEmail, setSearchTypeName, setSearchTypeUrl, userInfoType } from '../store/search';
+import { setEmail } from '../store/user/basicInfo';
 import { Filter } from '../types/common.types';
 import { GetData } from '../Utils/fetchData';
 
@@ -32,6 +33,10 @@ export default function SearchHelper() {
 
 
   }, [])
+  const updateStoreWithUserInfo = useCallback((userInfo: userInfoType) => {
+    dispatch(setSearchTypeEmail(userInfo))
+    dispatch(setEmail(userInfo.email))
+  }, [])
 
   const searchInputHandler = async (searchVal: string) => {
     if (!searchVal) return;
@@ -44,7 +49,7 @@ export default function SearchHelper() {
       const userInfo = await GetData(`api/user/get/platform?param=${JSON.stringify(param)}`)
 
       if (userInfo) {
-        dispatch(setSearchTypeEmail(userInfo as userInfoType))
+        updateStoreWithUserInfo(userInfo as userInfoType)
         return
       }
     }
@@ -58,7 +63,7 @@ export default function SearchHelper() {
       // check values exists in database
       const userInfo = await getUserByPlatform(searchVal)
       if (userInfo) {
-        dispatch(setSearchTypeEmail(userInfo as userInfoType))
+        updateStoreWithUserInfo(userInfo as userInfoType)
         return
       }
 
