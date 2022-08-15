@@ -46,7 +46,7 @@ export default function SearchHelper() {
       const param = {
         email: searchVal
       }
-      const userInfo = await GetData(`api/user/get/platform?param=${JSON.stringify(param)}`)
+      const userInfo = await GetData(`api/platform/platform?param=${JSON.stringify(param)}`)
 
       if (userInfo) {
         updateStoreWithUserInfo(userInfo as userInfoType)
