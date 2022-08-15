@@ -8,7 +8,7 @@ import { GetData } from '../Utils/fetchData';
 export default function SearchHelper() {
   const dispatch = UseAppDispatch();
 
-  const getUserByPlatform = useCallback(async (hostname: string, searchVal: string) => {
+  const getUserByPlatform = useCallback(async (searchVal: string) => {
     const hostnameAndQueryKey = {
       GITHUB: "github_url",
       LEETCODE: "leetcode_url",
@@ -21,7 +21,7 @@ export default function SearchHelper() {
     const _platformName = getDomain(searchVal)
     if (!_platformName) return
     const platformName = _platformName.split('.')?.[0]
-    debugger
+
     const queryKey = hostnameAndQueryKey[platformName.toUpperCase() as Filter]
     if (!queryKey) return
     const param = {
@@ -48,21 +48,24 @@ export default function SearchHelper() {
         return
       }
     }
-    // if search val was not an email || userinfo not found
+
+
     try {
+      // check if it is a valid url
+
       let { protocol, hostname, pathname } = new URL(searchVal);
 
-      //remove trailing slash
-      if (pathname.substr(-1) === '/') pathname = pathname.slice(0, -1);
-
-      //its a valid url
       // check values exists in database
-      const userInfo = await getUserByPlatform(hostname, searchVal)
+      const userInfo = await getUserByPlatform(searchVal)
       if (userInfo) {
         dispatch(setSearchTypeEmail(userInfo as userInfoType))
         return
       }
 
+      //remove trailing slash
+      if (pathname.substr(-1) === '/') pathname = pathname.slice(0, -1);
+
+      //its a valid url
       dispatch(setSearchTypeUrl({
         protocol,
         hostname,
