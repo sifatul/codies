@@ -28,20 +28,21 @@ const getGithubInfoByName = async (name: string) => {
 };
 
 const getRepoList = async (name: string) => {
-    const getRepoListApi = `https://api.github.com/users/${name}/repos`
-    const data: any = await PostData(forwardApiPath, getRepoListApi);
-    if (data.message === 'Not Found') return [];
-    if (!data || data?.length <= 0) return [];
-    if (typeof data !== 'object') return [];
+    try {
+        const getRepoListApi = `https://api.github.com/users/${name}/repos`
+        const data: any = await PostData(forwardApiPath, getRepoListApi);
+        const onlyPublicRepo: githubTopRepoType[] = (data || []).filter(
+            (item: githubTopRepoType) => item.visibility === 'public'
+        );
 
-    const onlyPublicRepo: githubTopRepoType[] = (data || []).filter(
-        (item: githubTopRepoType) => item.visibility === 'public'
-    );
-
-    const sortedRepo: githubTopRepoType[] = onlyPublicRepo.sort((a, b) => {
-        return b.stargazers_count - a.stargazers_count;
-    });
-    return sortedRepo.slice(0, 2);
+        const sortedRepo: githubTopRepoType[] = onlyPublicRepo.sort((a, b) => {
+            return b.stargazers_count - a.stargazers_count;
+        });
+        return sortedRepo.slice(0, 2);
+    } catch (e) {
+        console.error(e)
+        return []
+    }
     //
 };
 export { getRepoList, getGithubInfoByName };

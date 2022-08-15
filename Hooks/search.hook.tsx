@@ -1,16 +1,47 @@
-import { PostData } from '../Utils/fetchData';
-import { isEmail } from 'js-string-helper';
+import { getDomain, isEmail } from 'js-string-helper';
+import { useCallback } from 'react';
 import { UseAppDispatch } from '../store';
 import { resetSearchType, setSearchTypeEmail, setSearchTypeName, setSearchTypeUrl, userInfoType } from '../store/search';
+import { Filter } from '../types/common.types';
+import { GetData } from '../Utils/fetchData';
+
 export default function SearchHelper() {
   const dispatch = UseAppDispatch();
+
+  const getUserByPlatform = useCallback(async (hostname: string, searchVal: string) => {
+    const hostnameAndQueryKey = {
+      GITHUB: "github_url",
+      LEETCODE: "leetcode_url",
+      HACKERRANK: "hackerrank_url",
+      CODEPEN: "codepen_url",
+      MEDIUM: "medium_url",
+      LINKEDIN: "linkedin_url"
+    }
+    if (!searchVal) return
+    const _platformName = getDomain(searchVal)
+    if (!_platformName) return
+    const platformName = _platformName.split('.')?.[0]
+    debugger
+    const queryKey = hostnameAndQueryKey[platformName.toUpperCase() as Filter]
+    if (!queryKey) return
+    const param = {
+      [queryKey]: searchVal
+    }
+
+    return await GetData(`api/user/get/platform?param=${JSON.stringify(param)}`)
+
+
+  }, [])
 
   const searchInputHandler = async (searchVal: string) => {
     if (!searchVal) return;
     dispatch(resetSearchType)
 
     if (isEmail(searchVal)) {
-      const userInfo = await PostData('api/getUserByEmail', searchVal)
+      const param = {
+        email: searchVal
+      }
+      const userInfo = await GetData(`api/user/get/platform?param=${JSON.stringify(param)}`)
 
       if (userInfo) {
         dispatch(setSearchTypeEmail(userInfo as userInfoType))
@@ -26,8 +57,11 @@ export default function SearchHelper() {
 
       //its a valid url
       // check values exists in database
-      const userInfo = await PostData('api/getUserNyEmail', searchVal)
-
+      const userInfo = await getUserByPlatform(hostname, searchVal)
+      if (userInfo) {
+        dispatch(setSearchTypeEmail(userInfo as userInfoType))
+        return
+      }
 
       dispatch(setSearchTypeUrl({
         protocol,
