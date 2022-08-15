@@ -3,7 +3,7 @@ import { removeSpecialCharacter } from 'js-string-helper';
 import React, { useCallback, useEffect, useState } from "react";
 import { UseAppDispatch, UseAppSelector } from "../store";
 import { setGithubUsername } from '../store/platforms/github';
-import { getHackerRankUserInfo, hackerRankDataType, setHackerRankInfo } from "../store/platforms/hackerrank";
+import { getHackerRankUserInfo, hackerRankDataType, setHackerRankInfo, setHackerRankSubmissionHistory } from "../store/platforms/hackerrank";
 import { getSearchState } from '../store/search';
 import { setCountry, setName, setProfilePic } from "../store/user/basicInfo";
 import { SearchByType } from "../types/common.types";
@@ -45,6 +45,19 @@ const HackerrankArea = (props: any) => {
     return hackerRankdata;
   }, []);
 
+  const getHackerRankSubmissionHistory = React.useCallback(async (nameFromUrl: string) => {
+    const hackerRankApi = 'https://www.hackerrank.com/rest/hackers/userName/submission_histories'
+    const hackerRankSubmissionHistoryApi = hackerRankApi.replace('userName', nameFromUrl);
+    const postApiForwardingApi = '/api/forward-api';
+    const data: any = await PostData(postApiForwardingApi, hackerRankSubmissionHistoryApi);
+    if (!data) return
+    const dataKeys = Object.keys(data);
+    if (dataKeys.length <= 0) return
+    dispatch(setHackerRankSubmissionHistory(data))
+
+  }, []);
+
+
   const getDataFromUrl = useCallback(async (hackerRankUrl: string) => {
 
     let UrlIfno;
@@ -66,6 +79,7 @@ const HackerrankArea = (props: any) => {
 
     setLoading(true);
     const { github_url } = await getHackerRankInfo(nameFromUrl);
+    getHackerRankSubmissionHistory(nameFromUrl)
     setLoading(false);
     if (!github_url) return console.warn("hackerrank area> github_url: not found")
 
@@ -79,6 +93,7 @@ const HackerrankArea = (props: any) => {
     name = removeSpecialCharacter(name);
 
     const { github_url } = await getHackerRankInfo(name);
+    getHackerRankSubmissionHistory(name)
     setLoading(false);
     if (!github_url) return
     dispatch(setGithubUsername(github_url));

@@ -117,6 +117,15 @@ export const getLeetcodeUserInfo = (state: { leetcode: LeetcodeUserInfoType }) =
 
   return { ...state.leetcode, profile_url };
 }
+export const getLeetCodeSubmissionSummary = (state: { leetcode: LeetcodeUserInfoType }) => {
+  let maxLanguageCount = { languageName: "", problemsSolved: 0 }
+  const countProblemSolved = (state.leetcode?.languageProblemCount || []).reduce((sum, item) => {
+    const countSolved = (item?.problemsSolved || 0);
+    if (countSolved > maxLanguageCount.problemsSolved) maxLanguageCount = item
+    return countSolved + sum
+  }, 0)
+  return { countProblemSolved, maxUsedLanguage: maxLanguageCount.languageName }
+}
 
 // Exports all actions
 export const { setLeetcodeUserInfo, setLeetcodeLanguageProblemCount, setLeetcodeTagProblemCounts } = leetcodeUser.actions;

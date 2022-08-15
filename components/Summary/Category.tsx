@@ -1,33 +1,31 @@
 import Box from "@mui/material/Box";
 import * as React from "react";
 import { UseAppSelector } from "../../store";
-import { getGithubUserInfo } from "../../store/platforms/github";
-import { getLeetcodeUserInfo } from "../../store/platforms/leetcode";
+import { getGithubSummary } from "../../store/platforms/github";
+import { getHackerRankTotalProblemSolved } from "../../store/platforms/hackerrank";
+import { getLeetCodeSubmissionSummary } from "../../store/platforms/leetcode";
 import CategoryItem from "./CategoryItem";
 
 export default function CategorySummary() {
-  const githubUserInfo = UseAppSelector(getGithubUserInfo);
-  const leetCodeUserInfo = UseAppSelector(getLeetcodeUserInfo);
+  const githubSummary = UseAppSelector(getGithubSummary);
 
-  let maxLanguageCount = { languageName: "", problemsSolved: 0 }
-  const problemCount = (leetCodeUserInfo?.languageProblemCount || []).reduce((sum, item) => {
-    const countSolved = (item?.problemsSolved || 0);
-    if (countSolved > maxLanguageCount.problemsSolved) maxLanguageCount = item
+  const leetCodeSummary = UseAppSelector(getLeetCodeSubmissionSummary);
+  const hackerrankTotalSubmission = UseAppSelector(getHackerRankTotalProblemSolved);
 
-    return countSolved + sum
-  }, 0)
-
+  const problemCount = leetCodeSummary.countProblemSolved + hackerrankTotalSubmission
+  let programmingLanguageUser = leetCodeSummary.maxUsedLanguage
+  if (githubSummary.maxUsedLanguage) programmingLanguageUser += ", " + githubSummary.maxUsedLanguage
 
   const categoryList = [
     {
-      label: "Years of experience",
+      label: "Experiences",
       icon: "",
-      value: "10"
+      value: "#"
     },
     {
       label: "Programming Language",
       icon: "",
-      value: maxLanguageCount.languageName
+      value: programmingLanguageUser
     },
     {
       label: "Problem Solved",
@@ -37,7 +35,7 @@ export default function CategorySummary() {
     {
       label: "Total Project",
       icon: "",
-      value: githubUserInfo.repos?.length + ""
+      value: githubSummary.totalProject + ""
     }
   ]
   return (
@@ -47,8 +45,8 @@ export default function CategorySummary() {
         flexWrap: "wrap",
         "& > :not(style)": {
           m: 1,
-          width: 128,
-          height: 128
+          width: 150,
+          height: 'auto'
         }
       }}
     >

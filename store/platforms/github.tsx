@@ -63,7 +63,23 @@ export const userSlice = createSlice({
 });
 
 export const getGithubUserInfo = (state: { github: GithubUserInfoType }) => state.github;
-export const getTopRepos = (state: { github: GithubUserInfoType }) => state.github.repos?.slice(0, 2);;
+export const getTopRepos = (state: { github: GithubUserInfoType }) => state.github.repos?.slice(0, 2);
+export const getGithubSummary = (state: { github: GithubUserInfoType }) => {
+  let maxLanguageCount = { languageName: "", count: 0 }
+  state.github.repos?.reduce((accu: any, current: githubRepoType) => {
+    const previousCount = accu[current?.language] || 0
+    const newCount = previousCount + 1
+    if (newCount > maxLanguageCount.count) {
+      maxLanguageCount.languageName = current?.language
+      maxLanguageCount.count = newCount
+    }
+
+    accu[current?.language] = newCount
+    return accu
+  }, {})
+  return { totalProject: state.github.repos?.length, maxUsedLanguage: maxLanguageCount.languageName }
+
+}
 
 // Exports all actions
 export const { setGithubUserInfo, setGithubUsername } = userSlice.actions;
