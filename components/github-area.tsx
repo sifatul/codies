@@ -1,4 +1,5 @@
 import { Divider, Typography } from '@mui/material';
+import { removeSpecialCharacter } from 'js-string-helper';
 import { userInfo } from 'os';
 import React, { useCallback, useEffect } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
@@ -51,6 +52,7 @@ const GithubArea = () => {
 
 
   const getGithubData = React.useCallback(async (name: string) => {
+    name = removeSpecialCharacter(name)
     if (window == undefined) return;
 
     const [gitHubBasicInfo, githubRepos] = await Promise.all([
