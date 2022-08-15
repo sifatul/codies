@@ -20,13 +20,15 @@ export interface githubDataType {
 }
 
 const forwardApiPath = '/api/forward-api';
-const getGithubInfoByName = async (userProfileApi: string) => {
-    const data: any = await PostData(forwardApiPath, userProfileApi);
+const getGithubInfoByName = async (name: string) => {
+    const userInfoApi = `https://api.github.com/users/${name}`
+    const data: any = await PostData(forwardApiPath, userInfoApi);
     const githubData: githubDataType = data || {};
     return githubData
 };
 
-const getRepoList = async (getRepoListApi: string) => {
+const getRepoList = async (name: string) => {
+    const getRepoListApi = `https://api.github.com/users/${name}/repos`
     const data: any = await PostData(forwardApiPath, getRepoListApi);
     if (data.message === 'Not Found') return [];
     if (!data || data?.length <= 0) return [];

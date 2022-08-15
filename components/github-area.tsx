@@ -9,12 +9,6 @@ import { SearchByType } from '../types/common.types';
 import { getGithubInfoByName, getRepoList } from '../Utils/github';
 import CardGithub from './common/card';
 
-const githubApi = {
-    name: 'github',
-    userInfoApi: 'https://api.github.com/users/userName',
-    repoListApi: 'https://api.github.com/users/userName/repos',
-};
-
 const GithubArea = () => {
   const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
 
@@ -58,12 +52,10 @@ const GithubArea = () => {
 
   const getGithubData = React.useCallback(async (name: string) => {
     if (window == undefined) return;
-    const getRepoListApi = githubApi.repoListApi.replace('userName', name);
-    const userProfileApi = githubApi.userInfoApi.replace('userName', name);
 
     const [gitHubBasicInfo, githubRepos] = await Promise.all([
-      getGithubInfoByName(userProfileApi),
-      getRepoList(getRepoListApi),
+      getGithubInfoByName(name),
+      getRepoList(name),
     ]);
     const { email } = gitHubBasicInfo;
     if (email) dispatch(setEmail(email))
