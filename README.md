@@ -42,6 +42,9 @@ To contribute in development, please follow the following steps:
 - Package Manager -> Yarn
 (More to be added...)
 
+## Guidelines
+- Filename:[ Use PascalCase for filenames](https://github.com/airbnb/javascript/tree/master/react)
+
 ## List of features
 - Show data from Leetcode
 - Show data from LinkedIn
