@@ -21,7 +21,7 @@ const LeetCodeArea = (props: any) => {
     })
 
     getLeetCodeProfileInfo(nameFromUrl, QueryType.LangugaeProblemSolvedQuery).then((output: any) => {
-      dispatch(setLeetcodeLanguageProblemCount(output));
+      dispatch(setLeetcodeLanguageProblemCount(output?.languageProblemCount));
     })
     getLeetCodeProfileInfo(nameFromUrl, QueryType.TagProblemsCountQuery).then((output: any) => {
       dispatch(setLeetcodeTagProblemCounts(output));

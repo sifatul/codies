@@ -3,7 +3,7 @@ import { removeSpecialCharacter } from 'js-string-helper';
 import { userInfo } from 'os';
 import React, { useCallback, useEffect } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
-import { getGithubUserInfo, setGithubUserInfo, setGithubUsername } from '../store/platforms/github';
+import { getGithubUserInfo, getTopRepos, setGithubUserInfo, setGithubUsername } from '../store/platforms/github';
 import { getSearchState, userInfoType } from '../store/search';
 import { setEmail } from '../store/user/basicInfo';
 import { SearchByType } from '../types/common.types';
@@ -16,6 +16,7 @@ const GithubArea = () => {
   console.log("github-area>originalSearchVal ", originalSearchVal)
 
   const githubUserInfo = UseAppSelector(getGithubUserInfo);
+  const githubTopRepos = UseAppSelector(getTopRepos);
   const { username } = githubUserInfo
   const dispatch = UseAppDispatch();
 
@@ -61,20 +62,20 @@ const GithubArea = () => {
     ]);
     const { email } = gitHubBasicInfo;
     if (email) dispatch(setEmail(email))
-    dispatch(setGithubUserInfo({ ...gitHubBasicInfo, topRepos: githubRepos, username: name }))
+    dispatch(setGithubUserInfo({ ...gitHubBasicInfo, repos: githubRepos, username: name }))
   }, []);
 
   return <>
 
 
-    {(githubUserInfo.topRepos || [])?.length > 0 && (
+    {(githubTopRepos || [])?.length > 0 && (
       <>
         <Typography variant='h5' component='div'> Projects  </Typography>
 
         <Divider sx={{ mb: 5 }} />
 
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          {githubUserInfo.topRepos?.map((repo, idx) => (
+          {githubTopRepos?.map((repo, idx) => (
             <CardGithub topRepo={repo} key={'repo' + idx} />
           ))}
         </div>

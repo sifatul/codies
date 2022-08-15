@@ -38,7 +38,7 @@ const getRepoList = async (name: string) => {
         const sortedRepo: githubTopRepoType[] = onlyPublicRepo.sort((a, b) => {
             return b.stargazers_count - a.stargazers_count;
         });
-        return sortedRepo.slice(0, 2);
+        return sortedRepo
     } catch (e) {
         console.error(e)
         return []

@@ -11,11 +11,11 @@ export type CategoryItemType = {
 export default function CategoryItem(props: CategoryItemType) {
   const { label, icon, value } = props
   return (
-    <Paper elevation={3} >
+    <Paper elevation={3} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {/* <img src={icon} /> */}
-      <CategoryIcon />
-      <p>{label}</p>
-      <p>{value}</p>
+      <CategoryIcon fontSize="large" />
+      <p style={{ fontSize: 12 }}>{label}</p>
+      <p style={{ padding: 0, margin: 0 }}>{value}</p>
     </Paper>
   );
 }

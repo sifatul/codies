@@ -1,7 +1,7 @@
 
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 
-export interface githubTopRepoType {
+export interface githubRepoType {
   language: string;
   url: string;
   html_url: string;
@@ -16,7 +16,7 @@ export interface GithubUserInfoType {
   blog: string;
   email: string;
   avatar_url: string;
-  topRepos?: githubTopRepoType[];
+  repos?: githubRepoType[];
   html_url: string;
   username: string;
 
@@ -62,8 +62,8 @@ export const userSlice = createSlice({
   },
 });
 
-// A small helper of user state for `useSelector` function.
 export const getGithubUserInfo = (state: { github: GithubUserInfoType }) => state.github;
+export const getTopRepos = (state: { github: GithubUserInfoType }) => state.github.repos?.slice(0, 2);;
 
 // Exports all actions
 export const { setGithubUserInfo, setGithubUsername } = userSlice.actions;
