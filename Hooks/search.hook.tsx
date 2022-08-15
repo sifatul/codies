@@ -10,7 +10,7 @@ export default function SearchHelper() {
     dispatch(resetSearchType)
 
     if (isEmail(searchVal)) {
-      const userInfo = await PostData('api/getUserNyEmail', searchVal)
+      const userInfo = await PostData('api/getUserByEmail', searchVal)
 
       if (userInfo) {
         dispatch(setSearchTypeEmail(userInfo as userInfoType))
@@ -23,6 +23,11 @@ export default function SearchHelper() {
 
       //remove trailing slash
       if (pathname.substr(-1) === '/') pathname = pathname.slice(0, -1);
+
+      //its a valid url
+      // check values exists in database
+      const userInfo = await PostData('api/getUserNyEmail', searchVal)
+
 
       dispatch(setSearchTypeUrl({
         protocol,
