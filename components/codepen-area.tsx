@@ -1,4 +1,5 @@
 import { Box, Divider, Grid, Typography } from '@mui/material';
+import { removeSpecialCharacter } from 'js-string-helper';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
