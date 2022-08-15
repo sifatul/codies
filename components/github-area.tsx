@@ -52,8 +52,8 @@ const GithubArea = () => {
 
 
   const getGithubData = React.useCallback(async (name: string) => {
+    if (window == undefined || !name) return;
     name = removeSpecialCharacter(name)
-    if (window == undefined) return;
 
     const [gitHubBasicInfo, githubRepos] = await Promise.all([
       getGithubInfoByName(name),

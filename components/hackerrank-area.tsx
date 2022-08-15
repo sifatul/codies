@@ -1,4 +1,5 @@
 import { CircularProgress } from '@mui/material';
+import { removeSpecialCharacter } from 'js-string-helper';
 import React, { useCallback, useEffect, useState } from "react";
 import { UseAppDispatch, UseAppSelector } from "../store";
 import { setGithubUsername } from '../store/platforms/github';
@@ -75,6 +76,7 @@ const HackerrankArea = (props: any) => {
 
   const getDataFromName = useCallback(async (name: string) => {
     if (!name) return;
+    name = removeSpecialCharacter(name);
 
     const { github_url } = await getHackerRankInfo(name);
     setLoading(false);

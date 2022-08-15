@@ -25,7 +25,7 @@ const CodePenArea = (props: any) => {
     if (searchBy === SearchByType.URL && pathname) {
         //extract name from the url
         const _codePenUserName = pathname.split('/').pop();
-        if (_codePenUserName) codePenUserName = _codePenUserName
+        if (_codePenUserName) codePenUserName = removeSpecialCharacter(_codePenUserName)
     }
     const codepenInfoFetchApi = codepenInfoFetchUrl.replace('userName', codePenUserName);
 
