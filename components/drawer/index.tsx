@@ -80,7 +80,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
             ...closedMixin(theme),
             '& .MuiDrawer-paper': closedMixin(theme),
         }),
-    }),
+    })
 );
 
 export default function MiniDrawer() {
@@ -98,13 +98,10 @@ export default function MiniDrawer() {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar position="fixed" open={open}>
-                <CustomToolbar
-                    handleDrawerOpen={handleDrawerOpen}
-                    open={open}
-                />
+            <AppBar position='fixed' open={open}>
+                <CustomToolbar handleDrawerOpen={handleDrawerOpen} open={open} />
             </AppBar>
-            <Drawer variant="permanent" open={open}>
+            <Drawer variant='permanent' open={open}>
                 <DrawerHeader>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -113,10 +110,9 @@ export default function MiniDrawer() {
                 <Divider />
                 <DrawerList toggleDrawer={(e) => setOpen(e)} open={open} />
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
                 <DataArea />
-
             </Box>
         </Box>
     );

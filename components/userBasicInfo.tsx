@@ -22,19 +22,19 @@ const UserBasicInfo = () => {
             <Grid container spacing={3}>
                 <Grid item lg={8} md={8} sm={12}>
                     <Typography variant='body1' mb={1}>
-                        <span>Name:</span> <span>{name}</span>
+                        <span>Name:</span> <span>{name ? name : '-'}</span>
                     </Typography>
                     <Typography variant='body1' mb={1}>
-                        <span>Email:</span> <span>{email}</span>
+                        <span>Email:</span> <span>{email ? email : '-'}</span>
                     </Typography>
                     <Typography variant='body1' mb={1}>
-                        <span>Mobile:</span> <span>{mobile}</span>
+                        <span>Mobile:</span> <span>{mobile ? mobile : '-'}</span>
                     </Typography>
                     <Typography variant='body1' mb={1}>
-                        <span>Country:</span> <span>{country}</span>
+                        <span>Country:</span> <span>{country ? country : '-'}</span>
                     </Typography>
                     <Typography variant='body1' mb={1}>
-                        <span>Date of Birth:</span> <span>{dob}</span>
+                        <span>Date of Birth:</span> <span>{dob ? dob : '-'}</span>
                     </Typography>
                 </Grid>
                 <Grid item lg={4} md={4} sm={12}>

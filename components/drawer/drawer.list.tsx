@@ -38,7 +38,15 @@ const otherPlatforms = {
     },
 };
 
-const ShowFromList = ({ platformsList, onClick, open }: { platformsList: any; onClick: Function, open: boolean }) => {
+const ShowFromList = ({
+    platformsList,
+    onClick,
+    open,
+}: {
+    platformsList: any;
+    onClick: Function;
+    open: boolean;
+}) => {
     const platforms = Object.keys(platformsList);
     const dispatch = UseAppDispatch();
     return (
@@ -79,7 +87,13 @@ const ShowFromList = ({ platformsList, onClick, open }: { platformsList: any; on
     );
 };
 
-const DrawerList = ({ toggleDrawer, open }: { toggleDrawer: (bol: boolean) => any, open: boolean }) => {
+const DrawerList = ({
+    toggleDrawer,
+    open,
+}: {
+    toggleDrawer: (bol: boolean) => any;
+    open: boolean;
+}) => {
     const [activeDrawerItem, setActiveDrawerItem] = useState('CODEPEN');
     const dispatch = UseAppDispatch();
 
@@ -87,7 +101,7 @@ const DrawerList = ({ toggleDrawer, open }: { toggleDrawer: (bol: boolean) => an
         <Box
             sx={{ width: 250 }}
             role='presentation'
-            onClick={e => toggleDrawer(false)}
+            onClick={(e) => toggleDrawer(false)}
             onKeyDown={() => toggleDrawer(false)}
         >
             <ListItem
@@ -108,9 +122,17 @@ const DrawerList = ({ toggleDrawer, open }: { toggleDrawer: (bol: boolean) => an
                 </ListItemButton>
             </ListItem>
             <Divider />
-            <ShowFromList platformsList={otherPlatforms} onClick={setActiveDrawerItem} open={open} />
+            <ShowFromList
+                platformsList={otherPlatforms}
+                onClick={setActiveDrawerItem}
+                open={open}
+            />
             <Divider />
-            <ShowFromList platformsList={codingPlatforms} onClick={setActiveDrawerItem} open={open} />
+            <ShowFromList
+                platformsList={codingPlatforms}
+                onClick={setActiveDrawerItem}
+                open={open}
+            />
         </Box>
     );
 };
