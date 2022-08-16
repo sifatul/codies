@@ -22,7 +22,7 @@ export default async (req: any, res: any) => {
 
         const query = { _id: new ObjectId(), ...data };
 
-        await db.collection(platformName).update(query, {unique:true});
+        await db.collection(platformName).updateOne(query, {unique:true});
 
         return res.json(data);
     } catch (e) {
