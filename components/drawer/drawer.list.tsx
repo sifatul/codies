@@ -38,15 +38,7 @@ const otherPlatforms = {
     },
 };
 
-const ShowFromList = ({
-    platformsList,
-    onClick,
-    open,
-}: {
-    platformsList: any;
-    onClick: Function;
-    open: boolean;
-}) => {
+const ShowFromList = ({ platformsList, onClick, open, activeDrawerItem }: { platformsList: any; onClick: Function, open: boolean, activeDrawerItem: string }) => {
     const platforms = Object.keys(platformsList);
     const dispatch = UseAppDispatch();
     return (
@@ -68,6 +60,7 @@ const ShowFromList = ({
                                 justifyContent: open ? 'initial' : 'center',
                                 px: 2.5,
                             }}
+                            selected={activeDrawerItem === name.toUpperCase()}
                         >
                             <ListItemIcon
                                 sx={{
@@ -87,16 +80,10 @@ const ShowFromList = ({
     );
 };
 
-const DrawerList = ({
-    toggleDrawer,
-    open,
-}: {
-    toggleDrawer: (bol: boolean) => any;
-    open: boolean;
-}) => {
-    const [activeDrawerItem, setActiveDrawerItem] = useState('CODEPEN');
+const DrawerList = ({ toggleDrawer, open }: { toggleDrawer: (bol: boolean) => any, open: boolean }) => {
+    const [activeDrawerItem, setActiveDrawerItem] = useState('ALL');
     const dispatch = UseAppDispatch();
-
+    
     return (
         <Box
             sx={{ width: 250 }}
@@ -117,22 +104,15 @@ const DrawerList = ({
                         justifyContent: open ? 'initial' : 'center',
                         px: 2.5,
                     }}
+                    selected={activeDrawerItem === 'ALL'}
                 >
                     <ListItemText primary={'All'} />
                 </ListItemButton>
             </ListItem>
             <Divider />
-            <ShowFromList
-                platformsList={otherPlatforms}
-                onClick={setActiveDrawerItem}
-                open={open}
-            />
+            <ShowFromList platformsList={otherPlatforms} onClick={setActiveDrawerItem} activeDrawerItem={activeDrawerItem} open={open} />
             <Divider />
-            <ShowFromList
-                platformsList={codingPlatforms}
-                onClick={setActiveDrawerItem}
-                open={open}
-            />
+            <ShowFromList platformsList={codingPlatforms} onClick={setActiveDrawerItem} activeDrawerItem={activeDrawerItem} open={open} />
         </Box>
     );
 };
