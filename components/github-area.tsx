@@ -2,21 +2,20 @@ import { Divider, Typography } from '@mui/material';
 import { getDomain, getLastPathname } from 'js-string-helper';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
-import { getGithubUserInfo, getTopRepos, setGithubUserInfo, setGithubUsername } from '../store/platforms/github';
+import { getGithubUserInfo, getTopRepos, setGithubUserInfo } from '../store/platforms/github';
 import { getSearchState } from '../store/search';
 import { setEmail } from '../store/user/basicInfo';
-import { SearchByType } from '../types/common.types';
-import { getGithubInfoByName, getRepoList } from '../Utils/github';
-import { StorePlatformData } from '../Utils/storePlatformData';
+import { Filter, SearchByType } from '../types/common.types';
+import { PostData } from '../Utils/fetchData';
+import { getGithubInfoByName, getRepoList, GithuApis } from '../Utils/github';
 import CardGithub from './common/card';
 
 const GithubArea = () => {
   const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
 
-  console.log("github-area>originalSearchVal ", originalSearchVal)
 
   const githubUserInfo = UseAppSelector(getGithubUserInfo);
-  const githubTopRepos = UseAppSelector(getTopRepos);
+  const githubTopRepos = UseAppSelector(getTopRepos) || [];
 
   const dispatch = UseAppDispatch();
 
@@ -59,18 +58,35 @@ const GithubArea = () => {
       getGithubInfoByName(githubUserName),
       getRepoList(githubUserName),
     ]);
-    // TODO 
-    // if (gitHubBasicInfo) {
-    //   const dataBody = {
-    //     source: githubUserInfo.html_url,
-    //     data: gitHubBasicInfo
-    //   }
-    //   await StorePlatformData('/api/platform/add', dataBody)
-    // }
+
+
     const { email } = gitHubBasicInfo;
     if (email) dispatch(setEmail(email))
     dispatch(setGithubUserInfo({ ...gitHubBasicInfo, repos: githubRepos, username: githubUserName }))
   }, [githubUserName]);
+
+  useEffect(() => {
+    // user data found from database already
+    if (userFound.github_url) return
+
+    // user basic info in github not found yet
+    if (!githubUserName || !githubUserInfo?.html_url) return
+    const param1 = {
+      source: GithuApis.userInfoApi.replace('userName', githubUserName),
+      data: githubUserInfo
+    }
+    PostData(`/api/platform/${Filter.GITHUB}`, JSON.stringify(param1))
+    if ((githubUserInfo?.repos || []).length <= 0) return
+
+    const param2 = {
+      source: GithuApis.getRepoListApi.replace('userName', githubUserName),
+      data: githubUserInfo.repos
+    }
+    PostData(`/api/platform/${Filter.GITHUB}`, JSON.stringify(param2))
+
+  }, [githubUserInfo?.html_url, userFound.github_url, githubUserName])
+
+
 
   return <>
 

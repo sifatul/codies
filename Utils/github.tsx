@@ -18,10 +18,14 @@ export interface githubDataType {
     html_url: string;
     topRepos?: githubTopRepoType[];
 }
+export const GithuApis = {
+    userInfoApi: `https://api.github.com/users/userName`,
+    getRepoListApi: `https://api.github.com/users/userName/repos`
+}
 
 const forwardApiPath = '/api/forward-api';
 const getGithubInfoByName = async (name: string) => {
-    const userInfoApi = `https://api.github.com/users/${name}`
+    const userInfoApi = GithuApis.userInfoApi.replace('userName', name)
     const data: any = await PostData(forwardApiPath, userInfoApi);
     const githubData: githubDataType = data || {};
     return githubData
@@ -29,7 +33,7 @@ const getGithubInfoByName = async (name: string) => {
 
 const getRepoList = async (name: string) => {
     try {
-        const getRepoListApi = `https://api.github.com/users/${name}/repos`
+        const getRepoListApi = GithuApis.userInfoApi.replace('userName', name)
         const data: any = await PostData(forwardApiPath, getRepoListApi);
         const onlyPublicRepo: githubTopRepoType[] = (data || []).filter(
             (item: githubTopRepoType) => item.visibility === 'public'
