@@ -38,7 +38,17 @@ const otherPlatforms = {
     },
 };
 
-const ShowFromList = ({ platformsList, onClick, open, activeDrawerItem }: { platformsList: any; onClick: Function, open: boolean, activeDrawerItem: string }) => {
+const ShowFromList = ({
+    platformsList,
+    onClick,
+    open,
+    activeDrawerItem,
+}: {
+    platformsList: any;
+    onClick: Function;
+    open: boolean;
+    activeDrawerItem: string;
+}) => {
     const platforms = Object.keys(platformsList);
     const dispatch = UseAppDispatch();
     return (
@@ -80,15 +90,21 @@ const ShowFromList = ({ platformsList, onClick, open, activeDrawerItem }: { plat
     );
 };
 
-const DrawerList = ({ toggleDrawer, open }: { toggleDrawer: (bol: boolean) => any, open: boolean }) => {
+const DrawerList = ({
+    toggleDrawer,
+    open,
+}: {
+    toggleDrawer: (bol: boolean) => any;
+    open: boolean;
+}) => {
     const [activeDrawerItem, setActiveDrawerItem] = useState('ALL');
     const dispatch = UseAppDispatch();
-    
+
     return (
         <Box
             sx={{ width: 250 }}
             role='presentation'
-            onClick={e => toggleDrawer(false)}
+            onClick={(e) => toggleDrawer(false)}
             onKeyDown={() => toggleDrawer(false)}
         >
             <ListItem
@@ -110,9 +126,19 @@ const DrawerList = ({ toggleDrawer, open }: { toggleDrawer: (bol: boolean) => an
                 </ListItemButton>
             </ListItem>
             <Divider />
-            <ShowFromList platformsList={otherPlatforms} onClick={setActiveDrawerItem} activeDrawerItem={activeDrawerItem} open={open} />
+            <ShowFromList
+                platformsList={otherPlatforms}
+                onClick={setActiveDrawerItem}
+                activeDrawerItem={activeDrawerItem}
+                open={open}
+            />
             <Divider />
-            <ShowFromList platformsList={codingPlatforms} onClick={setActiveDrawerItem} activeDrawerItem={activeDrawerItem} open={open} />
+            <ShowFromList
+                platformsList={codingPlatforms}
+                onClick={setActiveDrawerItem}
+                activeDrawerItem={activeDrawerItem}
+                open={open}
+            />
         </Box>
     );
 };
