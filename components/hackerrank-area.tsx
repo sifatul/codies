@@ -1,6 +1,6 @@
 import { CircularProgress } from '@mui/material';
 import { getDomain, getLastPathname, removeSpecialCharacter } from 'js-string-helper';
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { UseAppDispatch, UseAppSelector } from "../store";
 import { setGithubUsername } from '../store/platforms/github';
 import { getHackerRankUserInfo, hackerRankDataType, setHackerRankInfo, setHackerRankSubmissionHistory } from "../store/platforms/hackerrank";
@@ -16,18 +16,30 @@ const HackerrankArea = (props: any) => {
   const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
   const { searchBy, originalSearchVal, userFound, } = UseAppSelector(getSearchState);
 
-  useEffect(() => {
+  const hackerRankUserName = useMemo(() => {
+    if (searchBy === SearchByType.NONE) return ''
+
+    let userName = originalSearchVal
 
     const { hackerrank_url } = userFound
-    if (searchBy === SearchByType.URL) {
-      getDataFromUrl(originalSearchVal);
-    } else if (searchBy === SearchByType.NAME) {
-      getDataFromName(originalSearchVal);
-    } else if (searchBy === SearchByType.EMAIL && hackerrank_url) {
-      console.log("hackerrank_url: ", hackerrank_url)
-      getDataFromUrl(hackerrank_url);
+    if (searchBy === SearchByType.NAME) return userName
+
+    try {
+      const hackerrankUrl = hackerrank_url || originalSearchVal
+      const domain = getDomain(hackerrankUrl) || ''
+      if (new RegExp('hackerrank.com').test(domain) === false) return ''
+      userName = getLastPathname(hackerrankUrl) || ''
+
+    } catch (e) {
+      console.error(e)
+      return ''
     }
-  }, [searchBy, originalSearchVal, userFound]);
+    return userName
+  }, [])
+
+  useEffect(() => {
+    getDataFromUrl();
+  }, [hackerRankUserName]);
 
 
   const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
@@ -58,30 +70,20 @@ const HackerrankArea = (props: any) => {
   }, []);
 
 
-  const getDataFromUrl = useCallback(async (hackerRankUrl: string) => {
+  const getDataFromUrl = useCallback(async () => {
 
-    let nameFromUrl;
-    try {
-      nameFromUrl = getLastPathname(hackerRankUrl)
-    } catch (e) {
-      console.error(e);
-      return
-    }
-
-    if (!nameFromUrl) return console.warn("hackerrank area> nameFromUrl: not found")
-    const hostname = getDomain(hackerRankUrl) || ''
-    if (new RegExp('hackerrank.com').test(hostname) === false) return
+    if (!hackerRankUserName) return
 
     setLoading(true);
-    const { github_url } = await getHackerRankInfo(nameFromUrl);
-    getHackerRankSubmissionHistory(nameFromUrl)
+    const { github_url } = await getHackerRankInfo(hackerRankUserName);
+    getHackerRankSubmissionHistory(hackerRankUserName)
     setLoading(false);
     if (!github_url) return console.warn("hackerrank area> github_url: not found")
 
     const githubUserName = getLastPathname(github_url)
     if (!githubUserName) return console.warn("hackerrank area> githubUserName: not found")
     dispatch(setGithubUsername(githubUserName));
-  }, []);
+  }, [hackerRankUserName]);
 
   const getDataFromName = useCallback(async (name: string) => {
     if (!name) return;

@@ -1,7 +1,7 @@
 import { Box, Divider, Grid, Typography } from '@mui/material';
-import { getLastPathname, removeSpecialCharacter } from 'js-string-helper';
+import { getDomain, getLastPathname } from 'js-string-helper';
 import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
 import { setcodepenUserInfo } from '../store/platforms/codepen';
 import { getSearchState } from '../store/search';
@@ -14,20 +14,37 @@ interface codepenItemType {
 }
 
 
-const CodePenArea = (props: any) => {
+const CodePenArea = () => {
     const dispatch = UseAppDispatch();
 
-    const { searchBy, originalSearchVal, pathname, userFound } = UseAppSelector(getSearchState);
+    const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
 
     const [popularPen, setPopularPen] = useState<codepenItemType[]>([]);
 
-    console.log("codepen >> originalSearchVal", originalSearchVal)
+    const codepenUserName = useMemo(() => {
+        if (searchBy === SearchByType.NONE) return ''
+
+        if (searchBy === SearchByType.NAME) return originalSearchVal
+        let userName = originalSearchVal
+        const { codepen_url } = userFound
+        try {
+            const codepenUrl = codepen_url || originalSearchVal
+            const domain = getDomain(codepenUrl) || ''
+            if (new RegExp('codepen.com').test(domain) === false) return ''
+            userName = getLastPathname(codepenUrl) || ''
+
+        } catch (e) {
+            console.error(e)
+            return ''
+        }
+        return userName
+    }, [searchBy])
 
 
-    const getCodepenData = useCallback(async (codePenUserName: string) => {
+    const getCodepenData = useCallback(async () => {
         const codepenInfoFetchUrl =
             'https://api.rss2json.com/v1/api.json?rss_url=https://codepen.io/userName/popular/feed/';
-        const codepenInfoFetchApi = codepenInfoFetchUrl.replace('userName', codePenUserName);
+        const codepenInfoFetchApi = codepenInfoFetchUrl.replace('userName', codepenUserName);
 
         const data: any = await GetData(codepenInfoFetchApi);
         const { items = [] } = data;
@@ -41,7 +58,7 @@ const CodePenArea = (props: any) => {
         );
         const codepenData = {
             pens: sortedData,
-            username: codePenUserName,
+            username: codepenUserName,
         };
         dispatch(setcodepenUserInfo(codepenData));
         setPopularPen(sortedData.slice(0, 2));
@@ -49,29 +66,9 @@ const CodePenArea = (props: any) => {
 
 
     useEffect(() => {
-        if (!originalSearchVal) return
-
-        let codePenUserName = originalSearchVal;
-        // considering the input to be a name
-        if ((searchBy === SearchByType.URL && pathname) || searchBy === SearchByType.EMAIL) {
-            //extract name from the url
-            try {
-                debugger
-                codePenUserName = getLastPathname(userFound?.codepen_url) || getLastPathname(originalSearchVal) || ''
-
-                if (!codePenUserName) return
-            } catch (e) {
-                console.error(e)
-            }
-        }
-
-
-        codePenUserName = removeSpecialCharacter(codePenUserName)
-
-        if (!codePenUserName) return
-
-        getCodepenData(codePenUserName);
-    }, [originalSearchVal, userFound?.codepen_url]);
+        if (!codepenUserName) return
+        getCodepenData();
+    }, [codepenUserName]);
 
     return (
         <Box my={3}>

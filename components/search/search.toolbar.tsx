@@ -55,13 +55,10 @@ const SearchToolbar = () => {
   console.log("toolbar search > originalSearchVal,", originalSearchVal)
 
   const [searchVal, setSearchVal] = React.useState('');
-  const { searchInputHandler } = SearchHelper()
-  const inputSubmitHandler = React.useCallback(() => {
-    debugger
-    return searchInputHandler(searchVal);
-  }, [searchVal]);
+  const { searchInputHandler } = SearchHelper(searchVal)
+
   return <Search >
-    <SearchIconWrapper onClick={inputSubmitHandler}>
+    <SearchIconWrapper onClick={e => searchInputHandler()}>
       <SearchIcon />
     </SearchIconWrapper>
     <StyledInputBase
@@ -72,7 +69,7 @@ const SearchToolbar = () => {
       }}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
-          inputSubmitHandler();
+          searchInputHandler();
           e.preventDefault();
         }
       }}
