@@ -6,7 +6,7 @@ import { getGithubUserInfo, getTopRepos, setGithubUserInfo } from '../store/plat
 import { getSearchState } from '../store/search';
 import { setEmail } from '../store/user/basicInfo';
 import { Filter, SearchByType } from '../types/common.types';
-import { PostData } from '../Utils/fetchData';
+import { PostData, PutData } from '../Utils/fetchData';
 import { getGithubInfoByName, getRepoList, GithuApis } from '../Utils/github';
 import CardGithub from './common/card';
 
@@ -75,14 +75,14 @@ const GithubArea = () => {
       source: GithuApis.userInfoApi.replace('userName', githubUserName),
       data: githubUserInfo
     }
-    PostData(`/api/platform/${Filter.GITHUB}`, JSON.stringify(param1))
+    PutData(`/api/platform/${Filter.GITHUB}`, JSON.stringify(param1))
     if ((githubUserInfo?.repos || []).length <= 0) return
 
     const param2 = {
       source: GithuApis.getRepoListApi.replace('userName', githubUserName),
       data: githubUserInfo.repos
     }
-    PostData(`/api/platform/${Filter.GITHUB}`, JSON.stringify(param2))
+    PutData(`/api/platform/${Filter.GITHUB}`, JSON.stringify(param2))
 
   }, [githubUserInfo?.html_url, userFound.github_url, githubUserName])
 
