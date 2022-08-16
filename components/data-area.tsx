@@ -8,6 +8,7 @@ import BasicInfo from './basicInfo';
 import CodePenArea from './codepen-area';
 import GithubArea from './github-area';
 import HackerrankArea from './hackerrank-area';
+import SummaryPage from './Summary';
 import UserBasicInfo from './userBasicInfo';
 
 const DataArea = () => {
@@ -16,15 +17,7 @@ const DataArea = () => {
     const renderData = (currentFilter: null | string) => {
         switch (currentFilter) {
             case null:
-                return (
-                    <>
-                        <UserBasicInfo />
-                        <GithubArea />
-                        <CodePenArea />
-                        <LeetCodeArea />
-                        <HackerrankArea />
-                    </>
-                );
+                return <SummaryPage />
             case Filter.LEETCODE:
                 return <LeetCodeArea />;
             case Filter.CODEPEN:

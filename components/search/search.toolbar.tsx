@@ -53,31 +53,26 @@ const SearchToolbar = () => {
 
     console.log('toolbar search > originalSearchVal,', originalSearchVal);
 
-    const [searchVal, setSearchVal] = React.useState('');
-    const { searchInputHandler } = SearchHelper();
-    const inputSubmitHandler = React.useCallback(() => {
-        debugger;
-        return searchInputHandler(searchVal);
-    }, [searchVal]);
-    return (
-        <Search>
-            <SearchIconWrapper onClick={inputSubmitHandler}>
-                <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-                placeholder='Search…'
-                inputProps={{ 'aria-label': 'search' }}
-                onChange={(e) => {
-                    setSearchVal(e.target.value);
-                }}
-                onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                        inputSubmitHandler();
-                        e.preventDefault();
-                    }
-                }}
-            />
-        </Search>
-    );
-};
-export default SearchToolbar;
+  const [searchVal, setSearchVal] = React.useState('');
+  const { searchInputHandler } = SearchHelper(searchVal)
+
+  return <Search >
+    <SearchIconWrapper onClick={e => searchInputHandler()}>
+      <SearchIcon />
+    </SearchIconWrapper>
+    <StyledInputBase
+      placeholder="Search…"
+      inputProps={{ 'aria-label': 'search' }}
+      onChange={(e) => {
+        setSearchVal(e.target.value);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          searchInputHandler();
+          e.preventDefault();
+        }
+      }}
+    />
+  </Search>
+}
+export default SearchToolbar

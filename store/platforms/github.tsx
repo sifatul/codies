@@ -1,7 +1,8 @@
 
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
+import { removeSpecialCharacter } from 'js-string-helper';
 
-export interface githubTopRepoType {
+export interface githubRepoType {
   language: string;
   url: string;
   html_url: string;
@@ -16,7 +17,7 @@ export interface GithubUserInfoType {
   blog: string;
   email: string;
   avatar_url: string;
-  topRepos?: githubTopRepoType[];
+  repos?: githubRepoType[];
   html_url: string;
   username: string;
 
@@ -56,14 +57,30 @@ export const userSlice = createSlice({
       state: Draft<typeof initialState>,
       action: PayloadAction<string>
     ) => {
-      state.username = action.payload
+      state.username = removeSpecialCharacter(action.payload)
     },
 
   },
 });
 
-// A small helper of user state for `useSelector` function.
 export const getGithubUserInfo = (state: { github: GithubUserInfoType }) => state.github;
+export const getTopRepos = (state: { github: GithubUserInfoType }) => state.github.repos?.slice(0, 2);
+export const getGithubSummary = (state: { github: GithubUserInfoType }) => {
+  let maxLanguageCount = { languageName: "", count: 0 }
+  state.github.repos?.reduce((accu: any, current: githubRepoType) => {
+    const previousCount = accu[current?.language] || 0
+    const newCount = previousCount + 1
+    if (newCount > maxLanguageCount.count) {
+      maxLanguageCount.languageName = current?.language
+      maxLanguageCount.count = newCount
+    }
+
+    accu[current?.language] = newCount
+    return accu
+  }, {})
+  return { totalProject: (state.github.repos?.length || 0), maxUsedLanguage: maxLanguageCount.languageName }
+
+}
 
 // Exports all actions
 export const { setGithubUserInfo, setGithubUsername } = userSlice.actions;

@@ -1,6 +1,7 @@
 import { Box, Divider, Grid, Typography } from '@mui/material';
+import { getDomain, getLastPathname } from 'js-string-helper';
 import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
 import { setcodepenUserInfo } from '../store/platforms/codepen';
 import { getSearchState } from '../store/search';
@@ -12,24 +13,39 @@ interface codepenItemType {
     title: string;
 }
 
-const codepenInfoFetchUrl =
-    'https://api.rss2json.com/v1/api.json?rss_url=https://codepen.io/userName/popular/feed/';
-const CodePenArea = (props: any) => {
+
+const CodePenArea = () => {
     const dispatch = UseAppDispatch();
 
-    const { searchBy, originalSearchVal, pathname } = UseAppSelector(getSearchState);
+    const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
 
     const [popularPen, setPopularPen] = useState<codepenItemType[]>([]);
-    let codePenUserName = originalSearchVal;
-    // considering the input to be a name
-    if (searchBy === SearchByType.URL && pathname) {
-        //extract name from the url
-        const _codePenUserName = pathname.split('/').pop();
-        if (_codePenUserName) codePenUserName = _codePenUserName
-    }
-    const codepenInfoFetchApi = codepenInfoFetchUrl.replace('userName', codePenUserName);
+
+    const codepenUserName = useMemo(() => {
+        if (searchBy === SearchByType.NONE) return ''
+
+        if (searchBy === SearchByType.NAME) return originalSearchVal
+        let userName = originalSearchVal
+        const { codepen_url } = userFound
+        try {
+            const codepenUrl = codepen_url || originalSearchVal
+            const domain = getDomain(codepenUrl) || ''
+            if (new RegExp('codepen.com').test(domain) === false) return ''
+            userName = getLastPathname(codepenUrl) || ''
+
+        } catch (e) {
+            console.error(e)
+            return ''
+        }
+        return userName
+    }, [searchBy])
+
 
     const getCodepenData = useCallback(async () => {
+        const codepenInfoFetchUrl =
+            'https://api.rss2json.com/v1/api.json?rss_url=https://codepen.io/userName/popular/feed/';
+        const codepenInfoFetchApi = codepenInfoFetchUrl.replace('userName', codepenUserName);
+
         const data: any = await GetData(codepenInfoFetchApi);
         const { items = [] } = data;
 
@@ -42,16 +58,17 @@ const CodePenArea = (props: any) => {
         );
         const codepenData = {
             pens: sortedData,
-            username: codePenUserName,
+            username: codepenUserName,
         };
         dispatch(setcodepenUserInfo(codepenData));
         setPopularPen(sortedData.slice(0, 2));
     }, []);
 
+
     useEffect(() => {
+        if (!codepenUserName) return
         getCodepenData();
-    }, []);
-    if (!codePenUserName) return <>No codepen username </>;
+    }, [codepenUserName]);
 
     return (
         <Box my={3}>
@@ -75,7 +92,7 @@ const CodePenArea = (props: any) => {
                     const projectName = pathnameArr.pop();
                     const previewUrl = `https://codepen.io/${userName}/embed/preview/${projectName}`;
                     return (
-                        <Grid item xs={12} md={12} lg={6}>
+                        <Grid item xs={12} md={12} lg={6} key={projectName}>
                             <iframe
                                 height='300'
                                 key={'ifram-' + idx}

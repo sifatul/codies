@@ -21,7 +21,8 @@ export interface hackerRankDataType {
   local_language: string;
   job_title: string;
   jobs_headline: string;
-  followers_count: 0
+  followers_count: 0;
+  submissionHistory: { [key: string]: string }
 
 }
 
@@ -48,7 +49,8 @@ const initialState: hackerRankDataType = {
   job_title: "",
   jobs_headline: "",
   followers_count: 0,
-  short_bio: ""
+  short_bio: "",
+  submissionHistory: {}
 } as const;
 
 /**
@@ -66,6 +68,12 @@ export const hackerRankUser = createSlice({
       state: Draft<typeof initialState>,
       action: PayloadAction<hackerRankDataType>
     ) => action.payload,
+    setHackerRankSubmissionHistory: (
+      state: Draft<typeof initialState>,
+      action: PayloadAction<{ [key: string]: string }>
+    ) => {
+      state.submissionHistory = action.payload
+    },
   },
 });
 
@@ -75,8 +83,12 @@ export const getHackerRankUserInfo = (state: any) => {
   const profile_url = "hackerrank.com/userName".replace('userName', state.hackerrank?.username)
   return { ...state.hackerrank, profile_url }
 }
+export const getHackerRankTotalProblemSolved = (state: any) => {
+  const TotalCount = Object.keys(state.hackerrank?.submissionHistory || {}).length
+  return TotalCount
+}
 
 // Exports all actions
-export const { setHackerRankInfo } = hackerRankUser.actions;
+export const { setHackerRankInfo, setHackerRankSubmissionHistory } = hackerRankUser.actions;
 
 export default hackerRankUser.reducer;

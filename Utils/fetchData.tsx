@@ -6,7 +6,9 @@ const GetData = (url: string) => {
             })
             .then(function (json) {
                 resolve(json);
-            });
+            }).catch(e => {
+                throw e
+            })
     });
 };
 const PostData = (url: string, profileUrl: string) => {
@@ -17,7 +19,9 @@ const PostData = (url: string, profileUrl: string) => {
             })
             .then(function (json) {
                 resolve(json);
-            });
+            }).catch(e => {
+                throw e
+            })
     });
 };
 export { GetData, PostData };

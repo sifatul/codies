@@ -11,6 +11,7 @@ enum Filter {
     CODEPEN = 'CODEPEN',
     HACKERRANK = 'HACKERRANK',
     LEETCODE = 'LEETCODE',
+    MEDIUM = 'MEDIUM'
 }
 
 export { SearchByType, Filter };
