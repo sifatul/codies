@@ -28,8 +28,7 @@ const forwardApiPath = '/api/forward-api';
 const getGithubInfoByName = async (name: string) => {
     const userInfoApi = GithuApis.userInfoApi.replace('userName', name)
     const getDataFromDB: any = await GetData(`/api/platform/${Filter.GITHUB}?source=${userInfoApi}`);
-    console.l
-    const data: any = await PostData(forwardApiPath, userInfoApi);
+    const data: any = getDataFromDB || await PostData(forwardApiPath, userInfoApi);
     const githubData: githubDataType = data || {};
     return githubData
 };
@@ -37,7 +36,8 @@ const getGithubInfoByName = async (name: string) => {
 const getRepoList = async (name: string) => {
     try {
         const getRepoListApi = GithuApis.userInfoApi.replace('userName', name)
-        const data: any = await PostData(forwardApiPath, getRepoListApi);
+        const getDataFromDB: any = await GetData(`/api/platform/${Filter.GITHUB}?source=${getRepoListApi}`);
+        const data: any = getDataFromDB || await PostData(forwardApiPath, getRepoListApi);
         const onlyPublicRepo: githubTopRepoType[] = (data || []).filter(
             (item: githubTopRepoType) => item.visibility === 'public'
         );
