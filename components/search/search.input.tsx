@@ -14,12 +14,10 @@ const passedPlaceholderList = ['profile link', 'username'];
 export default function CustomizedInputBase() {
     const [searchVal, setSearchVal] = React.useState('');
     const { originalSearchVal } = UseAppSelector(getSearchState);
-    const { searchInputHandler } = SearchHelper()
+    const { searchInputHandler } = SearchHelper(searchVal)
 
 
-    const inputSubmitHandler = React.useCallback(() => {
-        return searchInputHandler(searchVal);
-    }, [searchVal]);
+
 
     const [placeholder, setPlaceholder] = React.useState('');
 
@@ -69,7 +67,7 @@ export default function CustomizedInputBase() {
                 error={true}
                 onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                        inputSubmitHandler();
+                        searchInputHandler();
                         e.preventDefault();
                     }
                 }}
@@ -83,7 +81,7 @@ export default function CustomizedInputBase() {
                 color='primary'
                 sx={{ p: '10px' }}
                 aria-label='directions'
-                onClick={() => inputSubmitHandler()}
+                onClick={() => searchInputHandler()}
             >
                 <SearchIcon />
             </IconButton>

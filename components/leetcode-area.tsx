@@ -1,90 +1,74 @@
-import React, { useCallback, useEffect, } from "react"
-import { UseAppDispatch, UseAppSelector } from "../store"
-import { SearchByType } from "../types/common.types"
-import { getLeetcodeUserInfo, setLeetcodeLanguageProblemCount, setLeetcodeTagProblemCounts, setLeetcodeUserInfo } from '../store/platforms/leetcode';
+import { getDomain, getLastPathname } from "js-string-helper";
+import React, { useCallback, useEffect, useMemo } from "react";
+import { UseAppDispatch, UseAppSelector } from "../store";
 import { setGithubUsername } from '../store/platforms/github';
-import { getLeetCodeProfileInfo, QueryType } from "../Utils/leetcode";
+import { getLeetcodeUserInfo, setLeetcodeLanguageProblemCount, setLeetcodeTagProblemCounts, setLeetcodeUserInfo } from '../store/platforms/leetcode';
 import { getSearchState } from "../store/search";
+import { SearchByType } from "../types/common.types";
+import { getLeetCodeProfileInfo, QueryType } from "../Utils/leetcode";
 
 
-const LeetCodeArea = (props: any) => {
-  const { originalSearchVal, searchBy, pathname, hostname, userFound } = UseAppSelector(getSearchState);
+const LeetCodeArea = () => {
+  const { originalSearchVal, searchBy, userFound } = UseAppSelector(getSearchState);
 
   const dispatch = UseAppDispatch();
   const leetcodeUserInfo = UseAppSelector(getLeetcodeUserInfo);
+  const leetcodeUserName = useMemo(() => {
+    if (searchBy === SearchByType.NONE) return ''
 
+    let userName = originalSearchVal
 
+    const { leetcode_url } = userFound
+    if (searchBy === SearchByType.NAME) return userName
 
-  const getLeetCodeInfo = React.useCallback(async (nameFromUrl: string) => {
-    getLeetCodeProfileInfo(nameFromUrl, QueryType.userProfileQuery).then((output: any) => {
-      dispatch(setLeetcodeUserInfo({ ...output, username: nameFromUrl }));
-    })
+    try {
+      const leetcodeUrl = leetcode_url || originalSearchVal
+      const domain = getDomain(leetcodeUrl) || ''
+      if (new RegExp('leetcode.com').test(domain) === false) return ''
+      userName = getLastPathname(leetcodeUrl) || ''
 
-    getLeetCodeProfileInfo(nameFromUrl, QueryType.LangugaeProblemSolvedQuery).then((output: any) => {
-      dispatch(setLeetcodeLanguageProblemCount(output?.languageProblemCount));
-    })
-    getLeetCodeProfileInfo(nameFromUrl, QueryType.TagProblemsCountQuery).then((output: any) => {
-      dispatch(setLeetcodeTagProblemCounts(output));
-    })
+    } catch (e) {
+      console.error(e)
+      return ''
+    }
+    return userName
 
   }, [])
 
 
-  const getDataFromName = useCallback(async (name: string) => {
 
-    if (!name) return
+  const getLeetCodeInfo = React.useCallback(async () => {
+    console.log("getLeetCodeInfo: is calling")
+    getLeetCodeProfileInfo(leetcodeUserName, QueryType.userProfileQuery).then((output: any) => {
+      dispatch(setLeetcodeUserInfo({ ...output, username: leetcodeUserName }));
+    })
 
-    await getLeetCodeInfo(name)
+    getLeetCodeProfileInfo(leetcodeUserName, QueryType.LangugaeProblemSolvedQuery).then((output: any) => {
+      dispatch(setLeetcodeLanguageProblemCount(output?.languageProblemCount));
+    })
+    getLeetCodeProfileInfo(leetcodeUserName, QueryType.TagProblemsCountQuery).then((output: any) => {
+      dispatch(setLeetcodeTagProblemCounts(output));
+    })
 
+  }, [leetcodeUserName])
 
-  }, [originalSearchVal])
-
-  const getDataFromUrl = useCallback((leetcodeUrl: string) => {
-    let UrlIfno;
-    try {
-      UrlIfno = new URL(leetcodeUrl);
-    } catch (e) {
-      console.error(e);
-    }
-    if (!UrlIfno) return console.warn("leetcode area> UrlIfno: not found")
-    let { pathname, hostname } = UrlIfno;
-    console.warn("leetcode area> pathname, hostname", pathname, hostname)
-
-    if (!pathname || !hostname) return console.warn("leetcode area> hostname: not found")
-
-    const nameFromUrl = pathname.split('/').filter(item => item).pop()
-    if (!nameFromUrl) return console.warn("leetcode area> nameFromUrl: not found")
-    if (new RegExp('leetcode.com').test(hostname) === false) return
-    getDataFromName(nameFromUrl)
-
-  }, [hostname, pathname])
 
   useEffect(() => {
-    const { leetcode_url } = userFound
+    if (!leetcodeUserName) return
+    console.log("leetcodeUserName ", leetcodeUserName)
+    getLeetCodeInfo()
+  }, [leetcodeUserName])
 
-    if (searchBy === SearchByType.URL) {
-      getDataFromUrl(originalSearchVal)
-    } else if (searchBy === SearchByType.NAME) {
-      getDataFromName(originalSearchVal)
-    }
-    else if (searchBy === SearchByType.EMAIL) {
-      getDataFromUrl(leetcode_url)
-    }
 
-  }, [searchBy])
   useEffect(() => {
     const githubUrl = leetcodeUserInfo.githubUrl
     if (!githubUrl) return
-    let { pathname: githubUserName } = new URL(githubUrl);
-    if (!githubUserName) return
-
-    const nameFromUrl = githubUserName.split('/').pop();
+    const nameFromUrl = getLastPathname(githubUrl) || ''
     if (!nameFromUrl) return
     dispatch(setGithubUsername(nameFromUrl))
+  }, []);
 
-  }, [leetcodeUserInfo.githubUrl]);
 
-  console.log(leetcodeUserInfo)
   return <>
     <h1>Leetcode page</h1>
 

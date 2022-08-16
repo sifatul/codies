@@ -6,10 +6,10 @@ import { setEmail } from '../store/user/basicInfo';
 import { Filter } from '../types/common.types';
 import { GetData } from '../Utils/fetchData';
 
-export default function SearchHelper() {
+export default function SearchHelper(searchVal: string) {
   const dispatch = UseAppDispatch();
 
-  const getUserByPlatform = useCallback(async (searchVal: string) => {
+  const getUserByPlatform = useCallback(async () => {
     const hostnameAndQueryKey = {
       GITHUB: "github_url",
       LEETCODE: "leetcode_url",
@@ -38,8 +38,10 @@ export default function SearchHelper() {
     dispatch(setEmail(userInfo.email))
   }, [])
 
-  const searchInputHandler = async (searchVal: string) => {
+  const searchInputHandler = useCallback(async () => {
+
     if (!searchVal) return;
+
     dispatch(resetSearchType)
 
     if (isEmail(searchVal)) {
@@ -61,7 +63,7 @@ export default function SearchHelper() {
       let { protocol, hostname, pathname } = new URL(searchVal);
 
       // check values exists in database
-      const userInfo = await getUserByPlatform(searchVal)
+      const userInfo = await getUserByPlatform()
       if (userInfo) {
         updateStoreWithUserInfo(userInfo as userInfoType)
         return
@@ -82,7 +84,8 @@ export default function SearchHelper() {
       dispatch(setSearchTypeName(searchVal))
 
     }
-  };
+
+  }, [searchVal])
   return { searchInputHandler }
 
 }
