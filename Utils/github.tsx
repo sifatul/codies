@@ -1,4 +1,5 @@
-import { PostData } from './fetchData';
+import { Filter } from '../types/common.types';
+import { GetData, PostData } from './fetchData';
 
 export interface githubTopRepoType {
     language: string;
@@ -26,6 +27,8 @@ export const GithuApis = {
 const forwardApiPath = '/api/forward-api';
 const getGithubInfoByName = async (name: string) => {
     const userInfoApi = GithuApis.userInfoApi.replace('userName', name)
+    const getDataFromDB: any = await GetData(`/api/platform/${Filter.GITHUB}?source=${userInfoApi}`);
+    console.l
     const data: any = await PostData(forwardApiPath, userInfoApi);
     const githubData: githubDataType = data || {};
     return githubData

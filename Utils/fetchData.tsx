@@ -24,4 +24,17 @@ const PostData = (url: string, profileUrl: string) => {
             })
     });
 };
-export { GetData, PostData };
+const PutData = (url: string, profileUrl: string) => {
+    return new Promise((resolve) => {
+        fetch(url, { method: 'PUT', body: profileUrl })
+            .then(function (res) {
+                return res.json();
+            })
+            .then(function (json) {
+                resolve(json);
+            }).catch(e => {
+                throw e
+            })
+    });
+};
+export { GetData, PostData, PutData };
