@@ -1,5 +1,6 @@
 
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
+import { removeSpecialCharacter } from 'js-string-helper';
 
 export interface githubRepoType {
   language: string;
@@ -56,7 +57,7 @@ export const userSlice = createSlice({
       state: Draft<typeof initialState>,
       action: PayloadAction<string>
     ) => {
-      state.username = action.payload
+      state.username = removeSpecialCharacter(action.payload)
     },
 
   },
@@ -77,7 +78,7 @@ export const getGithubSummary = (state: { github: GithubUserInfoType }) => {
     accu[current?.language] = newCount
     return accu
   }, {})
-  return { totalProject: state.github.repos?.length, maxUsedLanguage: maxLanguageCount.languageName }
+  return { totalProject: (state.github.repos?.length || 0), maxUsedLanguage: maxLanguageCount.languageName }
 
 }
 

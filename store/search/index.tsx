@@ -48,10 +48,11 @@ export const SearchSlice = createSlice({
     reducers: {
         setSearchTypeEmail: (
             state: Draft<SearchStateType>,
-            action: PayloadAction<userInfoType>
+            action: PayloadAction<{ userFound: userInfoType, originalSearchVal: string }>
         ) => {
             state.searchBy = SearchByType.EMAIL;
-            state.userFound = action.payload;
+            state.userFound = action.payload.userFound;
+            state.originalSearchVal = action.payload.originalSearchVal;
         },
         setSearchTypeUrl: (
             state: Draft<SearchStateType>,

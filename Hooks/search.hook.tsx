@@ -29,12 +29,12 @@ export default function SearchHelper() {
       [queryKey]: searchVal
     }
 
-    return await GetData(`api/user/get/platform?param=${JSON.stringify(param)}`)
+    return await GetData(`api/platform/platform?param=${JSON.stringify(param)}`)
 
 
   }, [])
   const updateStoreWithUserInfo = useCallback((userInfo: userInfoType) => {
-    dispatch(setSearchTypeEmail(userInfo))
+    dispatch(setSearchTypeEmail({ userFound: userInfo, originalSearchVal: userInfo.email }))
     dispatch(setEmail(userInfo.email))
   }, [])
 

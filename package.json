@@ -19,7 +19,7 @@
     "eslint-config-prettier": "^8.5.0",
     "graphql": "^16.5.0",
     "graphql-request": "^4.3.0",
-    "js-string-helper": "^0.0.36",
+    "js-string-helper": "^0.0.39",
     "linkedin-scrapper": "^1.2.1",
     "mongodb": "^4.8.1",
     "next": "12.2.2",

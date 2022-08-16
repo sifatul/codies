@@ -1,10 +1,9 @@
 import { Divider, Typography } from '@mui/material';
-import { removeSpecialCharacter } from 'js-string-helper';
-import { userInfo } from 'os';
+import { getLastPathname } from 'js-string-helper';
 import React, { useCallback, useEffect } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
 import { getGithubUserInfo, getTopRepos, setGithubUserInfo, setGithubUsername } from '../store/platforms/github';
-import { getSearchState, userInfoType } from '../store/search';
+import { getSearchState } from '../store/search';
 import { setEmail } from '../store/user/basicInfo';
 import { SearchByType } from '../types/common.types';
 import { getGithubInfoByName, getRepoList } from '../Utils/github';
@@ -25,45 +24,45 @@ const GithubArea = () => {
     let githubUserName = originalSearchVal
 
     if (searchBy === SearchByType.URL) {
-      getGithubUserByUrl(originalSearchVal)
+      updateGithubUserName(originalSearchVal)
     } else if (searchBy === SearchByType.EMAIL) {
       const { github_url } = userFound
-      getGithubUserByUrl(github_url)
+      updateGithubUserName(github_url)
     } else {
       dispatch(setGithubUsername(githubUserName))
     }
 
   }, [originalSearchVal]);
 
-  const getGithubUserByUrl = useCallback((githubUrl: string) => {
+  const updateGithubUserName = useCallback((githubUrl: string) => {
 
     if (!githubUrl) return
-    let { pathname: githubUserName } = new URL(githubUrl);
-    if (!githubUserName) return
-
-    const nameFromUrl = githubUserName.split('/').pop();
-    if (!nameFromUrl) return
-    dispatch(setGithubUsername(githubUserName))
+    try {
+      let nameFromUrl = getLastPathname(githubUrl)
+      if (!nameFromUrl) return
+      dispatch(setGithubUsername(nameFromUrl))
+    } catch (e) {
+      console.error(e)
+    }
   }, [])
 
   useEffect(() => {
     if (!username) return
-    getGithubData(username)
+    console.log("searching github userinfo", username, githubUserInfo)
+    getGithubData()
   }, [username]);
 
 
-  const getGithubData = React.useCallback(async (name: string) => {
-    if (window == undefined || !name) return;
-    name = removeSpecialCharacter(name)
-
+  const getGithubData = React.useCallback(async () => {
+    if (window == undefined || !username) return;
     const [gitHubBasicInfo, githubRepos] = await Promise.all([
-      getGithubInfoByName(name),
-      getRepoList(name),
+      getGithubInfoByName(username),
+      getRepoList(username),
     ]);
     const { email } = gitHubBasicInfo;
     if (email) dispatch(setEmail(email))
-    dispatch(setGithubUserInfo({ ...gitHubBasicInfo, repos: githubRepos, username: name }))
-  }, []);
+    dispatch(setGithubUserInfo({ ...gitHubBasicInfo, repos: githubRepos, username }))
+  }, [username]);
 
   return <>
 

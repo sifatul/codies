@@ -1,5 +1,5 @@
 import { CircularProgress } from '@mui/material';
-import { removeSpecialCharacter } from 'js-string-helper';
+import { getDomain, getLastPathname, removeSpecialCharacter } from 'js-string-helper';
 import React, { useCallback, useEffect, useState } from "react";
 import { UseAppDispatch, UseAppSelector } from "../store";
 import { setGithubUsername } from '../store/platforms/github';
@@ -60,21 +60,16 @@ const HackerrankArea = (props: any) => {
 
   const getDataFromUrl = useCallback(async (hackerRankUrl: string) => {
 
-    let UrlIfno;
+    let nameFromUrl;
     try {
-      UrlIfno = new URL(hackerRankUrl);
+      nameFromUrl = getLastPathname(hackerRankUrl)
     } catch (e) {
       console.error(e);
+      return
     }
-    if (!UrlIfno) return console.warn("hackerrank area> UrlIfno: not found")
-    let { pathname, hostname } = UrlIfno;
-    console.warn("hackerrank area> pathname, hostname", pathname, hostname)
 
-    if (!pathname || !hostname) return console.warn("hackerrank area> hostname: not found")
-
-    const nameFromUrl = pathname.split('/').filter(item => item).pop()
     if (!nameFromUrl) return console.warn("hackerrank area> nameFromUrl: not found")
-
+    const hostname = getDomain(hackerRankUrl) || ''
     if (new RegExp('hackerrank.com').test(hostname) === false) return
 
     setLoading(true);
@@ -83,7 +78,7 @@ const HackerrankArea = (props: any) => {
     setLoading(false);
     if (!github_url) return console.warn("hackerrank area> github_url: not found")
 
-    const githubUserName = github_url?.split('/').pop();
+    const githubUserName = getLastPathname(github_url)
     if (!githubUserName) return console.warn("hackerrank area> githubUserName: not found")
     dispatch(setGithubUsername(githubUserName));
   }, []);
