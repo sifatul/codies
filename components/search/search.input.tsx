@@ -8,16 +8,11 @@ import SearchHelper from '../../Hooks/search.hook';
 import { UseAppSelector } from '../../store';
 import { getSearchState } from '../../store/search';
 
-
-
 const passedPlaceholderList = ['profile link', 'username'];
 export default function CustomizedInputBase() {
     const [searchVal, setSearchVal] = React.useState('');
     const { originalSearchVal } = UseAppSelector(getSearchState);
-    const { searchInputHandler } = SearchHelper(searchVal)
-
-
-
+    const { searchInputHandler } = SearchHelper(searchVal);
 
     const [placeholder, setPlaceholder] = React.useState('');
 
