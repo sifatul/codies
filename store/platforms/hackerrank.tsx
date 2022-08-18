@@ -8,7 +8,7 @@ export interface hackerRankDataType {
   github_url: string;
   leetcode_url: string;
   country: string;
-  languages?: string[];
+  languages: string[];
   avatar: string;
   school?: string;
   created_at: string;
@@ -50,6 +50,7 @@ const initialState: hackerRankDataType = {
   jobs_headline: "",
   followers_count: 0,
   short_bio: "",
+  languages: [] as string[],
   submissionHistory: {}
 } as const;
 
@@ -86,6 +87,14 @@ export const getHackerRankUserInfo = (state: any) => {
 export const getHackerRankTotalProblemSolved = (state: any) => {
   const TotalCount = Object.keys(state.hackerrank?.submissionHistory || {}).length
   return TotalCount
+}
+export const getHackerRankMaxLanguageUsed = (state: any) => {
+
+  const MostUsedLang = (state.hackerrank.languages || []).reduce((prev: String[], curr: String[]) => {
+    if (!prev?.[1]) return curr;
+    return (curr?.[1] > prev?.[1]) ? curr : prev
+  }, [])
+  return MostUsedLang?.[0] || ''
 }
 
 // Exports all actions

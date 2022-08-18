@@ -16,7 +16,7 @@ import { setCountry, setName, setProfilePic } from '../store/user/basicInfo';
 import { SearchByType } from '../types/common.types';
 import { PostData } from '../Utils/fetchData';
 
-const HackerrankArea = (props: any) => {
+const HackerrankArea = () => {
     const dispatch = UseAppDispatch();
     const [loading, setLoading] = useState(false);
     const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
@@ -43,7 +43,7 @@ const HackerrankArea = (props: any) => {
     }, []);
 
     useEffect(() => {
-        getDataFromUrl();
+        getDataFromName();
     }, [hackerRankUserName]);
 
     const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
@@ -58,7 +58,7 @@ const HackerrankArea = (props: any) => {
         if (avatar) dispatch(setProfilePic(avatar));
         if (country) dispatch(setCountry(country));
         dispatch(setHackerRankInfo(hackerRankdata));
-        console.log(hackerRankdata);
+        console.log("hackerRankdata> ", hackerRankdata);
         return hackerRankdata;
     }, []);
 
@@ -74,7 +74,7 @@ const HackerrankArea = (props: any) => {
         dispatch(setHackerRankSubmissionHistory(data));
     }, []);
 
-    const getDataFromUrl = useCallback(async () => {
+    const getDataFromName = useCallback(async () => {
         if (!hackerRankUserName) return;
 
         setLoading(true);
@@ -88,19 +88,6 @@ const HackerrankArea = (props: any) => {
         dispatch(setGithubUsername(githubUserName));
     }, [hackerRankUserName]);
 
-    const getDataFromName = useCallback(
-        async (name: string) => {
-            if (!name) return;
-            name = removeSpecialCharacter(name);
-
-            const { github_url } = await getHackerRankInfo(name);
-            getHackerRankSubmissionHistory(name);
-            setLoading(false);
-            if (!github_url) return;
-            dispatch(setGithubUsername(github_url));
-        },
-        [originalSearchVal]
-    );
 
     return (
         <>
@@ -135,10 +122,10 @@ const HackerrankArea = (props: any) => {
                                         <GitHub />
                                     </IconButton>
                                 ) : (
-                                    <IconButton disabled component='a'>
-                                        <GitHub />
-                                    </IconButton>
-                                )}
+                                        <IconButton disabled component='a'>
+                                            <GitHub />
+                                        </IconButton>
+                                    )}
                                 {hackerrankUserInfo.linkedin_url ? (
                                     <IconButton
                                         component='a'
@@ -149,10 +136,10 @@ const HackerrankArea = (props: any) => {
                                         <LinkedIn />
                                     </IconButton>
                                 ) : (
-                                    <IconButton disabled component='a'>
-                                        <LinkedIn />
-                                    </IconButton>
-                                )}
+                                        <IconButton disabled component='a'>
+                                            <LinkedIn />
+                                        </IconButton>
+                                    )}
                             </Box>
                         </Grid>
                         <Grid item lg={4} md={4} sm={12}>
@@ -164,8 +151,8 @@ const HackerrankArea = (props: any) => {
                                     height={150}
                                 />
                             ) : (
-                                <Avatar />
-                            )}
+                                    <Avatar />
+                                )}
                         </Grid>
                     </Grid>
                 </Box>
