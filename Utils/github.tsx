@@ -60,10 +60,5 @@ const getRepoList = async (name: string) => {
     }
     //
 };
-const storeGithubUserInfo = async ({ data, source }: { data: string, source: any }) => {
-    const param = {
-        data, source
-    }
-    await PostData('/api/platform/add', JSON.stringify(param))
-}
-export { getRepoList, getGithubInfoByName, storeGithubUserInfo };
+
+export { getRepoList, getGithubInfoByName };

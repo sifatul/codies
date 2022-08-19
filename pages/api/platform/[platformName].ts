@@ -26,12 +26,10 @@ const storePlatformData = async (req: any, res: any) => {
         const query = { _id: new ObjectId(), ...data };
 
         await db.collection(platformName).updateOne(
-            data,
-            {
-                $setOnInsert: query,
-            },
+            {"source": data.source},
+            { $setOnInsert: query },
             { upsert: true }
-        );
+         )
 
         return res.json(data);
     } catch (e) {
@@ -59,7 +57,7 @@ const getPlatfromData = async (req: any, res: any) => {
         const data = { source: req.query.source };
 
         const dataFound = await db.collection(platformName).findOne(data);
-        if (!dataFound || !dataFound?.data) return res.json({ error: 'data not found' });
+        if (!dataFound || !dataFound?.data) return res.status(404).json(null);
 
         return res.json(dataFound.data);
     } catch (e) {
