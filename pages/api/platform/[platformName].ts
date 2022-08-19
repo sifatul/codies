@@ -25,7 +25,13 @@ const storePlatformData =  async(req: any, res: any) => {
 
         const query = { _id: new ObjectId(), ...data };
 
-        await db.collection(platformName).updateOne(query, {unique:true});
+        await db.collection(platformName).update(
+            data, 
+             {
+              $setOnInsert: query
+             },
+             {upsert: true}
+        )
 
         return res.json(data);
     } catch (e) {
