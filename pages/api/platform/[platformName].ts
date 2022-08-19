@@ -6,7 +6,7 @@ import { connectToDatabase } from '../../../Utils/mongodb';
 const handler = nextConnect();
 export default handler;
 
-const storePlatformData =  async(req: any, res: any) => {
+const storePlatformData = async (req: any, res: any) => {
     let client: any;
     let db: any;
     try {
@@ -25,13 +25,13 @@ const storePlatformData =  async(req: any, res: any) => {
 
         const query = { _id: new ObjectId(), ...data };
 
-        await db.collection(platformName).update(
-            data, 
-             {
-              $setOnInsert: query
-             },
-             {upsert: true}
-        )
+        await db.collection(platformName).updateOne(
+            data,
+            {
+                $setOnInsert: query,
+            },
+            { upsert: true }
+        );
 
         return res.json(data);
     } catch (e) {
@@ -41,7 +41,7 @@ const storePlatformData =  async(req: any, res: any) => {
         // Ensures that the client will close when you finish/error
     }
 };
-const getPlatfromData =  async(req: any, res: any) => {
+const getPlatfromData = async (req: any, res: any) => {
     let client: any;
     let db: any;
     try {
@@ -56,12 +56,12 @@ const getPlatfromData =  async(req: any, res: any) => {
         db = dbResponse.db;
         if (!db) return res.json({ error: 'database connection failed' });
         if (!req.query.source) return res.json({ error: 'query missing' });
-        const data = {source: req.query.source }
+        const data = { source: req.query.source };
 
+        const dataFound = await db.collection(platformName).findOne(data);
+        if (!dataFound || !dataFound?.data) return res.json({ error: 'data not found' });
 
-       const dataFound =  await db.collection(platformName).findOne(data);
-
-        return res.json(dataFound);
+        return res.json(dataFound.data);
     } catch (e) {
         console.error(e);
     } finally {
@@ -74,6 +74,5 @@ handler.put(async (req: any, res: any) => {
     res.json({ message: 'platform data stored successfully.' });
 });
 handler.get(async (req: any, res: any) => {
-   return await getPlatfromData(req, res);
-    
+    return getPlatfromData(req, res);
 });
