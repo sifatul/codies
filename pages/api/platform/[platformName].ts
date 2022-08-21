@@ -28,7 +28,7 @@ const storePlatformData = async (req: any, res: any) => {
 
         await db
             .collection(platformName)
-            .updateOne({ _id: query._id }, { $set: { ...query } }, { unique: true, upsert: true });
+            .updateOne({ source: data.source }, { $setOnInsert: query }, { upsert: true });
 
         return res.json(data);
     } catch (e) {
@@ -38,7 +38,6 @@ const storePlatformData = async (req: any, res: any) => {
         // Ensures that the client will close when you finish/error
     }
 };
-
 const getPlatfromData = async (req: any, res: any) => {
     let client: any;
     let db: any;
@@ -57,8 +56,9 @@ const getPlatfromData = async (req: any, res: any) => {
         const data = { source: req.query.source };
 
         const dataFound = await db.collection(platformName).findOne(data);
+        if (!dataFound || !dataFound?.data) return res.status(404).json(null);
 
-        return res.json(dataFound);
+        return res.json(dataFound.data);
     } catch (e) {
         console.error(e);
     } finally {

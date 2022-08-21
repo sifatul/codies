@@ -29,15 +29,23 @@ const getGithubInfoByName = async (name: string) => {
     const userInfoApi = GithuApis.userInfoApi.replace('userName', name)
     const getDataFromDB: any = await GetData(`/api/platform/${Filter.GITHUB}?source=${userInfoApi}`);
     const data: any = getDataFromDB || await PostData(forwardApiPath, userInfoApi);
+
     const githubData: githubDataType = data || {};
     return githubData
 };
 
 const getRepoList = async (name: string) => {
     try {
-        const getRepoListApi = GithuApis.userInfoApi.replace('userName', name)
+        const getRepoListApi = GithuApis.getRepoListApi.replace('userName', name)
         const getDataFromDB: any = await GetData(`/api/platform/${Filter.GITHUB}?source=${getRepoListApi}`);
-        const data: any = getDataFromDB || await PostData(forwardApiPath, getRepoListApi);
+        let data: any;
+
+
+        if ((getDataFromDB?.repos || []).length > 0) {
+            data = getDataFromDB?.repos
+        } else {
+            data = await PostData(forwardApiPath, getRepoListApi);
+        }
         const onlyPublicRepo: githubTopRepoType[] = (data || []).filter(
             (item: githubTopRepoType) => item.visibility === 'public'
         );
@@ -52,10 +60,5 @@ const getRepoList = async (name: string) => {
     }
     //
 };
-const storeGithubUserInfo = async ({ data, source }: { data: string, source: any }) => {
-    const param = {
-        data, source
-    }
-    await PostData('/api/platform/add', JSON.stringify(param))
-}
-export { getRepoList, getGithubInfoByName, storeGithubUserInfo };
+
+export { getRepoList, getGithubInfoByName };
