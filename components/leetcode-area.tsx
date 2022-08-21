@@ -12,7 +12,7 @@ import {
 } from '../store/platforms/leetcode';
 import { getSearchState } from '../store/search';
 import { Filter, SearchByType } from '../types/common.types';
-import { PutData } from '../Utils/fetchData';
+import { PutData, GetData } from '../Utils/fetchData';
 import { getLeetCodeProfileInfo, LeetCodeApi, QueryType } from '../Utils/leetcode';
 
 const LeetCodeArea = () => {
@@ -41,6 +41,15 @@ const LeetCodeArea = () => {
     }, []);
 
     const getLeetCodeInfo = React.useCallback(async () => {
+        const getLeetcodeApi = LeetCodeApi + leetcodeUserName;
+        const getDataFromDB: any = await GetData(
+            `/api/platform/${Filter.LEETCODE}?source=${getLeetcodeApi}`
+        );
+
+        if (getDataFromDB) {
+            return getDataFromDB;
+        }
+
         getLeetCodeProfileInfo(leetcodeUserName, QueryType.userProfileQuery).then((output: any) => {
             dispatch(setLeetcodeUserInfo({ ...output, username: leetcodeUserName }));
         });
