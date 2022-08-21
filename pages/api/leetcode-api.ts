@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     if (query) query = query.trim();
     if (url) url = url.trim();
-    if (variables) variables = variables.trim();
+    if (variables) variables = variables?.username.trim();
 
     const output = {};
 
