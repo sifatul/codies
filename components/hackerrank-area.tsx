@@ -13,8 +13,8 @@ import { Avatar, CircularProgress, Divider, Grid, IconButton, Typography } from 
 import { Box } from '@mui/system';
 import { getSearchState } from '../store/search';
 import { setCountry, setName, setProfilePic } from '../store/user/basicInfo';
-import { SearchByType } from '../types/common.types';
-import { PostData } from '../Utils/fetchData';
+import { Filter, SearchByType } from '../types/common.types';
+import { PostData, PutData } from '../Utils/fetchData';
 
 const HackerrankArea = () => {
     const dispatch = UseAppDispatch();
@@ -45,6 +45,16 @@ const HackerrankArea = () => {
     useEffect(() => {
         getDataFromName();
     }, [hackerRankUserName]);
+
+    useEffect(() => {
+        if (hackerrankUserInfo?.id) {
+            const param1 = {
+                source: hackerrankUserInfo?.profile_url,
+                data: hackerrankUserInfo,
+            };
+            PutData(`/api/platform/${Filter.HACKERRANK}`, JSON.stringify(param1));
+        }
+    }, [hackerrankUserInfo]);
 
     const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
         const getUserProfileApi =
