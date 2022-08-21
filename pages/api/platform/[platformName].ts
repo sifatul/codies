@@ -6,7 +6,7 @@ import { connectToDatabase } from '../../../Utils/mongodb';
 const handler = nextConnect();
 export default handler;
 
-const storePlatformData =  async(req: any, res: any) => {
+const storePlatformData = async (req: any, res: any) => {
     let client: any;
     let db: any;
     try {
@@ -24,8 +24,11 @@ const storePlatformData =  async(req: any, res: any) => {
         if (!data) return res.json({ error: 'params missing' });
 
         const query = { _id: new ObjectId(), ...data };
+        console.log(query);
 
-        await db.collection(platformName).updateOne(query, {unique:true});
+        await db
+            .collection(platformName)
+            .updateOne({ _id: query._id }, { $set: { ...query } }, { unique: true, upsert: true });
 
         return res.json(data);
     } catch (e) {
@@ -35,7 +38,8 @@ const storePlatformData =  async(req: any, res: any) => {
         // Ensures that the client will close when you finish/error
     }
 };
-const getPlatfromData =  async(req: any, res: any) => {
+
+const getPlatfromData = async (req: any, res: any) => {
     let client: any;
     let db: any;
     try {
@@ -50,10 +54,9 @@ const getPlatfromData =  async(req: any, res: any) => {
         db = dbResponse.db;
         if (!db) return res.json({ error: 'database connection failed' });
         if (!req.query.source) return res.json({ error: 'query missing' });
-        const data = {source: req.query.source }
+        const data = { source: req.query.source };
 
-
-       const dataFound =  await db.collection(platformName).findOne(data);
+        const dataFound = await db.collection(platformName).findOne(data);
 
         return res.json(dataFound);
     } catch (e) {
@@ -68,6 +71,5 @@ handler.put(async (req: any, res: any) => {
     res.json({ message: 'platform data stored successfully.' });
 });
 handler.get(async (req: any, res: any) => {
-   return await getPlatfromData(req, res);
-    
+    return getPlatfromData(req, res);
 });

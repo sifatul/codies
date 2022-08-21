@@ -11,14 +11,16 @@ import {
     setLeetcodeUserInfo,
 } from '../store/platforms/leetcode';
 import { getSearchState } from '../store/search';
-import { SearchByType } from '../types/common.types';
-import { getLeetCodeProfileInfo, QueryType } from '../Utils/leetcode';
+import { Filter, SearchByType } from '../types/common.types';
+import { PutData } from '../Utils/fetchData';
+import { getLeetCodeProfileInfo, LeetCodeApi, QueryType } from '../Utils/leetcode';
 
 const LeetCodeArea = () => {
     const { originalSearchVal, searchBy, userFound } = UseAppSelector(getSearchState);
 
     const dispatch = UseAppDispatch();
     const leetcodeUserInfo = UseAppSelector(getLeetcodeUserInfo);
+
     const leetcodeUserName = useMemo(() => {
         if (searchBy === SearchByType.NONE) return '';
 
@@ -33,14 +35,12 @@ const LeetCodeArea = () => {
             if (new RegExp('leetcode.com').test(domain) === false) return '';
             userName = getLastPathname(leetcodeUrl) || '';
         } catch (e) {
-            console.error(e);
             return '';
         }
         return userName;
     }, []);
 
     const getLeetCodeInfo = React.useCallback(async () => {
-        console.log('getLeetCodeInfo: is calling');
         getLeetCodeProfileInfo(leetcodeUserName, QueryType.userProfileQuery).then((output: any) => {
             dispatch(setLeetcodeUserInfo({ ...output, username: leetcodeUserName }));
         });
@@ -59,9 +59,18 @@ const LeetCodeArea = () => {
 
     useEffect(() => {
         if (!leetcodeUserName) return;
-        console.log('leetcodeUserName ', leetcodeUserName);
         getLeetCodeInfo();
     }, [leetcodeUserName]);
+
+    useEffect(() => {
+        if (userFound.leetcode_url) return;
+        if (!leetcodeUserName || !leetcodeUserInfo?.profile_url) return;
+        const param = {
+            source: LeetCodeApi + leetcodeUserName,
+            data: leetcodeUserInfo,
+        };
+        PutData(`/api/platform/${Filter.LEETCODE}`, JSON.stringify(param));
+    }, [leetcodeUserName, leetcodeUserInfo?.profile_url, userFound.leetcode_url]);
 
     useEffect(() => {
         const githubUrl = leetcodeUserInfo.githubUrl;

@@ -1,5 +1,5 @@
 
-const LeetCodeApi = "https://leetcode.com/graphql/"
+export const LeetCodeApi = "https://leetcode.com/graphql/"
 export enum QueryType {
   TagProblemsCountQuery = 'TagProblemsCountQuery',
   LangugaeProblemSolvedQuery = 'LangugaeProblemSolvedQuery',

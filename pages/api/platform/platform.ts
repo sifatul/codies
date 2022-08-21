@@ -6,7 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const { db } = await connectToDatabase();
     if (!db) return res.status(502).json({ message: 'database connection error' });
     const param = req.query.param as string;
-    const emailQuery = JSON.parse(param) as object;
+    const emailQuery = JSON.parse(param.trim()) as object;
     if (!emailQuery) return res.status(400).json({ message: 'email missing' });
 
     const userData = await db.collection('users').findOne(emailQuery);
