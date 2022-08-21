@@ -24,7 +24,6 @@ const storePlatformData = async (req: any, res: any) => {
         if (!data) return res.json({ error: 'params missing' });
 
         const query = { _id: new ObjectId(), ...data };
-        console.log(query);
 
         await db
             .collection(platformName)
