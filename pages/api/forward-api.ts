@@ -4,7 +4,13 @@ import fetch from 'node-fetch';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
     const body = req.body;
+    const headers = req.headers;
 
+    console.log('====body, headers====')
+    console.log(body);
+    console.log(headers);
+    
+    console.log('====body, headers====')
     let output = {};
 
     try {

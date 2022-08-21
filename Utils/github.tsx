@@ -24,11 +24,17 @@ export const GithuApis = {
     getRepoListApi: `https://api.github.com/users/userName/repos`
 }
 
+const githubHeader = {
+    clientId: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET
+
+}
+
 const forwardApiPath = '/api/forward-api';
 const getGithubInfoByName = async (name: string) => {
     const userInfoApi = GithuApis.userInfoApi.replace('userName', name)
     const getDataFromDB: any = await GetData(`/api/platform/${Filter.GITHUB}?source=${userInfoApi}`);
-    const data: any = getDataFromDB || await PostData(forwardApiPath, userInfoApi);
+    const data: any = getDataFromDB || await PostData(forwardApiPath, userInfoApi, githubHeader);
 
     const githubData: githubDataType = data || {};
     return githubData
@@ -44,7 +50,7 @@ const getRepoList = async (name: string) => {
         if ((getDataFromDB?.repos || []).length > 0) {
             data = getDataFromDB?.repos
         } else {
-            data = await PostData(forwardApiPath, getRepoListApi);
+            data = await PostData(forwardApiPath, getRepoListApi, githubHeader);
         }
         const onlyPublicRepo: githubTopRepoType[] = (data || []).filter(
             (item: githubTopRepoType) => item.visibility === 'public'
