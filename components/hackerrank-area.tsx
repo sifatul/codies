@@ -14,7 +14,7 @@ import { Box } from '@mui/system';
 import { getSearchState } from '../store/search';
 import { setCountry, setName, setProfilePic } from '../store/user/basicInfo';
 import { Filter, SearchByType } from '../types/common.types';
-import { PostData, PutData } from '../Utils/fetchData';
+import { GetData, PostData, PutData } from '../Utils/fetchData';
 
 const HackerrankArea = () => {
     const dispatch = UseAppDispatch();
@@ -49,7 +49,7 @@ const HackerrankArea = () => {
     useEffect(() => {
         if (hackerrankUserInfo?.id) {
             const param1 = {
-                source: hackerrankUserInfo?.profile_url,
+                source: hackerrankUserInfo?.username,
                 data: hackerrankUserInfo,
             };
             PutData(`/api/platform/${Filter.HACKERRANK}`, JSON.stringify(param1));
@@ -61,8 +61,9 @@ const HackerrankArea = () => {
             'https://www.hackerrank.com/rest/contests/master/hackers/userName/profile';
         const userProfileApi = getUserProfileApi.replace('userName', nameFromUrl);
         const postApiForwardingApi = '/api/forward-api';
-        const data: any = await PostData(postApiForwardingApi, userProfileApi);
-        const hackerRankdata: hackerRankDataType = data?.model || {};
+        const getDataFromDB: any = await GetData(`/api/platform/${Filter.HACKERRANK}?source=${nameFromUrl.toLowerCase()}`);
+        const data: any = getDataFromDB || await PostData(postApiForwardingApi, userProfileApi);
+        const hackerRankdata: hackerRankDataType = data?.model || {...data};
         const { avatar, country, name } = hackerRankdata;
         if (name) dispatch(setName(name));
         if (avatar) dispatch(setProfilePic(avatar));
