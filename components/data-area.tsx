@@ -8,6 +8,7 @@ import BasicInfo from './basicInfo';
 import CodePenArea from './codepen-area';
 import GithubArea from './github-area';
 import HackerrankArea from './hackerrank-area';
+import MediumArea from './medium-area';
 import SummaryPage from './Summary';
 import UserBasicInfo from './userBasicInfo';
 
@@ -26,6 +27,8 @@ const DataArea = () => {
                 return <GithubArea />;
             case Filter.HACKERRANK:
                 return <HackerrankArea />;
+            case Filter.MEDIUM:
+                return <MediumArea />;
         }
     };
 

@@ -2,14 +2,33 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 
 
-
+export interface mediumBlogItemType {
+  title: string;
+  pubDate: string;
+  link: string;
+  guid: string;
+  author: string;
+  thumbnail: string;
+  description: string;
+  content: string;
+  enclosure?: any;
+  categories: string[];
+}
+interface mediumFeed {
+  url: string;
+  title: string;
+  link: string;
+  author: string;
+  description: string;
+  image: string;
+}
 /**
  * Default state object with initial values.
  */
-const initialState: any = {
+const initialState: { feed?: mediumFeed, items: mediumBlogItemType[] } = {
+  feed: undefined,
+  items: [] as mediumBlogItemType[]
 
-
-  // topRepos: [],
 } as const;
 
 /**
@@ -26,18 +45,14 @@ export const mediumSlice = createSlice({
     setMediumData: (
       state: Draft<typeof initialState>,
       action: PayloadAction<any>
-    ) => {
-      // TODO 
-      action.payload
-    },
+    ) => action.payload,
 
   },
 });
 
 // A small helper of user state for `useSelector` function.
-export const getMediumData = (state: any) => {
-  // TODO 
-  return state
+export const getMediumData = (state: { medium: typeof initialState }) => {
+  return state.medium
 };
 
 // Exports all actions

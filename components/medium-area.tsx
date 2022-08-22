@@ -1,9 +1,8 @@
-import { Box, Divider, Grid, Typography } from '@mui/material';
-import { getDomain, getLastPathname } from 'js-string-helper';
+import { isUrl } from 'js-string-helper';
 import * as React from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
-import { setcodepenUserInfo } from '../store/platforms/codepen';
+import { getMediumData, mediumBlogItemType, setMediumData } from '../store/platforms/medium';
 import { getSearchState } from '../store/search';
 import { SearchByType } from '../types/common.types';
 import { GetData } from '../Utils/fetchData';
@@ -12,6 +11,7 @@ import { GetData } from '../Utils/fetchData';
 
 const MediumArea = () => {
   const dispatch = UseAppDispatch();
+  const mediumData = UseAppSelector(getMediumData);
 
   const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
 
@@ -24,9 +24,9 @@ const MediumArea = () => {
     const { medium_url } = userFound
     try {
       const mediumUrl = medium_url || originalSearchVal
-      const domain = getDomain(mediumUrl) || ''
-      if (new RegExp('medium.com').test(domain) === false) return ''
-      userName = getLastPathname(mediumUrl) || ''
+      if (!isUrl(mediumUrl) || !mediumUrl.includes('medium.com')) return ''
+      const mediumUrlSplit = mediumUrl.split("@")
+      userName = mediumUrlSplit?.pop() || ''
 
     } catch (e) {
       console.error(e)
@@ -35,18 +35,21 @@ const MediumArea = () => {
     return userName
   }, [searchBy])
 
+  console.log("mediumUserName", mediumUserName)
 
-  const getCodepenData = useCallback(async () => {
+
+  const fetchMediumData = useCallback(async () => {
     const codepenInfoFetchUrl =
       'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@userName';
     const mediumFetchApi = codepenInfoFetchUrl.replace('userName', mediumUserName);
 
     const data: any = await GetData(mediumFetchApi);
-    console.log("data from medium ", data)
+    if (!data) return
+    dispatch(setMediumData(data))
 
     // TODO
     /* 
-    1. store data in medium store >  store/platforms/medium.tsx
+    
     2. show data from  > store/platforms/medium.tsx
     3. store data in database
     3. show data in database
@@ -59,9 +62,19 @@ const MediumArea = () => {
 
   useEffect(() => {
     if (!mediumUserName) return
-    getCodepenData();
+    fetchMediumData();
   }, [mediumUserName]);
 
-  return <> Medium data area </>
+  return <>
+    <h1> Medium data area </h1>
+    {mediumData?.items?.map((item: mediumBlogItemType) => {
+      return <>
+        {item.author}
+        {item.link}
+        {item.pubDate}
+      </>
+    })}
+
+  </>
 };
 export default MediumArea;
