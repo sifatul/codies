@@ -4,14 +4,16 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
 import { getMediumData, mediumBlogItemType, setMediumData } from '../store/platforms/medium';
 import { getSearchState } from '../store/search';
-import { SearchByType } from '../types/common.types';
-import { GetData } from '../Utils/fetchData';
+import { Filter, SearchByType } from '../types/common.types';
+import { GetData, PutData } from '../Utils/fetchData';
 
-
+const mediumInfoFetchUrl =
+  'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@userName';
 
 const MediumArea = () => {
   const dispatch = UseAppDispatch();
   const mediumData = UseAppSelector(getMediumData);
+  const [gotNewData, setGotNewData] = React.useState(false)
 
   const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
 
@@ -39,23 +41,18 @@ const MediumArea = () => {
 
 
   const fetchMediumData = useCallback(async () => {
-    const codepenInfoFetchUrl =
-      'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@userName';
-    const mediumFetchApi = codepenInfoFetchUrl.replace('userName', mediumUserName);
 
-    const data: any = await GetData(mediumFetchApi);
+    const mediumFetchApi = mediumInfoFetchUrl.replace('userName', mediumUserName);
+
+    let data: any = await GetData(`/api/platform/${Filter.MEDIUM}?source=${mediumFetchApi}`);
+    if (!data) {
+      data = await GetData(mediumFetchApi);
+      //new data found
+      if (data) setGotNewData(true);
+    }
+
     if (!data) return
     dispatch(setMediumData(data))
-
-    // TODO
-    /* 
-    
-    2. show data from  > store/platforms/medium.tsx
-    3. store data in database
-    3. show data in database
-
-     *  
-    */
 
   }, []);
 
@@ -64,6 +61,18 @@ const MediumArea = () => {
     if (!mediumUserName) return
     fetchMediumData();
   }, [mediumUserName]);
+
+  useEffect(() => {
+    if (!gotNewData || mediumData.items.length <= 0 || !mediumUserName) return
+
+    // only store new data in database
+
+    const param = {
+      source: mediumInfoFetchUrl.replace('userName', mediumUserName),
+      data: mediumData
+    }
+    PutData(`/api/platform/${Filter.MEDIUM}`, JSON.stringify(param))
+  }, [mediumData.items.length, gotNewData])
 
   return <>
     <h1> Medium data area </h1>
