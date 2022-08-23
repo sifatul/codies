@@ -42,28 +42,45 @@ const LeetCodeArea = () => {
 
     const getLeetCodeInfo = React.useCallback(async () => {
         const getLeetcodeApi = LeetCodeApi + leetcodeUserName;
+
         const getDataFromDB: any = await GetData(
             `/api/platform/${Filter.LEETCODE}?source=${getLeetcodeApi}`
         );
 
         if (getDataFromDB) {
-            return getDataFromDB;
-        }
-
-        getLeetCodeProfileInfo(leetcodeUserName, QueryType.userProfileQuery).then((output: any) => {
+            console.log(getDataFromDB);
+            dispatch(
+                setLeetcodeUserInfo({
+                    githubUrl: getDataFromDB?.githubUrl,
+                    twitterUrl: getDataFromDB?.twitterUrl,
+                    linkedinUrl: getDataFromDB?.linkedinUrl,
+                    profile: getDataFromDB?.profile,
+                    languageProblemCount: getDataFromDB?.languageProblemCount,
+                    tagProblemCounts: getDataFromDB?.tagProblemCounts,
+                    username: leetcodeUserName,
+                })
+            );
+            dispatch(setLeetcodeLanguageProblemCount(getDataFromDB?.languageProblemCount));
+            dispatch(setLeetcodeTagProblemCounts(getDataFromDB?.tagProblemCounts));
+        } else {
+            const output: any = await getLeetCodeProfileInfo(
+                leetcodeUserName,
+                QueryType.userProfileQuery
+            );
             dispatch(setLeetcodeUserInfo({ ...output, username: leetcodeUserName }));
-        });
 
-        getLeetCodeProfileInfo(leetcodeUserName, QueryType.LangugaeProblemSolvedQuery).then(
-            (output: any) => {
-                dispatch(setLeetcodeLanguageProblemCount(output?.languageProblemCount));
-            }
-        );
-        getLeetCodeProfileInfo(leetcodeUserName, QueryType.TagProblemsCountQuery).then(
-            (output: any) => {
-                dispatch(setLeetcodeTagProblemCounts(output));
-            }
-        );
+            const problemSolved: any = await getLeetCodeProfileInfo(
+                leetcodeUserName,
+                QueryType.LangugaeProblemSolvedQuery
+            );
+            dispatch(setLeetcodeLanguageProblemCount(problemSolved?.languageProblemCount));
+
+            const problemCount: any = await getLeetCodeProfileInfo(
+                leetcodeUserName,
+                QueryType.TagProblemsCountQuery
+            );
+            dispatch(setLeetcodeTagProblemCounts(problemCount));
+        }
     }, [leetcodeUserName]);
 
     useEffect(() => {

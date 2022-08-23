@@ -4,11 +4,15 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
     const data = JSON.parse(req.body);
-    let { query, url, variables } = data;
+    const { query, variables } = data;
+    let { url } = data;
 
-    if (query) query = query.trim();
-    if (url) url = url.trim();
-    if (variables) variables = variables?.username.trim();
+    if (url) {
+        url = url.trim();
+    }
+    if (variables && variables?.username) {
+        variables.username = variables?.username.trim();
+    }
 
     const output = {};
 
