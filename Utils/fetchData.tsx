@@ -13,9 +13,6 @@ const GetData = (url: string) => {
 };
 const PostData = (url: string, profileUrl: string, headers?: any) => {
     return new Promise((resolve) => {
-        console.log('******');
-        console.log(url, profileUrl, headers);
-        console.log('******');
         fetch(url, { method: 'POST', body: profileUrl, headers})
             .then(function (res) {
                 return res.json();

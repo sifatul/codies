@@ -25,10 +25,10 @@ export const GithuApis = {
 }
 
 const githubHeader = {
-    clientId: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET
-
+    clientId: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID,
+    clientSecret: process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET
 }
+
 
 const forwardApiPath = '/api/forward-api';
 const getGithubInfoByName = async (name: string) => {
