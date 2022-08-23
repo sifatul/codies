@@ -1,4 +1,38 @@
 import { connectToDatabase } from '../../../Utils/mongodb';
+/**
+ * @swagger
+ * '/api/users/list':
+ *  get:
+ *     tags:
+ *     - Users
+ *     summary: Get all heroes
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  name:
+ *                    type: string
+ *                  email:
+ *                    type: string
+ *                  country:
+ *                    type: string
+ *                  gender:
+ *                    type: string
+ *                  dob:
+ *                    type: string
+ *                  profilePic:
+ *                    type: string
+ *                  mobile:
+ *                    type: number
+ *       400:
+ *         description: Bad request
+ */
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req: any, res: any) => {

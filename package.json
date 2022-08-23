@@ -24,16 +24,19 @@
     "mongodb": "^4.8.1",
     "next": "12.2.2",
     "next-connect": "^0.13.0",
+    "next-swagger-doc": "^0.3.6",
     "node-fetch": "^3.2.9",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-redux": "^8.0.2",
-    "rss-to-json": "^2.1.0"
+    "rss-to-json": "^2.1.0",
+    "swagger-ui-react": "^4.14.0"
   },
   "devDependencies": {
     "@types/node": "18.0.6",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
+    "@types/swagger-ui-react": "^4.11.0",
     "eslint": "8.20.0",
     "eslint-config-next": "12.2.2",
     "prettier": "^2.7.1",
