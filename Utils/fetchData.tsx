@@ -11,9 +11,9 @@ const GetData = (url: string) => {
             })
     });
 };
-const PostData = (url: string, profileUrl: string) => {
+const PostData = (url: string, profileUrl: string, headers?: any) => {
     return new Promise((resolve) => {
-        fetch(url, { method: 'POST', body: profileUrl })
+        fetch(url, { method: 'POST', body: profileUrl, headers})
             .then(function (res) {
                 return res.json();
             })

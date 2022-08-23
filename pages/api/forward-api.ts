@@ -4,12 +4,19 @@ import fetch from 'node-fetch';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
     const body = req.body;
-
     let output = {};
+
+    const headers = new Headers();
+    if (req.headers.clientid && req.headers.clientsecret) {
+        const clientId = req.headers.clientid;
+        const clientSecret = req.headers.clientsecret;
+        const convertToBase64 = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+        headers.append('Authorization', `Basic ${convertToBase64}`);
+    }
 
     try {
         output = await new Promise((resolve) => {
-            fetch(body)
+            fetch(body, { headers })
                 .then((res) => res.json())
                 .then((result: any) => {
                     resolve(result);
