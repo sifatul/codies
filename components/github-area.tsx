@@ -12,6 +12,7 @@ import CardGithub from './common/card';
 
 const GithubArea = () => {
   const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
+  const [gotNewData, setGotNewData] = React.useState(false)
 
 
   const githubUserInfo = UseAppSelector(getGithubUserInfo);
@@ -59,15 +60,21 @@ const GithubArea = () => {
       getRepoList(githubUserName),
     ]);
 
-
     const { email } = gitHubBasicInfo;
     if (email) dispatch(setEmail(email))
-    dispatch(setGithubUserInfo({ ...gitHubBasicInfo, repos: githubRepos, username: githubUserName }))
+    const isNew = gitHubBasicInfo.isNewData || githubRepos.isNewData
+    if (isNew) {
+      setGotNewData(true)
+    }
+
+    const repos = githubRepos.repos
+
+    dispatch(setGithubUserInfo({ ...gitHubBasicInfo, repos, username: githubUserName }))
   }, [githubUserName]);
 
   useEffect(() => {
-    // user data found from database already
-    if (userFound.github_url) return
+    // only store new data to database
+    if (!gotNewData) return
 
     // user basic info in github not found yet
     if (!githubUserName || !githubUserInfo?.html_url) return
@@ -84,7 +91,7 @@ const GithubArea = () => {
     }
     PutData(`/api/platform/${Filter.GITHUB}`, JSON.stringify(param2))
 
-  }, [githubUserInfo?.html_url, userFound.github_url, githubUserName])
+  }, [githubUserInfo?.html_url, userFound.github_url, githubUserName, gotNewData])
 
 
 

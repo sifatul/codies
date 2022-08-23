@@ -12,8 +12,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const clientSecret = req.headers.clientsecret;
         const convertToBase64 = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
         headers.append('Authorization', `Basic ${convertToBase64}`);
-
-        console.log(`Basic ${convertToBase64}`);
     }
 
     try {

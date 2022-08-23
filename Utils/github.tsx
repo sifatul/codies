@@ -33,36 +33,39 @@ const githubHeader = {
 const forwardApiPath = '/api/forward-api';
 const getGithubInfoByName = async (name: string) => {
     const userInfoApi = GithuApis.userInfoApi.replace('userName', name)
-    const getDataFromDB: any = await GetData(`/api/platform/${Filter.GITHUB}?source=${userInfoApi}`);
-    const data: any = getDataFromDB || await PostData(forwardApiPath, userInfoApi, githubHeader);
+    let data: any = await GetData(`/api/platform/${Filter.GITHUB}?source=${userInfoApi}`);
+    let isNewData = false;
+    if (!data) {
+        data = await PostData(forwardApiPath, userInfoApi, githubHeader);
+        if (data) isNewData = true;
 
+    }
     const githubData: githubDataType = data || {};
-    return githubData
+    return { ...githubData, isNewData }
 };
 
 const getRepoList = async (name: string) => {
     try {
         const getRepoListApi = GithuApis.getRepoListApi.replace('userName', name)
-        const getDataFromDB: any = await GetData(`/api/platform/${Filter.GITHUB}?source=${getRepoListApi}`);
-        let data: any;
+        let repos: any = await GetData(`/api/platform/${Filter.GITHUB}?source=${getRepoListApi}`);
+        let isNewData = false;
 
 
-        if ((getDataFromDB?.repos || []).length > 0) {
-            data = getDataFromDB?.repos
-        } else {
-            data = await PostData(forwardApiPath, getRepoListApi, githubHeader);
+        if ((repos || []).length <= 0) {
+            repos = await PostData(forwardApiPath, getRepoListApi, githubHeader);
+            if (repos.length > 0) isNewData = true;
         }
-        const onlyPublicRepo: githubTopRepoType[] = (data || []).filter(
+        const onlyPublicRepo: githubTopRepoType[] = (repos || []).filter(
             (item: githubTopRepoType) => item.visibility === 'public'
         );
 
         const sortedRepo: githubTopRepoType[] = onlyPublicRepo.sort((a, b) => {
             return b.stargazers_count - a.stargazers_count;
         });
-        return sortedRepo
+        return { repos: sortedRepo, isNewData }
     } catch (e) {
         console.error(e)
-        return []
+        return { repos: [], isNewData: false }
     }
     //
 };
