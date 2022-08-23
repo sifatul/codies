@@ -6,6 +6,7 @@ import hackerrank from './platforms/hackerrank';
 import github from './platforms/github';
 import leetcode from './platforms/leetcode';
 import codepen from './platforms/codepen';
+import medium from './platforms/medium';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 /**
@@ -19,7 +20,8 @@ export const store = configureStore({
         leetcode,
         codepen,
         filter,
-        search
+        search,
+        medium
     },
 });
 
