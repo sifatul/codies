@@ -1,11 +1,12 @@
 import { GitHub, LinkedIn, Twitter } from '@mui/icons-material';
 import { Avatar, Box, Divider, Grid, IconButton, Typography } from '@mui/material';
 import { getDomain, getLastPathname } from 'js-string-helper';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
 import { setGithubUsername } from '../store/platforms/github';
 import {
     getLeetcodeUserInfo,
+    ProblemSolved,
     setLeetcodeLanguageProblemCount,
     setLeetcodeTagProblemCounts,
     setLeetcodeUserInfo,
@@ -17,6 +18,7 @@ import { getLeetCodeProfileInfo, LeetCodeApi, QueryType } from '../Utils/leetcod
 
 const LeetCodeArea = () => {
     const { originalSearchVal, searchBy, userFound } = UseAppSelector(getSearchState);
+    const [gotNewData, setGotNewData] = useState(false);
 
     const dispatch = UseAppDispatch();
     const leetcodeUserInfo = UseAppSelector(getLeetcodeUserInfo);
@@ -48,31 +50,31 @@ const LeetCodeArea = () => {
         );
 
         if (getDataFromDB) {
-            console.log(getDataFromDB);
-            dispatch(
-                setLeetcodeUserInfo({
-                    githubUrl: getDataFromDB?.githubUrl,
-                    twitterUrl: getDataFromDB?.twitterUrl,
-                    linkedinUrl: getDataFromDB?.linkedinUrl,
-                    profile: getDataFromDB?.profile,
-                    languageProblemCount: getDataFromDB?.languageProblemCount,
-                    tagProblemCounts: getDataFromDB?.tagProblemCounts,
-                    username: leetcodeUserName,
-                })
-            );
+            const param = {
+                githubUrl: getDataFromDB?.githubUrl,
+                twitterUrl: getDataFromDB?.twitterUrl,
+                linkedinUrl: getDataFromDB?.linkedinUrl,
+                profile: getDataFromDB?.profile,
+                languageProblemCount: getDataFromDB?.languageProblemCount,
+                tagProblemCounts: getDataFromDB?.tagProblemCounts,
+                username: leetcodeUserName,
+            };
+
+            dispatch(setLeetcodeUserInfo(param));
             dispatch(setLeetcodeLanguageProblemCount(getDataFromDB?.languageProblemCount));
             dispatch(setLeetcodeTagProblemCounts(getDataFromDB?.tagProblemCounts));
         } else {
+            setGotNewData(true);
             const output: any = await getLeetCodeProfileInfo(
                 leetcodeUserName,
                 QueryType.userProfileQuery
             );
             dispatch(setLeetcodeUserInfo({ ...output, username: leetcodeUserName }));
 
-            const problemSolved: any = await getLeetCodeProfileInfo(
+            const problemSolved: ProblemSolved = (await getLeetCodeProfileInfo(
                 leetcodeUserName,
                 QueryType.LangugaeProblemSolvedQuery
-            );
+            )) as ProblemSolved;
             dispatch(setLeetcodeLanguageProblemCount(problemSolved?.languageProblemCount));
 
             const problemCount: any = await getLeetCodeProfileInfo(
@@ -89,14 +91,15 @@ const LeetCodeArea = () => {
     }, [leetcodeUserName]);
 
     useEffect(() => {
-        if (userFound.leetcode_url) return;
-        if (!leetcodeUserName || !leetcodeUserInfo?.profile_url) return;
-        const param = {
-            source: LeetCodeApi + leetcodeUserName,
-            data: leetcodeUserInfo,
-        };
-        PutData(`/api/platform/${Filter.LEETCODE}`, JSON.stringify(param));
-    }, [leetcodeUserName, leetcodeUserInfo?.profile_url, userFound.leetcode_url]);
+        if (!leetcodeUserInfo?.profile_url) return;
+        if (gotNewData) {
+            const param = {
+                source: LeetCodeApi + leetcodeUserName,
+                data: leetcodeUserInfo,
+            };
+            PutData(`/api/platform/${Filter.LEETCODE}`, JSON.stringify(param));
+        }
+    }, [leetcodeUserInfo?.profile_url, gotNewData]);
 
     useEffect(() => {
         const githubUrl = leetcodeUserInfo.githubUrl;

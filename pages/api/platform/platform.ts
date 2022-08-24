@@ -6,7 +6,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const { db } = await connectToDatabase();
     if (!db) return res.status(502).json({ message: 'database connection error' });
     const param = req.query.param as string;
-    if (param === '') return;
+    if (param === '') {
+        res.status(400).send({ status: 'error', message: 'empty param is not allowed' });
+    }
 
     const emailQuery = JSON.parse(param) as object;
 

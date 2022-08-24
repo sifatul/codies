@@ -7,6 +7,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const { query, variables } = data;
     let { url } = data;
 
+    if (!url) {
+        res.status(400).send({ status: 'error', message: 'url param missing' });
+    }
+
+    if (!variables) {
+        res.status(400).send({ status: 'error', message: 'variable param missing' });
+    }
+
     if (url) {
         url = url.trim();
     }
