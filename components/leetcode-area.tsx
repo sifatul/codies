@@ -82,6 +82,10 @@ const LeetCodeArea = () => {
                 QueryType.TagProblemsCountQuery
             );
             dispatch(setLeetcodeTagProblemCounts(problemCount));
+
+            if (output) {
+                setGotNewData(true);
+            }
         }
     }, [leetcodeUserName]);
 
