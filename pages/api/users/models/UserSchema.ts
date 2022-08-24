@@ -7,11 +7,6 @@ enum Gender {
     OTHER = 'other',
 }
 
-enum Role {
-    USER = 'user',
-    ADMIN = 'admin',
-}
-
 // interface
 interface IUser {
     firstName: string;
@@ -19,7 +14,6 @@ interface IUser {
     email: string;
     password: string;
     gender: Gender;
-    role: Role;
     linkedin_url: string;
     github?: string;
     leetcode_url?: string;
@@ -49,12 +43,6 @@ const userSchema = new Schema<IUser>(
             enum: ['male', 'female', 'other'],
             required: true,
             default: Gender.MALE,
-        },
-        role: {
-            type: String,
-            enum: ['user', 'admin'],
-            required: true,
-            default: Role.USER,
         },
         linkedin_url: { type: String },
         github: { type: String },
