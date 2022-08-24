@@ -5,16 +5,16 @@ import { Octokit } from 'octokit';
 const handler = nextConnect();
 export default handler;
 
-const getRepoList = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+const getUserInfo = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     const username = req.query.username || '';
     if (!username) res.status(404).end();
-    const getRepoListApi = `GET /users/${username}/repos`;
+    const getUserInfoApi = `GET /users/${username}`;
     const octokit = new Octokit({ auth: process.env.GITHUB_ACCESS_TOKEN });
-    const githubResponse = await octokit.request(getRepoListApi, {});
-    const repos = githubResponse?.data;
+    const githubResponse = await octokit.request(getUserInfoApi, {});
+    const userInfo = githubResponse?.data;
 
-    return res.status(200).json(repos);
+    return res.status(200).json(userInfo);
 };
 handler.get(async (req: any, res: any) => {
-    return getRepoList(req, res);
+    return getUserInfo(req, res);
 });
