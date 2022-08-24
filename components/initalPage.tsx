@@ -1,10 +1,15 @@
 import * as React from 'react';
 import Footer from '../components/common/footer';
 import Hint from '../components/common/hint';
-import SearchInput from './search/search.input';
 import styles from '../styles/Home.module.css';
-
+import { GetData, PostData } from '../Utils/fetchData';
+import SearchInput from './search/search.input';
 const InitialPage = () => {
+
+
+  React.useEffect(() => {
+    // fetch(`/api/platform/github/repos`)
+  }, [])
 
 
   return (
