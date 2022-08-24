@@ -1,3 +1,4 @@
+import { NextApiResponse, NextApiRequest } from 'next';
 /* eslint-disable import/no-anonymous-default-export */
 import { connectToDatabase } from '../../../Utils/mongodb';
 
@@ -41,7 +42,38 @@ import { connectToDatabase } from '../../../Utils/mongodb';
  *        description: Created
  */
 
-export default async (req: any, res: any) => {
+enum Gender {
+    MALE = 'male',
+    FEMALE = 'female',
+    OTHER = 'other',
+}
+
+// interface
+interface IUserRequest extends NextApiRequest {
+    body: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+        gender: Gender;
+        linkedin_url: string;
+        github?: string;
+        leetcode_url?: string;
+        hackerrank_url?: string;
+        codepen_url?: string;
+        medium_url?: string;
+        codeforces_url?: string;
+    };
+}
+
+interface IUserResponse extends NextApiResponse {
+    firstName: string;
+    lastName: string;
+    email: string;
+    gender: Gender;
+}
+
+export default async (req: IUserRequest, res: IUserResponse) => {
     let client: any;
     let db: any;
     try {
