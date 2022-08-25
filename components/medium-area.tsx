@@ -72,7 +72,7 @@ const MediumArea = () => {
       data: mediumData
     }
     PutData(`/api/platform/${Filter.MEDIUM}`, JSON.stringify(param))
-  }, [mediumData.items.length, gotNewData])
+  }, [mediumData?.items?.length, gotNewData])
 
   return <>
     <h1> Medium data area </h1>
