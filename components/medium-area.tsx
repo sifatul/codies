@@ -51,7 +51,7 @@ const MediumArea = () => {
       if (data) setGotNewData(true);
     }
 
-    if (!data) return
+    if (!data || !data.feed) return
     dispatch(setMediumData(data))
 
   }, []);
