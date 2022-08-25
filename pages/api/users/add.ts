@@ -1,6 +1,8 @@
+import mongoose from 'mongoose';
 import { NextApiResponse, NextApiRequest } from 'next';
 /* eslint-disable import/no-anonymous-default-export */
 import { connectToDatabase } from '../../../Utils/mongodb';
+import User from './models/UserSchema';
 
 /**
  * @swagger
@@ -55,7 +57,7 @@ interface IUserRequest extends NextApiRequest {
         lastName: string;
         email: string;
         password: string;
-        gender: Gender;
+        gender?: Gender;
         linkedin_url: string;
         github?: string;
         leetcode_url?: string;
@@ -73,19 +75,23 @@ interface IUserResponse extends NextApiResponse {
     gender: Gender;
 }
 
-export default async (req: IUserRequest, res: IUserResponse) => {
+export default async (req: IUserRequest, res: any) => {
     let client: any;
     let db: any;
     try {
         const dbResponse = await connectToDatabase();
-        client = dbResponse.client;
-        db = dbResponse.db;
-        if (!db) return res.json({ error: 'database connection failed' });
-        await db.collection('users').insertOne(req.body);
+        // client = dbResponse.client;
+        // db = dbResponse.db;
+        // if (!db) return res.json({ error: 'database connection failed' });
+        console.log(req.body)
+        const newUser = new User({ ...req.body });
+        console.log(newUser)
+        await newUser.save();
 
         return res.json({ message: 'User create successfully.' });
     } catch (e) {
         console.error(e);
+        res.send({ error: 'nothing' })
     } finally {
         if (client) await client.close();
         // Ensures that the client will close when you finish/error

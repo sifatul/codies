@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 enum Gender {
@@ -31,6 +31,8 @@ const userSchema = new Schema<IUser>(
             type: String,
             required: [true, 'Email is required'],
             unique: true,
+            index: true,
+            sparse: true,
         },
         password: {
             type: String,
@@ -70,6 +72,6 @@ userSchema.methods.checkPassword = async (candidatePassword: string, userPasswor
     return await bcrypt.compare(candidatePassword, userPassword);
 };
 
-const User = model<IUser>('User', userSchema);
+const User = models.users || model<IUser>('users', userSchema);
 
 export default User;
