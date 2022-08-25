@@ -3,10 +3,11 @@ import { getDomain, getLastPathname } from 'js-string-helper';
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
-import { setcodepenUserInfo } from '../store/platforms/codepen';
+import { setcodepenUserInfo, getcodepenUserInfo } from '../store/platforms/codepen';
 import { getSearchState } from '../store/search';
-import { SearchByType } from '../types/common.types';
+import { SearchByType, Filter } from '../types/common.types';
 import { GetData } from '../Utils/fetchData';
+import { PostData, PutData } from '../Utils/fetchData';
 interface codepenItemType {
     pubDate: string;
     link: string;
@@ -20,7 +21,7 @@ const CodePenArea = () => {
     const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
 
     const [popularPen, setPopularPen] = useState<codepenItemType[]>([]);
-
+    const codepenUserInfo = UseAppSelector(getcodepenUserInfo);
     const codepenUserName = useMemo(() => {
         if (searchBy === SearchByType.NONE) return ''
 
@@ -69,6 +70,16 @@ const CodePenArea = () => {
         if (!codepenUserName) return
         getCodepenData();
     }, [codepenUserName]);
+
+    useEffect(() => {
+        if (!codepenUserInfo || !codepenUserInfo?.pens || !codepenUserInfo?.pens?.length) return
+
+        const param2 = {
+            source: codepenUserInfo.profile_url,
+            data: codepenUserInfo
+        }
+        PutData(`/api/platform/${Filter.CODEPEN}`, JSON.stringify(param2))
+    }, [codepenUserInfo])
 
     return (
         <Box my={3}>
