@@ -28,7 +28,7 @@ export async function connectToDatabase() {
   await client.connect();
   // Establish and verify connection
   const dbConnect = await client.db(dbName)
-  console.log("Connected successfully to server");
+  console.log("Connected successfully to db");
 
   return { client, db: dbConnect }
 
