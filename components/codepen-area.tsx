@@ -72,15 +72,13 @@ const CodePenArea = () => {
     }, [codepenUserName]);
 
     useEffect(() => {
-        if(!codepenUserInfo && !codepenUserInfo?.pens && !codepenUserInfo?.pens?.length) {
-            return
-        }
+        if (!codepenUserInfo || !codepenUserInfo?.pens || !codepenUserInfo?.pens?.length) return
 
         const param2 = {
             source: codepenUserInfo.profile_url,
             data: codepenUserInfo
-          }
-          PutData(`/api/platform/${Filter.CODEPEN}`, JSON.stringify(param2))
+        }
+        PutData(`/api/platform/${Filter.CODEPEN}`, JSON.stringify(param2))
     }, [codepenUserInfo])
 
     return (
