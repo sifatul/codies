@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const { query, variables } = data;
     let { url } = data;
 
-    if (!url) {
+    if (!url.trim()) {
         res.status(400).send({ status: 'error', message: 'url param missing' });
     }
 
@@ -15,9 +15,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         res.status(400).send({ status: 'error', message: 'variable param missing' });
     }
 
-    if (url) {
-        url = url.trim();
-    }
     if (variables && variables?.username) {
         variables.username = variables?.username.trim();
     }
