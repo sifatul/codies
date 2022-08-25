@@ -22,7 +22,6 @@ const CodePenArea = () => {
 
     const [popularPen, setPopularPen] = useState<codepenItemType[]>([]);
     const codepenUserInfo = UseAppSelector(getcodepenUserInfo);
-    console.log(codepenUserInfo, 'codepenUserInfo')
     const codepenUserName = useMemo(() => {
         if (searchBy === SearchByType.NONE) return ''
 
