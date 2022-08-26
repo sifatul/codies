@@ -3,25 +3,23 @@ import { getDomain, getLastPathname } from 'js-string-helper';
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
-import { setcodepenUserInfo, getcodepenUserInfo } from '../store/platforms/codepen';
+import { setcodepenUserInfo, getcodepenUserInfo, codepenProjectType } from '../store/platforms/codepen';
 import { getSearchState } from '../store/search';
 import { SearchByType, Filter } from '../types/common.types';
 import { GetData } from '../Utils/fetchData';
 import { PostData, PutData } from '../Utils/fetchData';
-interface codepenItemType {
-    pubDate: string;
-    link: string;
-    title: string;
-}
+
+const codepenPensApiDemo = 'https://codepen.io/userName/popular/feed/'
 
 
 const CodePenArea = () => {
     const dispatch = UseAppDispatch();
 
     const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
-
-    const [popularPen, setPopularPen] = useState<codepenItemType[]>([]);
+    const [popularPen, setPopularPen] = useState<codepenProjectType[]>([]);
     const codepenUserInfo = UseAppSelector(getcodepenUserInfo);
+    const [gotNewData, setGotNewData] = React.useState(false)
+
     const codepenUserName = useMemo(() => {
         if (searchBy === SearchByType.NONE) return ''
 
@@ -31,7 +29,7 @@ const CodePenArea = () => {
         try {
             const codepenUrl = codepen_url || originalSearchVal
             const domain = getDomain(codepenUrl) || ''
-            if (new RegExp('codepen.com').test(domain) === false) return ''
+            if (new RegExp('codepen.io').test(domain) === false) return ''
             userName = getLastPathname(codepenUrl) || ''
 
         } catch (e) {
@@ -41,16 +39,28 @@ const CodePenArea = () => {
         return userName
     }, [searchBy])
 
+    console.log("codepenUserName", codepenUserName)
 
     const getCodepenData = useCallback(async () => {
-        const codepenInfoFetchUrl =
-            'https://api.rss2json.com/v1/api.json?rss_url=https://codepen.io/userName/popular/feed/';
-        const codepenInfoFetchApi = codepenInfoFetchUrl.replace('userName', codepenUserName);
+        if (!codepenUserName) return
 
-        const data: any = await GetData(codepenInfoFetchApi);
-        const { items = [] } = data;
+        const codepenInfoFetchApi = codepenPensApiDemo.replace('userName', codepenUserName);
+        // look into database first
+        let data: any = await GetData(`/api/platform/${Filter.CODEPEN}?source=${codepenInfoFetchApi}`);
+        let items: codepenProjectType[] = data;
+        if (!data) {
+            // look into codepen
+            const codepenInfoFetchUrl = `https://api.rss2json.com/v1/api.json?rss_url=${codepenInfoFetchApi}`;
+            data = await GetData(codepenInfoFetchUrl);
+            if (data && data.items) {
+                items = data.items
+                setGotNewData(true);
+            }
 
-        const sortedData: codepenItemType[] = items.sort(
+        }
+
+
+        const sortedData: codepenProjectType[] = items.sort(
             (a: { pubDate: string }, b: { pubDate: string }) => {
                 const timeA = new Date(a.pubDate).getTime();
                 const timeB = new Date(b.pubDate).getTime();
@@ -63,7 +73,7 @@ const CodePenArea = () => {
         };
         dispatch(setcodepenUserInfo(codepenData));
         setPopularPen(sortedData.slice(0, 2));
-    }, []);
+    }, [codepenUserName]);
 
 
     useEffect(() => {
@@ -72,11 +82,12 @@ const CodePenArea = () => {
     }, [codepenUserName]);
 
     useEffect(() => {
-        if (!codepenUserInfo || !codepenUserInfo?.pens || !codepenUserInfo?.pens?.length) return
+        if (!codepenUserInfo?.pens?.length || !gotNewData) return
+        const codepenInfoFetchApi = codepenPensApiDemo.replace('userName', codepenUserName);
 
         const param2 = {
-            source: codepenUserInfo.profile_url,
-            data: codepenUserInfo
+            source: codepenInfoFetchApi,
+            data: codepenUserInfo?.pens
         }
         PutData(`/api/platform/${Filter.CODEPEN}`, JSON.stringify(param2))
     }, [codepenUserInfo])
