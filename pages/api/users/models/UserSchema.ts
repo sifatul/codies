@@ -1,11 +1,8 @@
 import { Schema, model, models } from 'mongoose';
 import bcrypt from 'bcryptjs';
-
-enum Gender {
-    MALE = 'male',
-    FEMALE = 'female',
-    OTHER = 'other',
-}
+import isEmail from 'validator/lib/isEmail';
+import isURL from 'validator/lib/isURL';
+import { Gender } from '../../../../types/common.types';
 
 // interface
 interface IUser {
@@ -14,7 +11,7 @@ interface IUser {
     email: string;
     password: string;
     gender: Gender;
-    linkedin_url: string;
+    linkedin_url?: string;
     github?: string;
     leetcode_url?: string;
     hackerrank_url?: string;
@@ -32,7 +29,7 @@ const userSchema = new Schema<IUser>(
             required: [true, 'Email is required'],
             unique: true,
             index: true,
-            sparse: true,
+            validate: [isEmail, 'Invalid email'],
         },
         password: {
             type: String,
@@ -42,17 +39,17 @@ const userSchema = new Schema<IUser>(
         },
         gender: {
             type: String,
-            enum: ['male', 'female', 'other'],
-            required: true,
+            enum: Gender,
+            required: [true, 'Gender is required'],
             default: Gender.MALE,
         },
-        linkedin_url: { type: String },
-        github: { type: String },
-        leetcode_url: { type: String },
-        hackerrank_url: { type: String },
-        codepen_url: { type: String },
-        medium_url: { type: String },
-        codeforces_url: { type: String },
+        linkedin_url: { type: String, validate: [isURL, 'Invalid url'] },
+        github: { type: String, validate: [isURL, 'Invalid url'] },
+        leetcode_url: { type: String, validate: [isURL, 'Invalid url'] },
+        hackerrank_url: { type: String, validate: [isURL, 'Invalid url'] },
+        codepen_url: { type: String, validate: [isURL, 'Invalid url'] },
+        medium_url: { type: String, validate: [isURL, 'Invalid url'] },
+        codeforces_url: { type: String, validate: [isURL, 'Invalid url'] },
     },
     { timestamps: true }
 );
