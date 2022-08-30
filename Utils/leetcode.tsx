@@ -1,9 +1,8 @@
-
-const LeetCodeApi = "https://leetcode.com/graphql/"
+export const LeetCodeApi = 'https://leetcode.com/graphql/';
 export enum QueryType {
-  TagProblemsCountQuery = 'TagProblemsCountQuery',
-  LangugaeProblemSolvedQuery = 'LangugaeProblemSolvedQuery',
-  userProfileQuery = 'userProfileQuery'
+    TagProblemsCountQuery = 'TagProblemsCountQuery',
+    LangugaeProblemSolvedQuery = 'LangugaeProblemSolvedQuery',
+    userProfileQuery = 'userProfileQuery',
 }
 const TagProblemsCountQuery = `
 query userProfile($username: String!) {
@@ -27,7 +26,7 @@ query userProfile($username: String!) {
     }
   }
 }
-`
+`;
 const LangugaeProblemSolvedQuery = `
 query userProfile($username: String!) {
   matchedUser(username: $username) {
@@ -37,7 +36,7 @@ query userProfile($username: String!) {
     }
   }
 }
-`
+`;
 const userProfileQuery = `
 query userProfile($username: String!) {
   matchedUser(username: $username) {
@@ -60,42 +59,32 @@ query userProfile($username: String!) {
     }
   }
 }
-`
+`;
 const allLeetCodeQueries = {
-  TagProblemsCountQuery,
-  LangugaeProblemSolvedQuery,
-  userProfileQuery
-
-
-}
+    TagProblemsCountQuery,
+    LangugaeProblemSolvedQuery,
+    userProfileQuery,
+};
 const getLeetCodeProfileInfo = async (nameFromUrl: string, queryType: QueryType) => {
+    const variables = { username: nameFromUrl };
 
-  const variables = { username: nameFromUrl }
-
-  const query = allLeetCodeQueries[queryType]
-  const param = JSON.stringify({
-    query,
-    variables,
-    url: LeetCodeApi
-  })
-  return new Promise(resolve => {
-    fetch('/api/leetcode-api', { method: "POST", body: param })
-      .then(function (res) {
-        return res.json();
-      })
-      .then(function (json) {
-        // resolve(json)
-        console.log(json)
-        if (!json) return resolve(null)
-        const { matchedUser } = json
-        if (!matchedUser) return resolve(null)
-        resolve(matchedUser)
-
-
-      })
-
-  })
-
-
-}
-export { getLeetCodeProfileInfo }
+    const query = allLeetCodeQueries[queryType];
+    const param = JSON.stringify({
+        query,
+        variables,
+        url: LeetCodeApi,
+    });
+    return new Promise((resolve) => {
+        fetch('/api/leetcode-api', { method: 'POST', body: param })
+            .then(function (res) {
+                return res.json();
+            })
+            .then(function (json) {
+                if (!json) return resolve(null);
+                const { matchedUser } = json;
+                if (!matchedUser) return resolve(null);
+                resolve(matchedUser);
+            });
+    });
+};
+export { getLeetCodeProfileInfo };

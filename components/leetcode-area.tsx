@@ -1,24 +1,28 @@
 import { GitHub, LinkedIn, Twitter } from '@mui/icons-material';
 import { Avatar, Box, Divider, Grid, IconButton, Typography } from '@mui/material';
 import { getDomain, getLastPathname } from 'js-string-helper';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
 import { setGithubUsername } from '../store/platforms/github';
 import {
     getLeetcodeUserInfo,
+    ProblemSolved,
     setLeetcodeLanguageProblemCount,
     setLeetcodeTagProblemCounts,
     setLeetcodeUserInfo,
 } from '../store/platforms/leetcode';
 import { getSearchState } from '../store/search';
-import { SearchByType } from '../types/common.types';
-import { getLeetCodeProfileInfo, QueryType } from '../Utils/leetcode';
+import { Filter, SearchByType } from '../types/common.types';
+import { PutData, GetData } from '../Utils/fetchData';
+import { getLeetCodeProfileInfo, LeetCodeApi, QueryType } from '../Utils/leetcode';
 
 const LeetCodeArea = () => {
     const { originalSearchVal, searchBy, userFound } = UseAppSelector(getSearchState);
+    const [gotNewData, setGotNewData] = useState(false);
 
     const dispatch = UseAppDispatch();
     const leetcodeUserInfo = UseAppSelector(getLeetcodeUserInfo);
+
     const leetcodeUserName = useMemo(() => {
         if (searchBy === SearchByType.NONE) return '';
 
@@ -33,35 +37,73 @@ const LeetCodeArea = () => {
             if (new RegExp('leetcode.com').test(domain) === false) return '';
             userName = getLastPathname(leetcodeUrl) || '';
         } catch (e) {
-            console.error(e);
             return '';
         }
         return userName;
     }, []);
 
     const getLeetCodeInfo = React.useCallback(async () => {
-        console.log('getLeetCodeInfo: is calling');
-        getLeetCodeProfileInfo(leetcodeUserName, QueryType.userProfileQuery).then((output: any) => {
-            dispatch(setLeetcodeUserInfo({ ...output, username: leetcodeUserName }));
-        });
+        const getLeetcodeApi = LeetCodeApi + leetcodeUserName;
 
-        getLeetCodeProfileInfo(leetcodeUserName, QueryType.LangugaeProblemSolvedQuery).then(
-            (output: any) => {
-                dispatch(setLeetcodeLanguageProblemCount(output?.languageProblemCount));
-            }
+        const getDataFromDB: any = await GetData(
+            `/api/platform/${Filter.LEETCODE}?source=${getLeetcodeApi}`
         );
-        getLeetCodeProfileInfo(leetcodeUserName, QueryType.TagProblemsCountQuery).then(
-            (output: any) => {
-                dispatch(setLeetcodeTagProblemCounts(output));
+
+        if (getDataFromDB) {
+            const param = {
+                githubUrl: getDataFromDB?.githubUrl,
+                twitterUrl: getDataFromDB?.twitterUrl,
+                linkedinUrl: getDataFromDB?.linkedinUrl,
+                profile: getDataFromDB?.profile,
+                languageProblemCount: getDataFromDB?.languageProblemCount,
+                tagProblemCounts: getDataFromDB?.tagProblemCounts,
+                username: leetcodeUserName,
+            };
+
+            dispatch(setLeetcodeUserInfo(param));
+            dispatch(setLeetcodeLanguageProblemCount(getDataFromDB?.languageProblemCount));
+            dispatch(setLeetcodeTagProblemCounts(getDataFromDB?.tagProblemCounts));
+        } else {
+            setGotNewData(true);
+            const output: any = await getLeetCodeProfileInfo(
+                leetcodeUserName,
+                QueryType.userProfileQuery
+            );
+            dispatch(setLeetcodeUserInfo({ ...output, username: leetcodeUserName }));
+
+            const problemSolved: ProblemSolved = (await getLeetCodeProfileInfo(
+                leetcodeUserName,
+                QueryType.LangugaeProblemSolvedQuery
+            )) as ProblemSolved;
+            dispatch(setLeetcodeLanguageProblemCount(problemSolved?.languageProblemCount));
+
+            const problemCount: any = await getLeetCodeProfileInfo(
+                leetcodeUserName,
+                QueryType.TagProblemsCountQuery
+            );
+            dispatch(setLeetcodeTagProblemCounts(problemCount));
+
+            if (output) {
+                setGotNewData(true);
             }
-        );
+        }
     }, [leetcodeUserName]);
 
     useEffect(() => {
         if (!leetcodeUserName) return;
-        console.log('leetcodeUserName ', leetcodeUserName);
         getLeetCodeInfo();
     }, [leetcodeUserName]);
+
+    useEffect(() => {
+        if (!leetcodeUserInfo?.profile_url) return;
+        if (gotNewData) {
+            const param = {
+                source: LeetCodeApi + leetcodeUserName,
+                data: leetcodeUserInfo,
+            };
+            PutData(`/api/platform/${Filter.LEETCODE}`, JSON.stringify(param));
+        }
+    }, [leetcodeUserInfo?.profile_url, gotNewData]);
 
     useEffect(() => {
         const githubUrl = leetcodeUserInfo.githubUrl;

@@ -4,7 +4,20 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
     const data = JSON.parse(req.body);
-    const { query, url, variables } = data;
+    const { query, variables } = data;
+    const { url } = data;
+
+    if (!url.trim()) {
+        res.status(400).send({ status: 'error', message: 'url param missing' });
+    }
+
+    if (!variables) {
+        res.status(400).send({ status: 'error', message: 'variable param missing' });
+    }
+
+    if (variables && variables?.username) {
+        variables.username = variables?.username.trim();
+    }
 
     const output = {};
 
@@ -13,7 +26,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const output = await client.request(query, variables);
         res.status(200).json(output);
     } catch (e) {
-        console.log(e);
         res.status(200).json(output);
     }
 }

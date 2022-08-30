@@ -1,7 +1,7 @@
 
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 
-export interface codepenUserInfoType {
+export interface codepenProjectType {
   pubDate: string;
   link: string;
   title: string;
@@ -13,9 +13,9 @@ export interface codepenUserInfoType {
 /**
  * Default state object with initial values.
  */
-const initialState: { pens: codepenUserInfoType[], username: string } = {
+const initialState: { pens: codepenProjectType[], username: string } = {
   username: '',
-  pens: [] as codepenUserInfoType[]
+  pens: [] as codepenProjectType[]
 
   // topRepos: [],
 } as const;
@@ -33,14 +33,14 @@ export const codepenSlice = createSlice({
 
     setcodepenUserInfo: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<{ pens: codepenUserInfoType[], username: string }>
+      action: PayloadAction<{ pens: codepenProjectType[], username: string }>
     ) => action.payload,
 
   },
 });
 
 // A small helper of user state for `useSelector` function.
-export const getcodepenUserInfo = (state: { codepen: { pens: codepenUserInfoType[], username: string } }) => {
+export const getcodepenUserInfo = (state: { codepen: { pens: codepenProjectType[], username: string } }) => {
   const profile_url = "codepen.io/userName".replace("userName", state.codepen?.username)
   return { ...state.codepen, profile_url }
 };
