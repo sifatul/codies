@@ -5,7 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
     const data = JSON.parse(req.body);
     const { query, variables } = data;
-    let { url } = data;
+    const { url } = data;
 
     if (!url.trim()) {
         res.status(400).send({ status: 'error', message: 'url param missing' });
