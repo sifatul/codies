@@ -7,27 +7,7 @@ import { Field, Form, Formik } from 'formik';
 import { Gender } from '../../types/common.types';
 import { InputLabel } from '@mui/material';
 
-const validationSchema = Yup.object().shape({
-    firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
-    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
-    email: Yup.string()
-        .email('Invalid email')
-        .matches(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            'Invalid email'
-        )
-        .required('Required'),
-    gender: Yup.string().required('Required'),
-});
-
-const initialValues = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    gender: '',
-};
-
-export default function AddressForm() {
+function AddressForm() {
     const [gender, setgender] = React.useState('');
 
     const handleChange = (event: SelectChangeEvent) => {
@@ -38,21 +18,25 @@ export default function AddressForm() {
             {/* <Typography variant="h6" gutterBottom>
         Basic Informations
       </Typography> */}
-            <Formik initialValues={initialValues} onSubmit={() => console.log()}>
-                <div>
-                    <>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12} sm={6}>
-                                <Field name='firstName' component={TextField} label='First Name' />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Field name='lastName' component={TextField} label='Last Name' />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Field name='email' component={TextField} label='Email' fullWidth />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <InputLabel htmlFor='gender'>Gender</InputLabel>
+            <div>
+                <>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} sm={6}>
+                            <Field name='firstName' component={TextField} label='First Name' />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Field
+                                name='lastName'
+                                component={TextField}
+                                label='Last Name'
+                                value={'hello'}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Field name='email' component={TextField} label='Email' fullWidth />
+                        </Grid>
+                        <Grid item xs={12}>
+                            {/* <InputLabel htmlFor='gender'>Gender</InputLabel>
                                 <Field
                                     as='select'
                                     name='gender'
@@ -63,12 +47,35 @@ export default function AddressForm() {
                                     <option value={Gender.MALE}>Male</option>
                                     <option value={Gender.FEMALE}>Female</option>
                                     <option value={Gender.OTHER}>Other</option>
-                                </Field>
-                            </Grid>
+                                </Field> */}
                         </Grid>
-                    </>
-                </div>
-            </Formik>
+                    </Grid>
+                </>
+            </div>
         </>
     );
 }
+
+AddressForm.label = 'Profile info';
+
+AddressForm.initialValues = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    // gender: '',
+};
+
+AddressForm.validationSchema = Yup.object().shape({
+    firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
+    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
+    email: Yup.string()
+        .email('Invalid email')
+        .matches(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            'Invalid email'
+        )
+        .required('Required'),
+    // gender: Yup.string().required('Required'),
+});
+
+export default AddressForm;

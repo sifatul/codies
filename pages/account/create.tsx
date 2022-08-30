@@ -30,15 +30,6 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function UserDataInputForm() {
-    const handleSubmit = (event: any) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-    };
-
     return (
         <ThemeProvider theme={theme}>
             <Grid container component='main' sx={{ height: '100vh' }}>
@@ -68,11 +59,11 @@ export default function UserDataInputForm() {
                             alignItems: 'center',
                         }}
                     >
-                        <Box component='form' noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-                            <PreateProfileMain />
+                        {/* <Box component='form' noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}> */}
+                        <PreateProfileMain />
 
-                            <Copyright sx={{ mt: 5 }} />
-                        </Box>
+                        <Copyright sx={{ mt: 5 }} />
+                        {/* </Box> */}
                     </Box>
                 </Grid>
             </Grid>
