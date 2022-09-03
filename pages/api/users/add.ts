@@ -81,13 +81,12 @@ export default async (req: NextApiRequest, res: any) => {
         // db = dbResponse.db;
         // if (!db) return res.json({ error: 'database connection failed' });
 
-        const newUserObj = JSON.parse(req.body);
-
-        const newUser = await User.create(newUserObj);
+        const newUser = await User.create(req.body);
 
         return res.json({ status: 'success', message: 'User create successfully.' });
     } catch (e) {
-        res.send({ status: 'error', error: 'Something went wrong please try again later' });
+        console.log(e);
+        res.json({ status: 'error', error: 'Something went wrong please try again later' });
     } finally {
         if (client) await client.close();
         // Ensures that the client will close when you finish/error

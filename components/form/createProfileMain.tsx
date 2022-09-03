@@ -33,6 +33,7 @@ function getStepContent(step: number) {
 
 export default function PreateProfileMain() {
     const [activeStep, setActiveStep] = React.useState(0);
+    const [showSuccessMessage, setShowSuccessMessage] = React.useState(false);
 
     const isLastStep = () => {
         return activeStep === steps.length - 1;
@@ -61,6 +62,12 @@ export default function PreateProfileMain() {
             },
             body: JSON.stringify(values),
         });
+
+        res.json().then((result) => {
+            if (result?.status === 'success') {
+                setShowSuccessMessage(true);
+            }
+        });
     };
 
     return (
@@ -85,8 +92,8 @@ export default function PreateProfileMain() {
                         {({ isSubmitting }) => (
                             <Form id={formId}>
                                 <React.Fragment>
-                                    {activeStep === steps.length && <CreateUserSuccess />}
-                                    {activeStep !== steps.length && (
+                                    {showSuccessMessage && <CreateUserSuccess />}
+                                    {activeStep !== steps.length && !showSuccessMessage && (
                                         <React.Fragment>
                                             {getStepContent(activeStep)}
                                             <Box
