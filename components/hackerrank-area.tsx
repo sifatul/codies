@@ -87,13 +87,12 @@ const HackerrankArea = () => {
         if (!githubUserName) return console.warn('hackerrank area> githubUserName: not found');
         dispatch(setGithubUsername(githubUserName));
     }, [hackerRankUserName]);
-    console.log(hackerrankUserInfo)
     useEffect(() => {
         if (!hackerrankUserInfo.name) return
-        const codepenInfoFetchApi = getUserProfileApi.replace('userName', hackerRankUserName);
+        const hackerRankInfoFetchApi = getUserProfileApi.replace('userName', hackerRankUserName);
 
         const param2 = {
-            source: codepenInfoFetchApi,
+            source: hackerRankInfoFetchApi,
             data: hackerrankUserInfo
         }
         PutData(`/api/platform/${Filter.HACKERRANK}`, JSON.stringify(param2))
