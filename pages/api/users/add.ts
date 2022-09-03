@@ -51,6 +51,7 @@ interface IUserRequest extends NextApiRequest {
         firstName: string;
         lastName: string;
         email: string;
+        userName: string;
         password: string;
         gender: Gender;
         linkedin_url?: string;
@@ -70,7 +71,7 @@ interface IUserResponse extends NextApiResponse {
     gender: Gender;
 }
 
-export default async (req: IUserRequest, res: any) => {
+export default async (req: NextApiRequest, res: any) => {
     let client: any;
     let db: any;
 
@@ -79,13 +80,13 @@ export default async (req: IUserRequest, res: any) => {
         // client = dbResponse.client;
         // db = dbResponse.db;
         // if (!db) return res.json({ error: 'database connection failed' });
-        const newUser = new User({ ...req.body });
-        console.log(newUser);
-        await newUser.save();
+
+        const newUserObj = JSON.parse(req.body);
+
+        const newUser = await User.create(newUserObj);
 
         return res.json({ status: 'success', message: 'User create successfully.' });
     } catch (e) {
-        console.log(e);
         res.send({ status: 'error', error: 'Something went wrong please try again later' });
     } finally {
         if (client) await client.close();

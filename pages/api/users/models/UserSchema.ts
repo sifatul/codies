@@ -1,13 +1,13 @@
 import { Schema, model, models } from 'mongoose';
 import bcrypt from 'bcryptjs';
-import isEmail from 'validator/lib/isEmail';
-import isURL from 'validator/lib/isURL';
 import { Gender } from '../../../../types/common.types';
+import { isEmail, isUrl } from 'js-string-helper';
 
 // interface
 interface IUser {
     firstName: string;
     lastName: string;
+    userName: string;
     email: string;
     password: string;
     gender: Gender;
@@ -20,6 +20,14 @@ interface IUser {
     codeforces_url?: string;
 }
 
+const validateUrl = (value: string) => {
+    if (!value) {
+        return true;
+    }
+
+    return isUrl(value);
+};
+
 const userSchema = new Schema<IUser>(
     {
         firstName: { type: String, required: true },
@@ -30,6 +38,12 @@ const userSchema = new Schema<IUser>(
             unique: true,
             index: true,
             validate: [isEmail, 'Invalid email'],
+        },
+        userName: {
+            type: String,
+            required: [true, 'Username is required'],
+            unique: true,
+            index: true,
         },
         password: {
             type: String,
@@ -43,13 +57,69 @@ const userSchema = new Schema<IUser>(
             required: [true, 'Gender is required'],
             default: Gender.MALE,
         },
-        linkedin_url: { type: String, validate: [isURL, 'Invalid url'] },
-        github: { type: String, validate: [isURL, 'Invalid url'] },
-        leetcode_url: { type: String, validate: [isURL, 'Invalid url'] },
-        hackerrank_url: { type: String, validate: [isURL, 'Invalid url'] },
-        codepen_url: { type: String, validate: [isURL, 'Invalid url'] },
-        medium_url: { type: String, validate: [isURL, 'Invalid url'] },
-        codeforces_url: { type: String, validate: [isURL, 'Invalid url'] },
+        linkedin_url: {
+            type: String,
+            validate: {
+                validator: (val: string) => {
+                    validateUrl(val);
+                },
+            },
+            required: false,
+        },
+        github: {
+            type: String,
+            validate: {
+                validator: (val: string) => {
+                    validateUrl(val);
+                },
+            },
+            required: false,
+        },
+        leetcode_url: {
+            type: String,
+            validate: {
+                validator: (val: string) => {
+                    validateUrl(val);
+                },
+            },
+            required: false,
+        },
+        hackerrank_url: {
+            type: String,
+            validate: {
+                validator: (val: string) => {
+                    validateUrl(val);
+                },
+            },
+            required: false,
+        },
+        codepen_url: {
+            type: String,
+            validate: {
+                validator: (val: string) => {
+                    validateUrl(val);
+                },
+            },
+            required: false,
+        },
+        medium_url: {
+            type: String,
+            validate: {
+                validator: (val: string) => {
+                    validateUrl(val);
+                },
+            },
+            required: false,
+        },
+        codeforces_url: {
+            type: String,
+            validate: {
+                validator: (val: string) => {
+                    validateUrl(val);
+                },
+            },
+            required: false,
+        },
     },
     { timestamps: true }
 );
