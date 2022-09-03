@@ -14,7 +14,7 @@ import { Box } from '@mui/system';
 import { getSearchState } from '../store/search';
 import { setCountry, setName, setProfilePic } from '../store/user/basicInfo';
 import { SearchByType, Filter } from '../types/common.types';
-import { PostData, PutData } from '../Utils/fetchData';
+import { GetData, PostData, PutData } from '../Utils/fetchData';
 const getUserProfileApi =
 'https://www.hackerrank.com/rest/contests/master/hackers/userName/profile';
 const HackerrankArea = () => {
@@ -51,8 +51,16 @@ const HackerrankArea = () => {
        
         const userProfileApi = getUserProfileApi.replace('userName', nameFromUrl);
         const postApiForwardingApi = '/api/forward-api';
-        const data: any = await PostData(postApiForwardingApi, userProfileApi);
-        const hackerRankdata: hackerRankDataType = data?.model || {};
+        // look into database first
+        let data: any = await GetData(`/api/platform/${Filter.HACKERRANK}?source=${userProfileApi}`);
+        if (!data) {
+            // look into hankerrank
+            const hankerRankResponse: any = await PostData(postApiForwardingApi, userProfileApi);
+
+            data = hankerRankResponse?.model
+
+        }
+        const hackerRankdata: hackerRankDataType = data || {};
         const { avatar, country, name } = hackerRankdata;
         if (name) dispatch(setName(name));
         if (avatar) dispatch(setProfilePic(avatar));
