@@ -13,9 +13,10 @@ import { Avatar, CircularProgress, Divider, Grid, IconButton, Typography } from 
 import { Box } from '@mui/system';
 import { getSearchState } from '../store/search';
 import { setCountry, setName, setProfilePic } from '../store/user/basicInfo';
-import { SearchByType } from '../types/common.types';
-import { PostData } from '../Utils/fetchData';
-
+import { SearchByType, Filter } from '../types/common.types';
+import { PostData, PutData } from '../Utils/fetchData';
+const getUserProfileApi =
+'https://www.hackerrank.com/rest/contests/master/hackers/userName/profile';
 const HackerrankArea = () => {
     const dispatch = UseAppDispatch();
     const [loading, setLoading] = useState(false);
@@ -47,8 +48,7 @@ const HackerrankArea = () => {
     }, [hackerRankUserName]);
 
     const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
-        const getUserProfileApi =
-            'https://www.hackerrank.com/rest/contests/master/hackers/userName/profile';
+       
         const userProfileApi = getUserProfileApi.replace('userName', nameFromUrl);
         const postApiForwardingApi = '/api/forward-api';
         const data: any = await PostData(postApiForwardingApi, userProfileApi);
@@ -87,6 +87,17 @@ const HackerrankArea = () => {
         if (!githubUserName) return console.warn('hackerrank area> githubUserName: not found');
         dispatch(setGithubUsername(githubUserName));
     }, [hackerRankUserName]);
+    console.log(hackerrankUserInfo)
+    useEffect(() => {
+        if (!hackerrankUserInfo.name) return
+        const codepenInfoFetchApi = getUserProfileApi.replace('userName', hackerRankUserName);
+
+        const param2 = {
+            source: codepenInfoFetchApi,
+            data: hackerrankUserInfo
+        }
+        PutData(`/api/platform/${Filter.HACKERRANK}`, JSON.stringify(param2))
+    }, [hackerrankUserInfo])
 
 
     return (
