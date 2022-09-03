@@ -13,9 +13,10 @@ import { Avatar, CircularProgress, Divider, Grid, IconButton, Typography } from 
 import { Box } from '@mui/system';
 import { getSearchState } from '../store/search';
 import { setCountry, setName, setProfilePic } from '../store/user/basicInfo';
-import { SearchByType } from '../types/common.types';
-import { PostData } from '../Utils/fetchData';
-
+import { SearchByType, Filter } from '../types/common.types';
+import { GetData, PostData, PutData } from '../Utils/fetchData';
+const getUserProfileApi =
+'https://www.hackerrank.com/rest/contests/master/hackers/userName/profile';
 const HackerrankArea = () => {
     const dispatch = UseAppDispatch();
     const [loading, setLoading] = useState(false);
@@ -47,12 +48,19 @@ const HackerrankArea = () => {
     }, [hackerRankUserName]);
 
     const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
-        const getUserProfileApi =
-            'https://www.hackerrank.com/rest/contests/master/hackers/userName/profile';
+       
         const userProfileApi = getUserProfileApi.replace('userName', nameFromUrl);
         const postApiForwardingApi = '/api/forward-api';
-        const data: any = await PostData(postApiForwardingApi, userProfileApi);
-        const hackerRankdata: hackerRankDataType = data?.model || {};
+        // look into database first
+        let data: any = await GetData(`/api/platform/${Filter.HACKERRANK}?source=${userProfileApi}`);
+        if (!data) {
+            // look into hankerrank
+            const hankerRankResponse: any = await PostData(postApiForwardingApi, userProfileApi);
+
+            data = hankerRankResponse?.model
+
+        }
+        const hackerRankdata: hackerRankDataType = data || {};
         const { avatar, country, name } = hackerRankdata;
         if (name) dispatch(setName(name));
         if (avatar) dispatch(setProfilePic(avatar));
@@ -87,6 +95,16 @@ const HackerrankArea = () => {
         if (!githubUserName) return console.warn('hackerrank area> githubUserName: not found');
         dispatch(setGithubUsername(githubUserName));
     }, [hackerRankUserName]);
+    useEffect(() => {
+        if (!hackerrankUserInfo.name) return
+        const hackerRankInfoFetchApi = getUserProfileApi.replace('userName', hackerRankUserName);
+
+        const param2 = {
+            source: hackerRankInfoFetchApi,
+            data: hackerrankUserInfo
+        }
+        PutData(`/api/platform/${Filter.HACKERRANK}`, JSON.stringify(param2))
+    }, [hackerrankUserInfo])
 
 
     return (
