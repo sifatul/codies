@@ -14,4 +14,10 @@ enum Filter {
     MEDIUM = 'MEDIUM'
 }
 
-export { SearchByType, Filter };
+enum Gender {
+    MALE = 'male',
+    FEMALE = 'female',
+    OTHER = 'other',
+}
+
+export { SearchByType, Filter, Gender };

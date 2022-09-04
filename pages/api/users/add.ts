@@ -1,5 +1,9 @@
+import mongoose from 'mongoose';
+import { NextApiResponse, NextApiRequest } from 'next';
+import { Gender } from '../../../types/common.types';
 /* eslint-disable import/no-anonymous-default-export */
 import { connectToDatabase } from '../../../Utils/mongodb';
+import User from './models/UserSchema';
 
 /**
  * @swagger
@@ -41,19 +45,48 @@ import { connectToDatabase } from '../../../Utils/mongodb';
  *        description: Created
  */
 
-export default async (req: any, res: any) => {
+// interface
+interface IUserRequest extends NextApiRequest {
+    body: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        userName: string;
+        password: string;
+        gender: Gender;
+        linkedin_url?: string;
+        github?: string;
+        leetcode_url?: string;
+        hackerrank_url?: string;
+        codepen_url?: string;
+        medium_url?: string;
+        codeforces_url?: string;
+    };
+}
+
+interface IUserResponse extends NextApiResponse {
+    firstName: string;
+    lastName: string;
+    email: string;
+    gender: Gender;
+}
+
+export default async (req: NextApiRequest, res: any) => {
     let client: any;
     let db: any;
+
     try {
         const dbResponse = await connectToDatabase();
-        client = dbResponse.client;
-        db = dbResponse.db;
-        if (!db) return res.json({ error: 'database connection failed' });
-        await db.collection('users').insertOne(req.body);
+        // client = dbResponse.client;
+        // db = dbResponse.db;
+        // if (!db) return res.json({ error: 'database connection failed' });
 
-        return res.json({ message: 'User create successfully.' });
+        const newUser = await User.create(req.body);
+
+        return res.json({ status: 'success', message: 'User create successfully.' });
     } catch (e) {
-        console.error(e);
+        console.log(e);
+        res.json({ status: 'error', error: 'Something went wrong please try again later' });
     } finally {
         if (client) await client.close();
         // Ensures that the client will close when you finish/error

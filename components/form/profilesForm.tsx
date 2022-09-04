@@ -1,74 +1,54 @@
 import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import InputField from './FormField/InputField';
 
-export default function AddressForm() {
-  return (
-    <React.Fragment>
-      {/* <Typography variant="h6" gutterBottom>
-        Recommended 
-      </Typography> */}
-      <Grid container spacing={3}>
+function ProfilesForm({ formField }: any) {
+    const {
+        linkedin_url,
+        leetcode_url,
+        github,
+        hackerrank_url,
+        codepen_url,
+        codeforces_url,
+        medium_url,
+    } = formField;
 
-        <Grid item xs={12}>
-          <TextField
-            id="linkedin-url"
-            name="linkedin-url"
-            label="Linkedin profile url"
-            fullWidth
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="github"
-            name="github"
-            label="Github profile link"
-            fullWidth
-            variant="standard"
-          />
-        </Grid>
+    return (
+        <React.Fragment>
+            <Grid container spacing={3}>
+                <Grid item xs={12}>
+                    <InputField name={linkedin_url.name} label='Linkedin profile url' fullWidth />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputField name={github.name} label='Github profile link' fullWidth />
+                </Grid>
 
-
-
-        <Grid item xs={12}>
-          <TextField
-            id="leetcode-url"
-            name="leetcode-url"
-            label="Leetcode profile link"
-            fullWidth
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="hackerrank-url"
-            name="hackerrank-url"
-            label="Hackerrank profile link"
-            fullWidth
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="codepen-url"
-            name="codepen-url"
-            label="Codepen profile link"
-            fullWidth
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="medium-url"
-            name="medium-url"
-            label="Medium profile link"
-            fullWidth
-            variant="standard"
-          />
-        </Grid>
-      </Grid>
-    </React.Fragment>
-  );
+                <Grid item xs={12}>
+                    <InputField name={leetcode_url.name} label='Leetcode profile link' fullWidth />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputField
+                        name={hackerrank_url.name}
+                        label='Hackerrank profile link'
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputField name={codepen_url.name} label='Codepen profile link' fullWidth />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputField name={medium_url.name} label='Medium profile link' fullWidth />
+                </Grid>
+                <Grid item xs={12}>
+                    <InputField
+                        name={codeforces_url.name}
+                        label='Codeforces profile link'
+                        fullWidth
+                    />
+                </Grid>
+            </Grid>
+        </React.Fragment>
+    );
 }
+
+export default ProfilesForm;
