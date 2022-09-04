@@ -16,12 +16,13 @@ import { setCountry, setName, setProfilePic } from '../store/user/basicInfo';
 import { SearchByType, Filter } from '../types/common.types';
 import { GetData, PostData, PutData } from '../Utils/fetchData';
 const getUserProfileApi =
-'https://www.hackerrank.com/rest/contests/master/hackers/userName/profile';
+    'https://www.hackerrank.com/rest/contests/master/hackers/userName/profile';
 const HackerrankArea = () => {
     const dispatch = UseAppDispatch();
     const [loading, setLoading] = useState(false);
     const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
     const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
+    const [gotNewData, setGotNewData] = React.useState(false)
 
     const hackerRankUserName = useMemo(() => {
         if (searchBy === SearchByType.NONE) return '';
@@ -44,11 +45,13 @@ const HackerrankArea = () => {
     }, []);
 
     useEffect(() => {
+        // already has data
+        if (hackerrankUserInfo.username) return
         getDataFromName();
     }, [hackerRankUserName]);
 
     const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
-       
+
         const userProfileApi = getUserProfileApi.replace('userName', nameFromUrl);
         const postApiForwardingApi = '/api/forward-api';
         // look into database first
@@ -58,6 +61,7 @@ const HackerrankArea = () => {
             const hankerRankResponse: any = await PostData(postApiForwardingApi, userProfileApi);
 
             data = hankerRankResponse?.model
+            if (data) setGotNewData(true)
 
         }
         const hackerRankdata: hackerRankDataType = data || {};
@@ -96,7 +100,7 @@ const HackerrankArea = () => {
         dispatch(setGithubUsername(githubUserName));
     }, [hackerRankUserName]);
     useEffect(() => {
-        if (!hackerrankUserInfo.name) return
+        if (!hackerrankUserInfo.name || !gotNewData) return
         const hackerRankInfoFetchApi = getUserProfileApi.replace('userName', hackerRankUserName);
 
         const param2 = {
@@ -104,7 +108,7 @@ const HackerrankArea = () => {
             data: hackerrankUserInfo
         }
         PutData(`/api/platform/${Filter.HACKERRANK}`, JSON.stringify(param2))
-    }, [hackerrankUserInfo])
+    }, [hackerrankUserInfo, gotNewData])
 
 
     return (

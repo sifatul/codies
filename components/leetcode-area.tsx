@@ -91,6 +91,8 @@ const LeetCodeArea = () => {
 
     useEffect(() => {
         if (!leetcodeUserName) return;
+        // already has data
+        if (leetcodeUserInfo.username) return
         getLeetCodeInfo();
     }, [leetcodeUserName]);
 
@@ -144,10 +146,10 @@ const LeetCodeArea = () => {
                                     <GitHub />
                                 </IconButton>
                             ) : (
-                                <IconButton disabled component='a'>
-                                    <GitHub />
-                                </IconButton>
-                            )}
+                                    <IconButton disabled component='a'>
+                                        <GitHub />
+                                    </IconButton>
+                                )}
                             {leetcodeUserInfo.linkedinUrl ? (
                                 <IconButton
                                     component='a'
@@ -158,10 +160,10 @@ const LeetCodeArea = () => {
                                     <LinkedIn />
                                 </IconButton>
                             ) : (
-                                <IconButton disabled component='a'>
-                                    <LinkedIn />
-                                </IconButton>
-                            )}
+                                    <IconButton disabled component='a'>
+                                        <LinkedIn />
+                                    </IconButton>
+                                )}
                             {leetcodeUserInfo.twitterUrl ? (
                                 <IconButton
                                     component='a'
@@ -172,10 +174,10 @@ const LeetCodeArea = () => {
                                     <Twitter />
                                 </IconButton>
                             ) : (
-                                <IconButton disabled component='a'>
-                                    <Twitter />
-                                </IconButton>
-                            )}
+                                    <IconButton disabled component='a'>
+                                        <Twitter />
+                                    </IconButton>
+                                )}
                         </Box>
                     </Grid>
                     <Grid item lg={4} md={4} sm={12}>
@@ -187,8 +189,8 @@ const LeetCodeArea = () => {
                                 height={150}
                             />
                         ) : (
-                            <Avatar />
-                        )}
+                                <Avatar />
+                            )}
                     </Grid>
                 </Grid>
             </Box>

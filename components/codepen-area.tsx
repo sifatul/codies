@@ -59,6 +59,7 @@ const CodePenArea = () => {
 
         }
 
+        if (!items || items.length <= 0) return
 
         const sortedData: codepenProjectType[] = items.sort(
             (a: { pubDate: string }, b: { pubDate: string }) => {
@@ -78,6 +79,8 @@ const CodePenArea = () => {
 
     useEffect(() => {
         if (!codepenUserName) return
+        // already has data
+        if (codepenUserInfo.pens && codepenUserInfo.pens.length > 0) return
         getCodepenData();
     }, [codepenUserName]);
 

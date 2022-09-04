@@ -136,7 +136,7 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.methods.checkPassword = async (candidatePassword: string, userPassword: string) => {
-    return await bcrypt.compare(candidatePassword, userPassword);
+    return bcrypt.compare(candidatePassword, userPassword);
 };
 
 const User = models.users || model<IUser>('users', userSchema);

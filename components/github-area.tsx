@@ -23,7 +23,6 @@ const GithubArea = () => {
 
   const githubUserName = useMemo(() => {
     const { username } = githubUserInfo
-    console.log(githubUserName)
     if (username) return username
     if (searchBy === SearchByType.NONE) return ''
 
@@ -46,8 +45,9 @@ const GithubArea = () => {
   }, [githubUserInfo.username, searchBy])
 
   useEffect(() => {
-    if (!githubUserName) return
-    console.log("githubUserName: ", githubUserName)
+    if (window == undefined || !githubUserName) return;
+    // alread has data
+    if (githubUserInfo?.html_url) return
     getGithubData()
   }, [githubUserName]);
 
@@ -91,7 +91,7 @@ const GithubArea = () => {
     }
     PutData(`/api/platform/${Filter.GITHUB}`, JSON.stringify(param2))
 
-  }, [githubUserInfo?.html_url, userFound.github_url, githubUserName, gotNewData])
+  }, [githubUserInfo?.html_url, githubUserName, gotNewData])
 
 
 
