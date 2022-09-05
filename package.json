@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "tslint": "tslint -p . -c tslint.json",
-    "tslint.fix": "tslint --fix --project ./tsconfig.json"
+    "tslint.fix": "tslint --fix --project ./tsconfig.json",
+    "format": "prettier --write \"pages/**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@emotion/react": "^11.9.3",
@@ -35,6 +36,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-ga": "^3.3.1",
+    "react-otp-input": "^2.4.0",
     "react-redux": "^8.0.2",
     "rss-to-json": "^2.1.0",
     "swagger-ui-react": "^4.14.0",

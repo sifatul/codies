@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import * as React from 'react';
 import MiniDrawer from '../components/drawer';
-import InitialPage from "../components/initalPage";
+import InitialPage from '../components/initalPage';
 import { UseAppSelector } from '../store';
 import { getSearchState } from '../store/search';
 import { SearchByType } from '../types/common.types';
@@ -12,7 +12,6 @@ const Home: NextPage = () => {
             {SearchState.searchBy === SearchByType.NONE && <InitialPage />}
 
             {SearchState.searchBy !== SearchByType.NONE && <MiniDrawer />}
-
         </>
     );
 };
