@@ -21,6 +21,7 @@ const app = initializeApp(firebaseConfig);
 if (app.name && typeof window !== 'undefined') {
   firebaseAnalytics = getAnalytics(firebaseApp);
 }
+console.log("firebase connected")
 
 
-export { firebaseAnalytics }
+export { firebaseAnalytics, app }
