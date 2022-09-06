@@ -8,7 +8,9 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PreateProfileMain from '../../components/form/createProfileMain';
 import { Button } from '@mui/material';
-import { getGoogleRedirectResult, googleLogin } from "../../Hooks/socailLogin"
+import { 
+    getGoogleRedirectResult,
+    googleLogin, githubLogin, getGithubRedirectResult } from "../../Hooks/socailLogin"
 
 function Copyright(props: any) {
     return (
@@ -29,6 +31,7 @@ export default function UserDataInputForm() {
 
     React.useEffect(() => {
         getGoogleRedirectResult()
+        getGithubRedirectResult()
     }, [])
 
 
@@ -63,6 +66,7 @@ export default function UserDataInputForm() {
                     >
                         <PreateProfileMain />
                         <button onClick={e => googleLogin()}> Continue with google </button>
+                        <button onClick={e => githubLogin()}> Continue with github </button>
                         <Copyright sx={{ mt: 5 }} />
                     </Box>
                 </Grid>

@@ -1,7 +1,8 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider} from "firebase/auth";
 
 
 const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider()
 // const googleScopes = [
 //     // 'https://www.googleapis.com/auth/user.gender.read',
 //     // 'https://www.googleapis.com/auth/userinfo.profile',
@@ -13,5 +14,9 @@ googleProvider.setCustomParameters({
   prompt: 'select_account',
 })
 
-export { googleProvider }
+// githubProvider.setCustomParameters({
+//   prompt: 'select_account',
+// })
+
+export { googleProvider, githubProvider }
 
