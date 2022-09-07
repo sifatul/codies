@@ -1,19 +1,20 @@
 import { signInWithPopup, getAuth, getRedirectResult, GoogleAuthProvider, signInWithRedirect, GithubAuthProvider, OAuthCredential } from "firebase/auth";
 import { googleProvider, githubProvider } from "../Utils/auth/providers";
 import { getAnalytics, logEvent } from "firebase/analytics";
+import { SocialLoginPlatform } from "../types/common.types";
 
-enum platform {
-  GOOGLE = 'GOOGLE',
-  GITHUB = 'GITHUB'
-}
-const socialLogin = async (platform: platform, idToken: string | OAuthCredential | null | undefined) => {
+
+const socialLogin = async (platform: SocialLoginPlatform, idToken: string | OAuthCredential | null | undefined) => {
   const res = await fetch('/api/auth/social', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ platform, idToken }),
+    body: JSON.stringify({ platform, token: idToken }),
   });
+  if (res) {
+    alert(JSON.stringify(res))
+  }
 }
 const googleLogin = () => {
   if (!getAuth()) return
@@ -46,7 +47,7 @@ const githubLogin = () => {
       // The AuthCredential type that was used.
       const credential = GithubAuthProvider.credentialFromError(error);
       // ...
-      socialLogin(platform.GOOGLE, credential)
+      socialLogin(SocialLoginPlatform.GOOGLE, credential)
 
     });
 }
@@ -73,7 +74,7 @@ const getGoogleRedirectResult = () => {
       logEvent(analytics, 'google login successful');
 
 
-      if (token) socialLogin(platform.GOOGLE, credential.idToken)
+      if (token) socialLogin(SocialLoginPlatform.GOOGLE, user.uid)
 
 
     }).catch((error) => {
@@ -111,7 +112,7 @@ const getGithubRedirectResult = () => {
       const analytics = getAnalytics();
       logEvent(analytics, 'github login successful');
 
-      if (token) socialLogin(platform.GITHUB, token)
+      if (token) socialLogin(SocialLoginPlatform.GITHUB, user.uid)
 
 
     }).catch((error) => {
