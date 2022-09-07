@@ -26,7 +26,24 @@ const ButtonStyled = Styled.button`
     cursor: pointer;
 `;
 
-const Button: React.FC<{ label: string }> = ({ label }) => {
+export enum ButtonType {
+    PRIMARY = 'primary',
+    GHOST = 'ghost',
+}
+
+const Button: React.FC<{
+    label: string;
+    type: ButtonType;
+    labelWithLink?: string;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}> = ({ label, type, labelWithLink }) => {
+    if (type === ButtonType.GHOST) {
+        return (
+            <div>
+                <span>{label}</span> <span>{labelWithLink}</span>
+            </div>
+        );
+    }
     return <ButtonStyled>{label}</ButtonStyled>;
 };
 

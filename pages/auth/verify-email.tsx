@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Styled from '@emotion/styled';
 import { ClassNames, css } from '@emotion/react';
 import OtpInput from 'react-otp-input';
-import Button from '../../components/common/Button';
+import Button, { ButtonType } from '../../components/common/Button';
 import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
 
 const FlexContainer = Styled.div`
@@ -77,7 +77,14 @@ const VerifyEmailPage: React.FC = () => {
                             );
                         }}
                     </ClassNames>
-                    <Button label='Verify Email' />
+                    <Button type={ButtonType.PRIMARY} label='Verify Email' />
+                    <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'center' }}>
+                        <Button
+                            type={ButtonType.GHOST}
+                            label="Didn't get the code?"
+                            labelWithLink='Resend'
+                        />
+                    </div>
                 </div>
             </FlexItemLeft>
         </FlexContainer>
