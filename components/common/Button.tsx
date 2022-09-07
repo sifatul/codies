@@ -1,4 +1,5 @@
 import Styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
 const ButtonStyled = Styled.button`
     display: flex;
@@ -26,6 +27,26 @@ const ButtonStyled = Styled.button`
     cursor: pointer;
 `;
 
+const GhostBtnStyled = Styled.div`
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 28px;
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #000000;
+`;
+
+const LinkWithColor = Styled.span`
+    color: #2255f7;
+    display: inline-block;
+    margin-left: 5px;
+    cursor: pointer;
+`;
+
 export enum ButtonType {
     PRIMARY = 'primary',
     GHOST = 'ghost',
@@ -36,12 +57,12 @@ const Button: React.FC<{
     type: ButtonType;
     labelWithLink?: string;
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}> = ({ label, type, labelWithLink }) => {
+}> = ({ label, type, labelWithLink, onClick }) => {
     if (type === ButtonType.GHOST) {
         return (
-            <div>
-                <span>{label}</span> <span>{labelWithLink}</span>
-            </div>
+            <GhostBtnStyled>
+                <span>{label}</span> <LinkWithColor onClick={onClick}>{labelWithLink}</LinkWithColor>
+            </GhostBtnStyled>
         );
     }
     return <ButtonStyled>{label}</ButtonStyled>;

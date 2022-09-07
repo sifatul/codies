@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Styled from '@emotion/styled';
 import { ClassNames, css } from '@emotion/react';
 import OtpInput from 'react-otp-input';
+import Image from 'next/image';
 import Button, { ButtonType } from '../../components/common/Button';
 import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
 
@@ -11,10 +12,24 @@ const FlexContainer = Styled.div`
 `;
 
 const FlexItemLeft = Styled.div`
-    width: 50%;
+    width: 821px;
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+
+const FlexItemRight = Styled.div`
+    background: #F3F3F4;
+    width: calc(100% - 821px);
+    display: flex;
+    align-items: center;
+    position: relative;
+`;
+
+const BackgroundImg = Styled.div`
+    width: 100%;
+    position: absolute;
+    left: -59px;
 `;
 
 const VerifyEmailPage: React.FC = () => {
@@ -87,6 +102,17 @@ const VerifyEmailPage: React.FC = () => {
                     </div>
                 </div>
             </FlexItemLeft>
+            <FlexItemRight>
+                <BackgroundImg>
+                    <Image
+                        alt='avata-icon'
+                        width={625}
+                        height={611}
+                        src='/images/auth/otp-avatar.png'
+                        layout='responsive'
+                    />
+                </BackgroundImg>
+            </FlexItemRight>
         </FlexContainer>
     );
 };
