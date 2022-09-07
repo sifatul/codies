@@ -1,9 +1,20 @@
-import { signInWithPopup, getAuth, getRedirectResult, GoogleAuthProvider, signInWithRedirect, GithubAuthProvider } from "firebase/auth";
+import { signInWithPopup, getAuth, getRedirectResult, GoogleAuthProvider, signInWithRedirect, GithubAuthProvider, OAuthCredential } from "firebase/auth";
 import { googleProvider, githubProvider } from "../Utils/auth/providers";
 import { getAnalytics, logEvent } from "firebase/analytics";
 
-
-
+enum platform {
+  GOOGLE = 'GOOGLE',
+  GITHUB = 'GITHUB'
+}
+const socialLogin = async (platform: platform, idToken: string | OAuthCredential | null | undefined) => {
+  const res = await fetch('/api/auth/social', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ platform, idToken }),
+  });
+}
 const googleLogin = () => {
   if (!getAuth()) return
   const auth = getAuth();
@@ -16,6 +27,8 @@ const googleLogin = () => {
       const email = error.customData.email;
       // The AuthCredential type that was used.
       const credential = GoogleAuthProvider.credentialFromError(error);
+      console.log(credential)
+
       // ...
     });
 }
@@ -33,6 +46,8 @@ const githubLogin = () => {
       // The AuthCredential type that was used.
       const credential = GithubAuthProvider.credentialFromError(error);
       // ...
+      socialLogin(platform.GOOGLE, credential)
+
     });
 }
 
@@ -56,6 +71,10 @@ const getGoogleRedirectResult = () => {
 
       const analytics = getAnalytics();
       logEvent(analytics, 'google login successful');
+
+
+      if (token) socialLogin(platform.GOOGLE, credential.idToken)
+
 
     }).catch((error) => {
       console.error("getGoogleRedirectResult > error")
@@ -90,7 +109,10 @@ const getGithubRedirectResult = () => {
 
 
       const analytics = getAnalytics();
-      logEvent(analytics, 'google login successful');
+      logEvent(analytics, 'github login successful');
+
+      if (token) socialLogin(platform.GITHUB, token)
+
 
     }).catch((error) => {
       console.error("getGithubRedirectResult > error")
@@ -106,6 +128,8 @@ const getGithubRedirectResult = () => {
 }
 
 
-export { googleLogin, 
-  getGoogleRedirectResult, 
-  githubLogin, getGithubRedirectResult };
+export {
+  googleLogin,
+  getGoogleRedirectResult,
+  githubLogin, getGithubRedirectResult
+};
