@@ -12,16 +12,18 @@ export default async (req: any, res: any) => {
         // client = dbResponse.client;
         // db = dbResponse.db;
         // if (!db) return res.json({ error: 'database connection failed' });
-        const { platform, token } = req.body;
+        const { platform, token,userName } = req.body;
 
         const query =
             platform === SocialLoginPlatform.GOOGLE
                 ? { google_token: token }
                 : { github_token: token };
-        const users = await SocialUser.findOne(query);
-        if (!users) {
-            const userName = 'userName';
-            await SocialUser.create({ ...query, userName: userName });
+        let users = await SocialUser.findOne(query);
+        if(!users && !userName){
+            return res.status(400).json({message: 'user not found'});
+        }
+        else if (!users && userName) {
+            users = await SocialUser.create({ ...query, userName: userName });
             console.log('new user created');
         }
 
