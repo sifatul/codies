@@ -11,6 +11,7 @@
     "format": "prettier --write \"pages/**/*.{ts,tsx}\""
   },
   "dependencies": {
+    "@emotion/css": "^11.10.0",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.8.4",

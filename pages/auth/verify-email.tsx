@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Styled from '@emotion/styled';
-import { ClassNames, css } from '@emotion/react';
+import { cx, css } from '@emotion/css';
 import OtpInput from 'react-otp-input';
 import Image from 'next/image';
 import Button, { ButtonType } from '../../components/common/Button';
@@ -32,6 +32,40 @@ const BackgroundImg = Styled.div`
     left: -59px;
 `;
 
+const OtpInputClass = css`
+    width: 50px !important;
+    height: 54px;
+    padding: 11px 19px;
+    color: #2255f7;
+    border-radius: 4px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 32px;
+    background: #e9ebff;
+    border: 1px solid transparent;
+    &:focus {
+        background: white;
+        border: 1px solid #2255f7;
+        outline: none;
+    }
+    &:not([value='']) {
+        background: white;
+        border: 1px solid #2255f7;
+    }
+`;
+
+const OtpContainerClass = css`
+    display: flex;
+    gap: 8px;
+    margin: 40px 0;
+    justify-content: center;
+`;
+
+const OtpErrorClass = css`
+    border: 1px solid red;
+`;
+
 const VerifyEmailPage: React.FC = () => {
     const [otp, setOpt] = useState<string>();
 
@@ -48,50 +82,16 @@ const VerifyEmailPage: React.FC = () => {
                         label='Enter Code'
                         description='We sent OTP code to your email address'
                     />
-                    <ClassNames>
-                        {({ css }) => {
-                            return (
-                                <OtpInput
-                                    value={otp}
-                                    onChange={handleOtpChange}
-                                    numInputs={4}
-                                    hasErrored={false}
-                                    errorStyle={{
-                                        border: '1px solid red',
-                                    }}
-                                    inputStyle={css`
-                                        width: 50px !important;
-                                        height: 54px;
-                                        padding: 11px 19px;
-                                        color: #2255f7;
-                                        border-radius: 4px;
-                                        font-style: normal;
-                                        font-weight: 400;
-                                        font-size: 20px;
-                                        line-height: 32px;
-                                        background: #e9ebff;
-                                        border: 1px solid transparent;
-                                        &:focus {
-                                            background: white;
-                                            border: 1px solid #2255f7;
-                                            outline: none;
-                                        }
-                                        &:not([value='']) {
-                                            background: white;
-                                            border: 1px solid #2255f7;
-                                        }
-                                    `}
-                                    containerStyle={{
-                                        display: 'flex',
-                                        gap: '8px',
-                                        margin: '40px 0',
-                                        justifyContent: 'center',
-                                    }}
-                                    isInputNum={true}
-                                />
-                            );
-                        }}
-                    </ClassNames>
+                    <OtpInput
+                        value={otp}
+                        onChange={handleOtpChange}
+                        numInputs={4}
+                        hasErrored={false}
+                        errorStyle={cx(OtpErrorClass)}
+                        inputStyle={cx(OtpInputClass)}
+                        containerStyle={cx(OtpContainerClass)}
+                        isInputNum={true}
+                    />
                     <Button type={ButtonType.PRIMARY} label='Verify Email' />
                     <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'center' }}>
                         <Button
