@@ -76,7 +76,7 @@ export default async (req: NextApiRequest, res: any) => {
     let db: any;
 
     try {
-        const dbResponse = await connectToDatabase();
+          await connectToDatabase();
         // client = dbResponse.client;
         // db = dbResponse.db;
         // if (!db) return res.json({ error: 'database connection failed' });

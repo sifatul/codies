@@ -1,29 +1,25 @@
 import nextConnect from 'next-connect';
 import { connectToDatabase } from '../../../Utils/mongodb';
 import { ObjectId } from 'mongodb';
+import Users from "./models/UserSchema"
 
 const handler = nextConnect();
 
 const getByID = async (req: any, res: any) => {
-    let client: any;
-    let db: any;
+     
     try {
         const {
             query: { id },
         } = req;
 
         const query = { _id: new ObjectId(id) };
-        const dbResponse = await connectToDatabase();
-        client = dbResponse.client;
-        db = dbResponse.db;
-        if (!db) return res.json({ error: 'database connection failed' });
+        await connectToDatabase();
 
-        return await db.collection('users').findOne(query);
+        const userData = await Users.findOne(query);
+        return res.json(userData)
     } catch (error) {
         console.error(error);
-    } finally {
-        // Ensures that the client will close when you finish/error
-        if (client) await client.close();
+        return res.status(400).json(error);
     }
 };
 
@@ -36,45 +32,39 @@ const updateUser = async (req: any, res: any) => {
             body,
         } = req;
 
-        const dbResponse = await connectToDatabase();
-        client = dbResponse.client;
-        db = dbResponse.db;
-        if (!db) return res.json({ error: 'database connection failed' });
+        await connectToDatabase();
 
-        return await db.collection('users').updateOne(
+
+        const userData = await Users.updateOne(
             { _id: new ObjectId(id) },
             {
                 $set: body,
             }
         );
+        return res.json(userData)
     } catch (error) {
         console.error(error);
-    } finally {
-        // Ensures that the client will close when you finish/error
-        if (client) await client.close();
+        return res.status(400).json(error);
     }
 };
 
 const deleteByID = async (req: any, res: any) => {
-    let client: any;
-    let db: any;
+    
     try {
         const {
             query: { id },
         } = req;
 
         const query = { _id: new ObjectId(id) };
-        const dbResponse = await connectToDatabase();
-        client = dbResponse.client;
-        db = dbResponse.db;
-        if (!db) return res.json({ error: 'database connection failed' });
+          await connectToDatabase();
+         
 
-        return await db.collection('users').deleteOne(query);
+          const userData = await Users.deleteOne(query);
+        return res.json(userData)
     } catch (error) {
         console.error(error);
-    } finally {
-        // Ensures that the client will close when you finish/error
-        if (client) await client.close();
+        return res.status(400).json(error);
+
     }
 };
 

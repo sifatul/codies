@@ -4,19 +4,17 @@ import { connectToDatabase } from '../../../Utils/mongodb';
 import Pens from './models/penSchema';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
-    const body = req.body;
-
-    const output = {};
-
+ 
     try {
         await connectToDatabase();
         const userName = req.query.userName as string;
-        if (userName === '') {
-            res.status(400).send({ status: 'error', message: 'empty userName is not allowed' });
-        }
+        if (!userName) return res.status(400).send({ status: 'error', message: 'empty userName is not allowed' });
 
         let codepenData = await Pens.findOne({ userName });
-        if (!codepenData) {
+        if (codepenData) return res.json(codepenData);
+
+
+    
             const codePenInfoFromWebSite = await parse(
                 `https://codepen.io/${userName}/public/feed/`
             );
@@ -28,16 +26,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                     link: pen.link,
                 };
             });
+            if (pens.length <= 0) throw { message: "pens not found" }
             const pensData = { userName, pens };
 
             codepenData = await Pens.create(pensData);
-        }
+        
+
         if (!codepenData) return res.status(400).json({ message: 'data not found' });
 
         return res.status(200).json(codepenData);
     } catch (e) {
-        console.log(e);
-    }
-
-    return res.status(200).json(output);
+        return res.status(400).json(e);
+    } 
 }
