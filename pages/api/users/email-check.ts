@@ -35,16 +35,15 @@ export default async (req: NextApiRequest, res: any) => {
 
 
         const { email } = req.body
-        console.log(email)
         const user = await User.findOne({email});
         
         if(user) {
-            res.json({ status: 'error', error: 'Dublicate Email' });
+           return res.status(400).json({ status: 'error', error: 'Dublicate Email' });
         }
 
-        return res.json({ status: 'success', message: 'Success' });
+        return res.status(200).json({ status: 'success', message: 'Success' });
     } catch (e) {
         console.log(e);
-        res.json({ status: 'error', error: 'Something went wrong please try again later' });
+        res.status(500).json({ status: 'error', error: 'Something went wrong please try again later' });
     }
 };
