@@ -123,7 +123,7 @@ const sendOtpToEmail = async (email: string, newOtpObj: any, res: NextApiRespons
     await transporter.verify();
 
     // tslint:disable-next-line: await-promise
-    return await transporter.sendMail(mailOptions, (err, response) => {
+    await transporter.sendMail(mailOptions, (err, response) => {
         if (err) {
             return res.status(400).send({ status: 'error', message: 'Failure' });
         }
