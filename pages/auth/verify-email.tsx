@@ -27,7 +27,7 @@ const FlexItemRight = Styled.div`
 `;
 
 const BackgroundImg = Styled.div`
-    width: 100%;
+    width: 626px;
     position: absolute;
     left: -59px;
 `;
