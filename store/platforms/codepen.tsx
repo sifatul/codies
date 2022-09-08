@@ -2,9 +2,9 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 
 export interface codepenProjectType {
-  pubDate: String;
-  link: String;
-  title: String;
+  pubDate: number;
+  link: string;
+  title: string;
 
   // profile links
 

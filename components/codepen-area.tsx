@@ -46,23 +46,14 @@ const CodePenArea = () => {
 
         const codepenInfoFetchApi = codepenPensApiDemo.replace('userName', codepenUserName);
         // look into database first
-        let data: any = await GetData(`/api/${Filter.CODEPEN.toLocaleLowerCase()}?userName=${codepenUserName}`);
-        let items: codepenProjectType[] = data;
-        if (!data) {
-            // look into codepen
-            const codepenInfoFetchUrl = `https://api.rss2json.com/v1/api.json?rss_url=${codepenInfoFetchApi}`;
-            data = await GetData(codepenInfoFetchUrl);
-            if (data && data.items) {
-                items = data.items
-                setGotNewData(true);
-            }
+        let data: any = await GetData(`/api/codepen/find?userName=${codepenUserName}`);
 
-        }
+        let items: codepenProjectType[] = data;
 
         if (!items || items.length <= 0) return
 
         const sortedData: codepenProjectType[] = items.sort(
-            (a: { pubDate: string }, b: { pubDate: string }) => {
+            (a: { pubDate: number }, b: { pubDate: number }) => {
                 const timeA = new Date(a.pubDate).getTime();
                 const timeB = new Date(b.pubDate).getTime();
                 return timeB - timeA;
