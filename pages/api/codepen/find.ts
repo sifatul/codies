@@ -12,23 +12,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     try {
         
         await connectToDatabase();
-        const param = req.query.param as string;
-        if (param === '') {
-            res.status(400).send({ status: 'error', message: 'empty param is not allowed' });
+        const userName = req.query.userName as string;
+        if (userName === '') {
+            res.status(400).send({ status: 'error', message: 'empty userName is not allowed' });
         }
     
-        const emailQuery = JSON.parse(param) as object;
+  
     
-        if (!emailQuery) return res.status(400).json({ message: 'email missing' });
-    
-        const userData = await User.findOne(emailQuery);
+        let codepenData = await Pens.findOne({userName });
+        if(!codepenData){
+            codepenData = await parse(`https://codepen.io/${userName}/public/feed/`);
+            // store data in database
+        }
+        if(!codepenData) res.status(400).json({message: 'data not found'})
 
-        
-        
-        const rss = await parse('https://codepen.io/sifii2013/public/feed/');
-
-        console.log(JSON.stringify(rss, null, 3));
-        res.status(200).json(rss);
+         
+        res.status(200).json(codepenData);
     } catch (e) {
         console.log(e);
     }
