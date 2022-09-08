@@ -36,9 +36,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             // store data in database
             const mediums = mediumInfoFromWebSite.items.map((medium: any) => {
                 return {
-                    pubDate: medium.published,
+                    pubDate: medium.pubDate,
                     title: medium.title,
                     link: medium.link,
+                    guid: medium.guid,
+                    author: medium.author,
+                    thumbnail: medium.thumbnail,
+                    enclosure: medium.enclosure,
+                    categories: medium.categories,
                 };
             });
             const mediumsData = {

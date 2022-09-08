@@ -53,7 +53,7 @@ const MediumArea = () => {
     // }
     let data: any = await GetData(`/api/medium/find?userName=${mediumUserName}`);
 
-    if (!data || !data.feed) return
+    if (!data || !data.userName) return
     dispatch(setMediumData(data))
 
   }, [mediumUserName]);
