@@ -8,36 +8,27 @@ const GithubDataSchema = new Schema<GithubUserInfoType>(
       name: {
             type: String,
             required: true,
-            unique: true,
             index: true,
         },
         
         blog: {
           type: String,
-          required: true,
-          unique: true,
           index: true,
       },
       
       email: {
         type: String,
-        required: true,
-        unique: true,
         index: true,
     },
     
     avatar_url: {
       type: String,
-      required: true,
-      unique: true,
       index: true,
   },
       
   html_url: {
     type: String,
-    required: true,
     unique: true,
-    index: true,
 },
     
 repos: {
@@ -51,9 +42,6 @@ repos: {
     visibility: String,
     updated_at: String,
   }],
-  required: true,
-  unique: true,
-  index: true,
 },
   
          
