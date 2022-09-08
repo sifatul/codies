@@ -1,5 +1,4 @@
-import mongoose from 'mongoose';
-import { NextApiResponse, NextApiRequest } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { Gender } from '../../../types/common.types';
 /* eslint-disable import/no-anonymous-default-export */
 import { connectToDatabase } from '../../../Utils/mongodb';
@@ -76,7 +75,7 @@ export default async (req: NextApiRequest, res: any) => {
     let db: any;
 
     try {
-        const dbResponse = await connectToDatabase();
+          await connectToDatabase();
         // client = dbResponse.client;
         // db = dbResponse.db;
         // if (!db) return res.json({ error: 'database connection failed' });
