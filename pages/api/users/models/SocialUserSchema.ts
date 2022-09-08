@@ -1,7 +1,5 @@
-import { Schema, model, models } from 'mongoose';
-import bcrypt from 'bcryptjs';
-import { Gender } from '../../../../types/common.types';
-import { isEmail, isUrl } from 'js-string-helper';
+import { isEmail } from 'js-string-helper';
+import { model, models, Schema } from 'mongoose';
 
 // interface
 interface IUser {

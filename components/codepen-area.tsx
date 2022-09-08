@@ -46,7 +46,7 @@ const CodePenArea = () => {
 
         const codepenInfoFetchApi = codepenPensApiDemo.replace('userName', codepenUserName);
         // look into database first
-        let data: any = await GetData(`/api/platform/${Filter.CODEPEN}?source=${codepenInfoFetchApi}`);
+        let data: any = await GetData(`/api/${Filter.CODEPEN.toLocaleLowerCase()}?userName=${codepenUserName}`);
         let items: codepenProjectType[] = data;
         if (!data) {
             // look into codepen

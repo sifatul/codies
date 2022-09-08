@@ -47,6 +47,7 @@ const getPlatfromData = async (req: any, res: any) => {
         const checkValidPlatformName = platformName in Filter;
         if (!checkValidPlatformName) return res.json('invalid platform name');
 
+         await connectToDatabase();
         const dbResponse = await connectToDatabase();
         client = dbResponse.client;
         db = dbResponse.db;
