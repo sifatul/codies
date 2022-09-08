@@ -5,7 +5,7 @@ import { GithubUserInfoType } from "../../../../store/platforms/github";
 
 const GithubDataSchema = new Schema<GithubUserInfoType>(
     {
-      username: {
+      name: {
             type: String,
             required: true,
             unique: true,
@@ -61,6 +61,6 @@ repos: {
     { timestamps: true }
 );
 
-const CodepenData = models.users || model<GithubUserInfoType>('codepen', GithubDataSchema);
+const GithubData = models.github || model<GithubUserInfoType>('github', GithubDataSchema);
 
-export default CodepenData;
+export default GithubData;

@@ -36,12 +36,16 @@ handler.get(async (req: any, res: any) => {
     let GithubData = await Github.findOne({ user_name: userName });
     if (!GithubData) {
         try {
-            const { userInfo, repoList }: any = await Promise.all([getUserInfo(userName), getRepoList(userName)])
-            GithubData = { ...userInfo, repos: repoList }
+            const output: any = await Promise.all([
+                getUserInfo(userName),
+                getRepoList(userName)
+            ])
+            const userInfo = output?.[0];
+            const  repoList = output?.[1];
+            let newData = { ...userInfo}
+            if(repoList?.length>0 ) newData = { ...userInfo, repos: repoList }
             // let the data be stored in background
-            Github.create(GithubData).then(data => {
-                console.log("github rank data is stored")
-            });
+            GithubData = await Github.create(newData);
         } catch (e) {
             console.log("github fetch error: ", e)
             return res.status(400).json(e)

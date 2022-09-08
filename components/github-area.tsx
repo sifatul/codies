@@ -20,8 +20,8 @@ const GithubArea = () => {
 
 
   const githubUserName = useMemo(() => {
-    const { username } = githubUserInfo
-    if (username) return username
+    const { name } = githubUserInfo
+    if (name) return name
     if (searchBy === SearchByType.NONE) return ''
 
 
@@ -40,7 +40,7 @@ const GithubArea = () => {
       return ''
     }
     return userName
-  }, [githubUserInfo.username, searchBy])
+  }, [githubUserInfo.name, searchBy])
 
   useEffect(() => {
     if (window == undefined || !githubUserName) return;

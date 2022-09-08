@@ -19,7 +19,7 @@ export interface GithubUserInfoType {
   avatar_url: string;
   repos?: githubRepoType[];
   html_url: string;
-  username: string;
+  name: string;
 
   // profile links
 
@@ -33,7 +33,7 @@ const initialState: GithubUserInfoType = {
   email: '',
   avatar_url: '',
   html_url: '',
-  username: ''
+  name: ''
 
   // topRepos: [],
 } as const;
@@ -57,7 +57,7 @@ export const userSlice = createSlice({
       state: Draft<typeof initialState>,
       action: PayloadAction<string>
     ) => {
-      state.username = removeSpecialCharacter(action.payload)
+      state.name = removeSpecialCharacter(action.payload)
     },
 
   },
