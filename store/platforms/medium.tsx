@@ -9,8 +9,6 @@ export interface mediumBlogItemType {
   guid: string;
   author: string;
   thumbnail: string;
-  description: string;
-  content: string;
   enclosure?: any;
   categories: string[];
 }
@@ -25,9 +23,9 @@ interface mediumFeed {
 /**
  * Default state object with initial values.
  */
-const initialState: { feed?: mediumFeed, items: mediumBlogItemType[] } = {
+const initialState: { feed?: mediumFeed, mediums: mediumBlogItemType[] } = {
   feed: undefined,
-  items: [] as mediumBlogItemType[]
+  mediums: [] as mediumBlogItemType[]
 
 } as const;
 
