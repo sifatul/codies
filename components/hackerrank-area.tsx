@@ -22,7 +22,6 @@ const HackerrankArea = () => {
     const [loading, setLoading] = useState(false);
     const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
     const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
-    const [gotNewData, setGotNewData] = React.useState(false)
 
     const hackerRankUserName = useMemo(() => {
         if (searchBy === SearchByType.NONE) return '';
@@ -52,18 +51,9 @@ const HackerrankArea = () => {
 
     const getHackerRankInfo = React.useCallback(async (nameFromUrl: string) => {
 
-        const userProfileApi = getUserProfileApi.replace('userName', nameFromUrl);
-        const postApiForwardingApi = '/api/forward-api';
-        // look into database first
-        let data: any = await GetData(`/api/platform/${Filter.HACKERRANK}?source=${userProfileApi}`);
-        if (!data) {
-            // look into hankerrank
-            const hankerRankResponse: any = await PostData(postApiForwardingApi, userProfileApi);
 
-            data = hankerRankResponse?.model
-            if (data) setGotNewData(true)
+        let data: any = await GetData(`/api/${Filter.HACKERRANK.toLocaleLowerCase()}/find?userName=${nameFromUrl}`);
 
-        }
         const hackerRankdata: hackerRankDataType = data || {};
         const { avatar, country, name } = hackerRankdata;
         if (name) dispatch(setName(name));
@@ -99,16 +89,7 @@ const HackerrankArea = () => {
         if (!githubUserName) return console.warn('hackerrank area> githubUserName: not found');
         dispatch(setGithubUsername(githubUserName));
     }, [hackerRankUserName]);
-    useEffect(() => {
-        if (!hackerrankUserInfo.name || !gotNewData) return
-        const hackerRankInfoFetchApi = getUserProfileApi.replace('userName', hackerRankUserName);
 
-        const param2 = {
-            source: hackerRankInfoFetchApi,
-            data: hackerrankUserInfo
-        }
-        PutData(`/api/platform/${Filter.HACKERRANK}`, JSON.stringify(param2))
-    }, [hackerrankUserInfo, gotNewData])
 
 
     return (
