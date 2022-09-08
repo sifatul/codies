@@ -29,7 +29,6 @@ const theme = createTheme();
 export default function UserDataInputForm() {
 
 
-
     return (
         <ThemeProvider theme={theme}>
             <Grid container component='main' sx={{ height: '100vh' }}>
