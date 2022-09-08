@@ -12,6 +12,7 @@ function OtpVerificationForm() {
                 alignItems: 'center',
                 width: '400px',
             }}
+            component='form'
         >
             <Box>
                 <TextField
@@ -60,7 +61,7 @@ function OtpVerificationForm() {
                 />
             </Box>
             <Box mt={'22px'}>
-                <Button variant='contained' color='primary' size='large'>
+                <Button type='submit' variant='contained' color='primary' size='large'>
                     Verify Email
                 </Button>
             </Box>
