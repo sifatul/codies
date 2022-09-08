@@ -54,34 +54,27 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 message: 'No user found',
             });
 
-        const generatedOtp = generateOtp();
+        const generatedOtp = await generateOtp();
 
         const expireTime = AddMinutesToDate(new Date(), 10);
 
         const otpObj = {
             email: email,
-            otp: generatedOtp,
+            otp: generatedOtp as unknown as number,
             expireTime: expireTime,
         };
+
+        console.log(otpObj);
 
         const newOtp = await OTP.create(otpObj);
 
         if (newOtp) {
-            const { transporter, mailOptions } = sendOtpToEmail(email, newOtp);
-
-            await transporter.verify();
-
-            transporter.sendMail(mailOptions, (err, response) => {
-                if (err) {
-                    return res.status(400).send({ status: 'error', message: 'Failure' });
-                }
-
-                return res.json({ status: 'success', message: 'Success' });
-            });
+            await sendOtpToEmail(email, newOtp, res);
         }
 
         return res.status(400).send({ status: 'error', message: 'Failure' });
     } catch (e) {
+        console.log(e);
         res.json({ status: 'error', error: 'Something went wrong please try again later' });
     } finally {
         if (client) await client.close();
@@ -98,7 +91,7 @@ const generateOtp = async () => {
         where: { otp: otpNumber },
     });
 
-    while (otpExist) {
+    if (otpExist && otpExist?.otp === otpNumber) {
         generateOtp();
     }
 
@@ -109,14 +102,14 @@ const AddMinutesToDate = (date: Date, minutes: number) => {
     return new Date(date.getTime() + minutes * 60000);
 };
 
-const sendOtpToEmail = (email: string, newOtpObj: any) => {
+const sendOtpToEmail = async (email: string, newOtpObj: any, res: NextApiResponse) => {
     const transporter = nodemailer.createTransport({
-        host: 'gmail',
+        host: 'smtp.gmail.com',
         port: 465,
         secure: true,
         auth: {
             user: `${process.env.EMAIL_ADDRESS}`,
-            pass: `${process.env.EMAIL_PASSWORD}`,
+            pass: `${process.env.EMAIL_PASS}`,
         },
     });
 
@@ -124,10 +117,19 @@ const sendOtpToEmail = (email: string, newOtpObj: any) => {
         from: `"Find profile"<${process.env.EMAIL_ADDRESS}>`,
         to: `${email}`,
         subject: 'OTP verification',
-        text: messageForEmail(newOtpObj?.otp),
+        text: `otp: ${newOtpObj?.otp}`,
     };
 
-    return { transporter, mailOptions };
+    await transporter.verify();
+
+    // tslint:disable-next-line: await-promise
+    transporter.sendMail(mailOptions, (err, response) => {
+        if (err) {
+            return res.status(400).send({ status: 'error', message: 'Failure' });
+        }
+
+        return res.json({ status: 'success', message: 'Success' });
+    });
 };
 
 const messageForEmail = (otp: number) => {

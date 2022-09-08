@@ -25,15 +25,14 @@ export async function connectToDatabase() {
         useUnifiedTopology: true,
         serverApi: ServerApiVersion.v1,
     };
-    const client = await mongoose.connect(uri, options);
-    // const client = new MongoClient(uri, options);
+    // const client = await mongoose.connect(uri, options);
+    const client = new MongoClient(uri, options);
 
-    // // Connect the client to the server (optional starting in v4.7)
-    // await client.connect();
-    // // Establish and verify connection
-    // const dbConnect = await client.db(dbName);
-    // console.log('Connected successfully to server');
+    // Connect the client to the server (optional starting in v4.7)
+    await client.connect();
+    // Establish and verify connection
+    const dbConnect = await client.db(dbName);
+    console.log('Connected successfully to server');
 
-    // return { client, db: dbConnect };
-    return {client}
+    return { client, db: dbConnect };
 }
