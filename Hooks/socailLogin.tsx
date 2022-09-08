@@ -79,7 +79,7 @@ const getSocialRedirectResult = async () => {
     const token = credential.accessToken;
 
     // The signed-in user info.
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
 
     console.error("getGithubRedirectResult > error")

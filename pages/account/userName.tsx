@@ -8,7 +8,7 @@ import * as React from 'react';
 import * as Yup from 'yup';
 import InputField from '../../components/form/FormField/InputField';
 
-export default function userName() {
+export default function UserNameOnlyUI() {
 
   const router = useRouter()
 
