@@ -5,39 +5,30 @@ import { GithubUserInfoType } from "../../../../store/platforms/github";
 
 const GithubDataSchema = new Schema<GithubUserInfoType>(
     {
-      username: {
+      name: {
             type: String,
             required: true,
-            unique: true,
             index: true,
         },
         
         blog: {
           type: String,
-          required: true,
-          unique: true,
           index: true,
       },
       
       email: {
         type: String,
-        required: true,
-        unique: true,
         index: true,
     },
     
     avatar_url: {
       type: String,
-      required: true,
-      unique: true,
       index: true,
   },
       
   html_url: {
     type: String,
-    required: true,
     unique: true,
-    index: true,
 },
     
 repos: {
@@ -51,9 +42,6 @@ repos: {
     visibility: String,
     updated_at: String,
   }],
-  required: true,
-  unique: true,
-  index: true,
 },
   
          
@@ -61,6 +49,6 @@ repos: {
     { timestamps: true }
 );
 
-const CodepenData = models.users || model<GithubUserInfoType>('codepen', GithubDataSchema);
+const GithubData = models.github || model<GithubUserInfoType>('github', GithubDataSchema);
 
-export default CodepenData;
+export default GithubData;

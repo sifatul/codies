@@ -50,7 +50,7 @@ const CodePenArea = () => {
 
         let items: codepenProjectType[] = data;
 
-        if (!items || items.length <= 0) return
+        if (!items || items.length <= 0 || !items?.[0]) return
 
         const sortedData: codepenProjectType[] = items.sort(
             (a: { pubDate: number }, b: { pubDate: number }) => {

@@ -32,7 +32,7 @@ const HackerrankDataSchema = new Schema<hackerRankDataType>(
       unique: true,
     },
     languages: {
-      type: [String],
+      type: [{String: String}],
       required: false,
       unique: true,
     },
