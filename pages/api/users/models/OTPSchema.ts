@@ -3,7 +3,7 @@ import { model, models, Schema } from 'mongoose';
 
 interface IOTP {
     email: string;
-    otp: number;
+    otp: string;
     expireTime: Date;
     verified?: boolean;
     verifiedAt?: Date;
@@ -17,7 +17,7 @@ const OTPSchema = new Schema<IOTP>(
             validate: [isEmail, 'Invalid email'],
         },
         otp: {
-            type: Number,
+            type: String,
             minlength: 4,
             maxlength: 4,
             unique: true,

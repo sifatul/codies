@@ -72,7 +72,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             await sendOtpToEmail(email, newOtp, res);
         }
 
-        return res.status(400).send({ status: 'error', message: 'Failure' });
+        return res.status(400).send({ status: 'Success', message: newOtp });
     } catch (e) {
         console.log(e);
         res.json({ status: 'error', error: 'Something went wrong please try again later' });
@@ -123,7 +123,7 @@ const sendOtpToEmail = async (email: string, newOtpObj: any, res: NextApiRespons
     await transporter.verify();
 
     // tslint:disable-next-line: await-promise
-    transporter.sendMail(mailOptions, (err, response) => {
+    return await transporter.sendMail(mailOptions, (err, response) => {
         if (err) {
             return res.status(400).send({ status: 'error', message: 'Failure' });
         }
