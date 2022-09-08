@@ -34,24 +34,26 @@ handler.get(async (req: any, res: any) => {
 
 
     let GithubData = await Github.findOne({ user_name: userName });
-    if (!GithubData) {
-        try {
-            const output: any = await Promise.all([
-                getUserInfo(userName),
-                getRepoList(userName)
-            ])
-            const userInfo = output?.[0];
-            const  repoList = output?.[1];
-            let newData = { ...userInfo}
-            if(repoList?.length>0 ) newData = { ...userInfo, repos: repoList }
-            // let the data be stored in background
-            GithubData = await Github.create(newData);
-        } catch (e) {
-            console.log("github fetch error: ", e)
-            return res.status(400).json(e)
-        }
+    if (GithubData) return res.json(GithubData);
 
+    try {
+        const output: any = await Promise.all([
+            getUserInfo(userName),
+            getRepoList(userName)
+        ])
+        const userInfo = output?.[0];
+        const repoList = output?.[1];
+        let newData = { ...userInfo }
+        if (repoList?.length > 0) {
+            newData = { ...userInfo, repos: repoList }
+            GithubData = await Github.create(newData);
+        }        
+    } catch (e) {
+        console.log("github fetch error: ", e)
+        return res.status(400).json(e)
     }
+
+    if(!GithubData) return res.status(400).json({message:'github data not found'})
 
     return res.json(GithubData);
 });
