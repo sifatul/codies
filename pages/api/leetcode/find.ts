@@ -80,13 +80,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 
     try {
-      const client = new GraphQLClient(url);
+      const client1 = new GraphQLClient(url);
+      const client2 = new GraphQLClient(url);
+      const client3 = new GraphQLClient(url);
       const output = await Promise.all([
-        client.request(UserProfileQuery, variables),
-        client.request(LangugaeProblemSolvedQuery, variables),
-        client.request(TagProblemsCountQuery, variables),
+        client1.request(UserProfileQuery, variables),
+        client2.request(LangugaeProblemSolvedQuery, variables),
+        client3.request(TagProblemsCountQuery, variables),
       ])
-      const newData = { ...output?.[0]?.matchedUser, ...output?.[1]?.matchedUser, ...output?.[2]?.matchedUser }
+      const newData = { username:userName, ...output?.[0]?.matchedUser, ...output?.[1]?.matchedUser, ...output?.[2]?.matchedUser }
       if(!newData) return res.status(400).json({messsage:'leetcode data could not be crawled'})
       leetcode = await Leetcode.create(newData)           
     } catch (e) {
