@@ -18,6 +18,7 @@ interface IUser {
     codepen_url?: string;
     medium_url?: string;
     codeforces_url?: string;
+    google_token?: string;
 }
 
 const validateUrl = (value: string) => {
@@ -112,6 +113,15 @@ const userSchema = new Schema<IUser>(
             required: false,
         },
         codeforces_url: {
+            type: String,
+            validate: {
+                validator: (val: string) => {
+                    validateUrl(val);
+                },
+            },
+            required: false,
+        },
+        google_token: {
             type: String,
             validate: {
                 validator: (val: string) => {

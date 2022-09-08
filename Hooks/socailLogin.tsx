@@ -1,111 +1,106 @@
-import { signInWithPopup, getAuth, getRedirectResult, GoogleAuthProvider, signInWithRedirect, GithubAuthProvider } from "firebase/auth";
+import { signInWithPopup, getAuth, getRedirectResult, GoogleAuthProvider, signInWithRedirect, GithubAuthProvider, OAuthCredential } from "firebase/auth";
 import { googleProvider, githubProvider } from "../Utils/auth/providers";
 import { getAnalytics, logEvent } from "firebase/analytics";
+import { SocialLoginPlatform } from "../types/common.types";
 
 
 
-const googleLogin = () => {
-  if (!getAuth()) return
-  const auth = getAuth();
-  signInWithRedirect(auth, googleProvider)
-    .catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
+const socialLogin = async (platform: SocialLoginPlatform, idToken: string | OAuthCredential | null | undefined) => {
+  try {
+    const res = await fetch('/api/auth/social', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ platform, token: idToken }),
     });
+
+    if (res.status == 400) {
+      alert("user not registered. insert username");
+      window.location.href = `account/userName/?platform=${platform}&token=${idToken}`
+    }
+    else if (res) {
+      alert(JSON.stringify(res))
+    }
+  } catch (e) {
+    console.error(e)
+  }
+}
+const googleLogin = async () => {
+  try {
+    if (!getAuth()) return
+    const auth = getAuth();
+    signInWithRedirect(auth, googleProvider)
+  } catch (e) {
+    console.error(e)
+  }
+
+
 }
 
 const githubLogin = () => {
-  if (!getAuth()) return
-  const auth = getAuth();
-  signInWithRedirect(auth, githubProvider)
-    .catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GithubAuthProvider.credentialFromError(error);
-      // ...
-    });
+  try {
+    if (!getAuth()) return
+    const auth = getAuth();
+    signInWithRedirect(auth, githubProvider)
+  } catch (e) {
+    console.error(e)
+  }
+
 }
 
 
-const getGoogleRedirectResult = () => {
-  const auth = getAuth();
-  console.log(auth)
-  getRedirectResult(auth)
-    .then((result) => {
-      console.log("result: ", result)
-      if (!result) return
+const getSocialRedirectResult = async () => {
 
-      // This gives you a Google Access Token. You can use it to access Google APIs.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      if (!credential) return
-      const token = credential.accessToken;
+  try {
+    const auth = getAuth();
+    console.log(auth)
+    const result = await getRedirectResult(auth)
+    console.log("result: ", result)
+    if (!result) return
 
-      // The signed-in user info.
-      const user = result.user;
+    const user = result.user;
 
 
-      const analytics = getAnalytics();
-      logEvent(analytics, 'google login successful');
+    let platform, credential;
+    if (result.providerId === 'github.com') {
+      platform = SocialLoginPlatform.GITHUB
+      credential = GithubAuthProvider.credentialFromResult(result);
+    } else if (result.providerId === 'google.com') {
+      platform = SocialLoginPlatform.GOOGLE
+      credential = GoogleAuthProvider.credentialFromResult(result);
+    }
+    const analytics = getAnalytics();
+    logEvent(analytics, 'google login successful');
 
-    }).catch((error) => {
-      console.error("getGoogleRedirectResult > error")
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
-    });
+    if (user.uid && platform) await socialLogin(platform, user.uid)
+
+    if (!credential) return
+    const token = credential.accessToken;
+
+    // The signed-in user info.
+  } catch (error: any) {
+    console.error(error);
+
+    console.error("getGithubRedirectResult > error")
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    // const credential = GithubAuthProvider.credentialFromError(error);
+    console.error(`${email} is registered under a different platform`)
+  }
+
 }
 
 
 
-const getGithubRedirectResult = () => {
-  const auth = getAuth();
-  console.log(auth)
-  getRedirectResult(auth)
-    .then((result) => {
-      console.log("result: ", result)
-      if (!result) return
-
-      // This gives you a Google Access Token. You can use it to access Google APIs.
-      const credential = GithubAuthProvider.credentialFromResult(result);
-      if (!credential) return
-      const token = credential.accessToken;
-
-      // The signed-in user info.
-      const user = result.user;
 
 
-      const analytics = getAnalytics();
-      logEvent(analytics, 'google login successful');
-
-    }).catch((error) => {
-      console.error("getGithubRedirectResult > error")
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GithubAuthProvider.credentialFromError(error);
-      // ...
-    });
-}
-
-
-export { googleLogin, 
-  getGoogleRedirectResult, 
-  githubLogin, getGithubRedirectResult };
+export {
+  googleLogin,
+  getSocialRedirectResult,
+  githubLogin
+};

@@ -1,10 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { connectToDatabase } from '../../../Utils/mongodb';
+import User from './models/UserSchema';
+
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
-    const { db } = await connectToDatabase();
-    if (!db) return res.status(502).json({ message: 'database connection error' });
+     await connectToDatabase();
     const param = req.query.param as string;
     if (param === '') {
         res.status(400).send({ status: 'error', message: 'empty param is not allowed' });
@@ -14,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     if (!emailQuery) return res.status(400).json({ message: 'email missing' });
 
-    const userData = await db.collection('users').findOne(emailQuery);
+    const userData = await User.findOne(emailQuery);
     if (!userData) return res.status(404).json({ message: 'no user found' });
 
     return res.status(200).json(userData);

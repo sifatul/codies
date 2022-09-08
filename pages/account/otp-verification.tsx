@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { getGoogleRedirectResult, googleLogin } from '../../Hooks/socailLogin';
 import OtpVerificationForm from '../../components/form/otpVerificationForm';
 
 function Copyright(props: any) {
@@ -25,10 +24,6 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function UserDataInputForm() {
-    React.useEffect(() => {
-        getGoogleRedirectResult();
-    }, []);
-
     return (
         <ThemeProvider theme={theme}>
             <Grid container component='main' sx={{ height: '100vh' }}>
@@ -43,7 +38,9 @@ export default function UserDataInputForm() {
                             alignItems: 'center',
                         }}
                     >
-                        <Typography variant='h4' mb={4}>OTP verification</Typography>
+                        <Typography variant='h4' mb={4}>
+                            OTP verification
+                        </Typography>
                         <OtpVerificationForm />
                     </Box>
                 </Grid>

@@ -19,5 +19,9 @@ enum Gender {
     FEMALE = 'female',
     OTHER = 'other',
 }
+enum SocialLoginPlatform {
+    GOOGLE = 'GOOGLE',
+    GITHUB = 'GITHUB',
+}
 
-export { SearchByType, Filter, Gender };
+export { SearchByType, Filter, Gender, SocialLoginPlatform };
