@@ -9,25 +9,31 @@ export interface mediumBlogItemType {
   guid: string;
   author: string;
   thumbnail: string;
-  description: string;
-  content: string;
   enclosure?: any;
   categories: string[];
 }
-interface mediumFeed {
-  url: string;
-  title: string;
-  link: string;
-  author: string;
-  description: string;
-  image: string;
-}
+
 /**
  * Default state object with initial values.
  */
-const initialState: { feed?: mediumFeed, items: mediumBlogItemType[] } = {
-  feed: undefined,
-  items: [] as mediumBlogItemType[]
+const initialState: {  
+  userName?: string,
+  url?: string,
+  title?: string,
+  link?: string,
+  author?: string,
+  description?: string,
+  image?: string,
+  mediums: mediumBlogItemType[] 
+} = {
+  userName: undefined,
+  url: undefined,
+  title: undefined,
+  link: undefined,
+  author: undefined,
+  description: undefined,
+  image: undefined,
+  mediums: [] as mediumBlogItemType[]
 
 } as const;
 

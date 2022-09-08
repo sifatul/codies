@@ -1,18 +1,16 @@
 import { Divider, Typography } from '@mui/material';
 import { getDomain, getLastPathname } from 'js-string-helper';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../store';
 import { getGithubUserInfo, getTopRepos, setGithubUserInfo } from '../store/platforms/github';
 import { getSearchState } from '../store/search';
 import { setEmail } from '../store/user/basicInfo';
 import { Filter, SearchByType } from '../types/common.types';
-import { PostData, PutData } from '../Utils/fetchData';
-import { getGithubInfoByName, getRepoList, GithuApis } from '../Utils/github';
+import { GetData } from '../Utils/fetchData';
 import CardGithub from './common/card';
 
 const GithubArea = () => {
   const { searchBy, originalSearchVal, userFound } = UseAppSelector(getSearchState);
-  const [gotNewData, setGotNewData] = React.useState(false)
 
 
   const githubUserInfo = UseAppSelector(getGithubUserInfo);
@@ -22,8 +20,8 @@ const GithubArea = () => {
 
 
   const githubUserName = useMemo(() => {
-    const { username } = githubUserInfo
-    if (username) return username
+    const { name } = githubUserInfo
+    if (name) return name
     if (searchBy === SearchByType.NONE) return ''
 
 
@@ -42,7 +40,7 @@ const GithubArea = () => {
       return ''
     }
     return userName
-  }, [githubUserInfo.username, searchBy])
+  }, [githubUserInfo.name, searchBy])
 
   useEffect(() => {
     if (window == undefined || !githubUserName) return;
@@ -55,44 +53,16 @@ const GithubArea = () => {
   const getGithubData = React.useCallback(async () => {
     if (window == undefined || !githubUserName) return;
     console.log("calling getGithubData")
-    const [gitHubBasicInfo, githubRepos] = await Promise.all([
-      getGithubInfoByName(githubUserName),
-      getRepoList(githubUserName),
-    ]);
+    const gitHubBasicInfo: any = await GetData(`/api/${Filter.GITHUB.toLocaleLowerCase()}/find?userName=${githubUserName}`);
 
     const { email } = gitHubBasicInfo;
     if (email) dispatch(setEmail(email))
-    const isNew = gitHubBasicInfo.isNewData || githubRepos.isNewData
-    if (isNew) {
-      setGotNewData(true)
-    }
 
-    const repos = githubRepos.repos
+
+    const repos = gitHubBasicInfo.repos
 
     dispatch(setGithubUserInfo({ ...gitHubBasicInfo, repos, username: githubUserName }))
   }, [githubUserName]);
-
-  useEffect(() => {
-    // only store new data to database
-    if (!gotNewData) return
-
-    // user basic info in github not found yet
-    if (!githubUserName || !githubUserInfo?.html_url) return
-    const param1 = {
-      source: GithuApis.userInfoApi.replace('userName', githubUserName),
-      data: githubUserInfo
-    }
-    PutData(`/api/platform/${Filter.GITHUB}`, JSON.stringify(param1))
-    if ((githubUserInfo?.repos || []).length <= 0) return
-
-    const param2 = {
-      source: GithuApis.getRepoListApi.replace('userName', githubUserName),
-      data: githubUserInfo.repos
-    }
-    PutData(`/api/platform/${Filter.GITHUB}`, JSON.stringify(param2))
-
-  }, [githubUserInfo?.html_url, githubUserName, gotNewData])
-
 
 
   return <>

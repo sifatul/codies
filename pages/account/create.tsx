@@ -8,7 +8,8 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PreateProfileMain from '../../components/form/createProfileMain';
 import { Button } from '@mui/material';
-import { getGoogleRedirectResult, googleLogin } from "../../Hooks/socailLogin"
+
+import SocialAuth from './socialAuth';
 
 function Copyright(props: any) {
     return (
@@ -26,10 +27,6 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function UserDataInputForm() {
-
-    React.useEffect(() => {
-        getGoogleRedirectResult()
-    }, [])
 
 
     return (
@@ -62,7 +59,7 @@ export default function UserDataInputForm() {
                         }}
                     >
                         <PreateProfileMain />
-                        <button onClick={e => googleLogin()}> Continue with google </button>
+                        <SocialAuth />
                         <Copyright sx={{ mt: 5 }} />
                     </Box>
                 </Grid>

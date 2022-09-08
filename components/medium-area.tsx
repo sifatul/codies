@@ -42,19 +42,21 @@ const MediumArea = () => {
 
   const fetchMediumData = useCallback(async () => {
 
-    const mediumFetchApi = mediumInfoFetchUrl.replace('userName', mediumUserName);
+    if (!mediumUserName) return
+    // const mediumFetchApi = mediumInfoFetchUrl.replace('userName', mediumUserName);
 
-    let data: any = await GetData(`/api/platform/${Filter.MEDIUM}?source=${mediumFetchApi}`);
-    if (!data) {
-      data = await GetData(mediumFetchApi);
-      //new data found
-      if (data) setGotNewData(true);
-    }
+    // let data: any = await GetData(`/api/platform/${Filter.MEDIUM}?source=${mediumFetchApi}`);
+    // if (!data) {
+    //   data = await GetData(mediumFetchApi);
+    //   //new data found
+    //   if (data) setGotNewData(true);
+    // }
+    let data: any = await GetData(`/api/medium/find?userName=${mediumUserName}`);
 
-    if (!data || !data.feed) return
+    if (!data || !data.userName) return
     dispatch(setMediumData(data))
 
-  }, []);
+  }, [mediumUserName]);
 
 
   useEffect(() => {
@@ -63,7 +65,7 @@ const MediumArea = () => {
   }, [mediumUserName]);
 
   useEffect(() => {
-    if (!gotNewData || mediumData.items?.length <= 0 || !mediumUserName) return
+    if (!gotNewData || mediumData.mediums?.length <= 0 || !mediumUserName) return
 
     // only store new data in database
 
@@ -72,11 +74,11 @@ const MediumArea = () => {
       data: mediumData
     }
     PutData(`/api/platform/${Filter.MEDIUM}`, JSON.stringify(param))
-}, [mediumData?.items?.length, gotNewData])
+}, [mediumData?.mediums?.length, gotNewData])
 
   return <>
     <h1> Medium data area </h1>
-    {mediumData?.items?.map((item: mediumBlogItemType) => {
+    {mediumData?.mediums?.map((item: mediumBlogItemType) => {
       return <>
         {item.author}
         {item.link}

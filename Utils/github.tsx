@@ -27,7 +27,7 @@ export const GithuApis = {
 // const forwardApiPath = '/api/forward-api';
 const getGithubInfoByName = async (name: string) => {
     const userInfoApi = GithuApis.userInfoApi.replace('userName', name)
-    let data: any = await GetData(`/api/platform/${Filter.GITHUB}?source=${userInfoApi}`);
+    let data: any = await GetData(`/api/platform/${Filter.GITHUB.toLocaleLowerCase()}?source=${userInfoApi}`);
     let isNewData = false;
     if (!data) {
         // data = await PostData(forwardApiPath, userInfoApi);

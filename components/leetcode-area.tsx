@@ -46,8 +46,9 @@ const LeetCodeArea = () => {
         const getLeetcodeApi = LeetCodeApi + leetcodeUserName;
 
         const getDataFromDB: any = await GetData(
-            `/api/platform/${Filter.LEETCODE}?source=${getLeetcodeApi}`
+            `/api/${Filter.LEETCODE.toLocaleLowerCase()}/find?userName=${leetcodeUserName}`
         );
+        debugger
 
         if (getDataFromDB) {
             const param = {
