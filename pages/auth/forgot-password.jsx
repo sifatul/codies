@@ -1,6 +1,8 @@
 import Styled from '@emotion/styled';
-import imageUrl from '../../public/assets/img/Bitmap.png';
 import Image from 'next/image';
+import Button, { ButtonType } from '../../components/common/Button';
+import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
+import Input from '../../components/common/Input';
 
 const FlexContainerStyled = Styled.div`
     display: flex;
@@ -21,31 +23,6 @@ const ForgotItemsStyled = Styled.div`
 
 `;
 
-const TitleStyled = Styled.h2`
-    font-style: normal;
-    font-weight: 400;
-    font-size: 40px;
-    line-height: 52px;
-
-    display: flex;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 16px;
-    color: #0F1928;
-`;
-const DescriptionStyled = Styled.p`
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 32px;
-
-    display: flex;
-    align-items: center;
-    text-align: center;
-    color: #3F4753;
-    margin-bottom: 48px;
-`;
-
 const InputStyled = Styled.input`
     box-sizing: border-box;
     display: flex;
@@ -63,74 +40,36 @@ const InputStyled = Styled.input`
     margin-bottom: 48px;
 `;
 
-const ButtonStyled = Styled.button`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 16px 32px;
-    gap: 8px;
-
-    width: 480px;
-    height: 56px;
-
-    background: #2255F7;
-    border-radius: 8px;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 30px;
-
-    display: flex;
-    align-items: center;
-    text-align: center;
-
-    color: #FFFFFF;
-    border: none;
-    cursor: pointer;
-`;
-
 const RememberFlexStyled = Styled.div`
     display: flex;
 
 `;
-const RememberDescStyled = Styled.p`
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 28px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    color: #000000;
-    margin: 5px;
-`;
-const LoginStyled = Styled.p`
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 28px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    color: #2255F7;
-`;
+const myLoader = ({ src, width, quality }) => {
+    return `https://source.unsplash.com/random/?${src}?w=${width}&q=${quality || 100}`;
+};
+
 const ForgotPassPage = () => {
     return (
         <FlexContainerStyled>
             <FlexItemStyled>
-                <Image alt='' src={imageUrl} />
+                <Image alt='' loader={myLoader} src='developer,office' width={1024} height={1024} />
             </FlexItemStyled>
             <FlexItemStyled>
                 <ForgotItemsStyled>
-                    <TitleStyled>Forgot password?</TitleStyled>
-                    <DescriptionStyled>
-                        Insert your email to receive the reset link
-                    </DescriptionStyled>
+                    <SectionMetaInfo
+                        label='Forgot password?'
+                        description='Insert your email to receive the reset link'
+                    />
                     <InputStyled name='email' />
-                    <ButtonStyled>Send Reset Link</ButtonStyled>
+                    <Button type={ButtonType.PRIMARY} label='Send Reset Link' />
                     <RememberFlexStyled>
-                        <RememberDescStyled>Remember your password?</RememberDescStyled>
-                        <LoginStyled>Login Now</LoginStyled>
+                         <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'center' }}>
+                        <Button
+                            type={ButtonType.GHOST}
+                            label="Remember your password?"
+                            labelWithLink='Login Now'
+                        />
+                    </div>
                     </RememberFlexStyled>
                 </ForgotItemsStyled>
             </FlexItemStyled>
