@@ -31,7 +31,7 @@ function getStepContent(step: number) {
     }
 }
 
-export default function PreateProfileMain() {
+export default function CreateProfileMain() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [showSuccessMessage, setShowSuccessMessage] = React.useState(false);
 
