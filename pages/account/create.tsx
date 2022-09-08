@@ -28,7 +28,6 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function UserDataInputForm() {
-
     React.useEffect(() => {
         getGoogleRedirectResult()
         getGithubRedirectResult()
