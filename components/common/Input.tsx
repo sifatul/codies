@@ -57,6 +57,7 @@ const Input: React.FC<{ label: string; placeholder?: string; type?: InputType; i
     id,
 }) => {
     const [isFocused, setIsFocused] = useState(false);
+    const [value, setValue] = useState('');
     const GetAnyAdditionalClass = (type: string): string[] => {
         const arr = [];
         if (type === InputType.CHECKBOX) {
@@ -67,7 +68,8 @@ const Input: React.FC<{ label: string; placeholder?: string; type?: InputType; i
 
     return (
         <div style={{ position: 'relative' }}>
-            {isFocused && <label className={cx(LabelClass)}>{label}</label>}
+            {isFocused && type !== InputType.CHECKBOX && <label className={cx(LabelClass)}>{label}</label>}
+            {value && type !== InputType.CHECKBOX && <label className={cx(LabelClass)}>{label}</label>}
             <input
                 placeholder={placeholder}
                 className={cx([InputClass, GetAnyAdditionalClass(type)])}
@@ -75,6 +77,7 @@ const Input: React.FC<{ label: string; placeholder?: string; type?: InputType; i
                 id={id}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
+                onChange={(e) => setValue(e.target.value)}
             />
         </div>
     );
