@@ -6,10 +6,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CreateProfileMain from '../../components/form/createProfileMain';
-import { Button } from '@mui/material';
-
-import SocialAuth from './socialAuth';
+import OtpVerificationForm from '../../components/form/otpVerificationForm';
 
 function Copyright(props: any) {
     return (
@@ -27,16 +24,31 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function UserDataInputForm() {
-
     return (
         <ThemeProvider theme={theme}>
             <Grid container component='main' sx={{ height: '100vh' }}>
-                <CssBaseline />
+                <Grid item xs={6} sm={6} md={6}>
+                    <Box
+                        sx={{
+                            mx: 4,
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Typography variant='h4' mb={4}>
+                            OTP verification
+                        </Typography>
+                        <OtpVerificationForm />
+                    </Box>
+                </Grid>
                 <Grid
                     item
-                    xs={false}
-                    sm={4}
-                    md={7}
+                    xs={6}
+                    sm={6}
+                    md={6}
                     sx={{
                         backgroundImage:
                             'url(https://source.unsplash.com/random/?developer,office)',
@@ -47,21 +59,6 @@ export default function UserDataInputForm() {
                         backgroundPosition: 'center',
                     }}
                 />
-                <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-                    <Box
-                        sx={{
-                            my: 8,
-                            mx: 4,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <CreateProfileMain />
-                        <SocialAuth />
-                        <Copyright sx={{ mt: 5 }} />
-                    </Box>
-                </Grid>
             </Grid>
         </ThemeProvider>
     );
