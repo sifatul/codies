@@ -1,6 +1,8 @@
 import Styled from '@emotion/styled';
 import { cx, css } from '@emotion/css';
 import DesiredRoles from '../../components/ProfilePageComponent/DesiredRoles';
+import SkillsSection from '../../components/ProfilePageComponent/SkillsSection';
+import ExperienceSection from '../../components/ProfilePageComponent/ExperienceSection';
 
 const Container = Styled.div`
     margin: 0 auto;
@@ -37,6 +39,8 @@ const ProfilePage: React.FC = () => {
                 <ProfileSummaryContainer>summary</ProfileSummaryContainer>
                 <ProfileSkillsSection>
                     <DesiredRoles />
+                    <SkillsSection />
+                    <ExperienceSection />
                 </ProfileSkillsSection>
             </ProfileDetailsContainer>
         </Container>
