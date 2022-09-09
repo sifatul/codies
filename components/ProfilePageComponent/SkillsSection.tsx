@@ -2,6 +2,7 @@ import React from 'react';
 import Styled from '@emotion/styled';
 import { cx, css } from '@emotion/css';
 import SkillTags from './SkillTags';
+import EditButton from './EditButton';
 
 const Container = Styled.div`
     border-bottom: 1px solid #e1e1e1;
@@ -22,17 +23,12 @@ const SkillsSectionHeader = Styled.h3`
     margin: 0;
 `;
 
-const EditButton = Styled.button`
-    padding: 2px 16px;
-    line-height: 18px; 
-`;
-
 const SkillsSection = () => {
     return (
         <Container>
             <SkillsSectionHeaderContainer>
                 <SkillsSectionHeader>Skills</SkillsSectionHeader>
-                <EditButton>Edit</EditButton>
+                <EditButton onClick={() => console.log('hello')} />
             </SkillsSectionHeaderContainer>
             <SkillTags />
         </Container>

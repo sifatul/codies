@@ -1,11 +1,15 @@
 import React from 'react';
 import Styled from '@emotion/styled';
 import { cx, css } from '@emotion/css';
+import DesiredRolesModal from './DesiredRolesModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import EditButton from './EditButton';
 
 const Container = Styled.div`
     border-bottom: 1px solid #e1e1e1;
     padding-bottom: 12px;
-`
+`;
 
 const DesiredRolesContainer = Styled.div`
     display: flex;
@@ -18,11 +22,6 @@ const DesiredRolesHeaderContainer = Styled.div`
     align-items: center;
     margin: 12px 0;
     padding: 8px 12px;
-`;
-
-const EditButton = Styled.button`
-    padding: 2px 16px;
-    line-height: 18px; 
 `;
 
 const DesiredRolesHeader = Styled.h3`
@@ -54,11 +53,32 @@ const RolesContainer = Styled.div`
 `;
 
 const DesiredRoles = () => {
+    const [modalIsOpen, setIsOpen] = React.useState(false);
+    function openModal() {
+        setIsOpen(true);
+    }
+
+    function afterOpenModal() {
+        // references are now sync'd and can be accessed.
+        // subtitle.style.color = "#f00";
+    }
+
+    function closeModal() {
+        setIsOpen(false);
+    }
+
     return (
         <Container>
             <DesiredRolesHeaderContainer>
                 <DesiredRolesHeader>Desired Roles</DesiredRolesHeader>
-                <EditButton>Edit</EditButton>
+                <div>
+                    <EditButton onClick={openModal} />
+                    <DesiredRolesModal
+                        openModal={openModal}
+                        modalIsOpen={modalIsOpen}
+                        closeModal={closeModal}
+                    />
+                </div>
             </DesiredRolesHeaderContainer>
             <DesiredRolesContainer>
                 <RolesContainer>
