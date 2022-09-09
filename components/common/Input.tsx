@@ -66,10 +66,17 @@ const Input: React.FC<{ label: string; placeholder?: string; type?: InputType; i
         return arr;
     };
 
+    const isLabelRequired = () => {
+        if (type === InputType.CHECKBOX) return false;
+        if (isFocused || value) {
+            return true;
+        }
+        return false;
+    };
+
     return (
         <div style={{ position: 'relative' }}>
-            {isFocused && type !== InputType.CHECKBOX && <label className={cx(LabelClass)}>{label}</label>}
-            {value && type !== InputType.CHECKBOX && <label className={cx(LabelClass)}>{label}</label>}
+            {isLabelRequired() && <label className={cx(LabelClass)}>{label}</label>}
             <input
                 placeholder={placeholder}
                 className={cx([InputClass, GetAnyAdditionalClass(type)])}
