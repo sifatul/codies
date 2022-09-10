@@ -1,6 +1,5 @@
 import React from 'react';
 import Styled from '@emotion/styled';
-import Image from 'next/image';
 
 const Container = Styled.div`
     width: 100%;
@@ -12,15 +11,15 @@ const HeaderContainer = Styled.div`
 `;
 
 const UserProfilePic = Styled.div`
-height: 96px;
-width: 96px;
-margin-left: 48px;
-border-radius: 50%;
-border: 2px solid rgb(255, 255, 255);
-margin-top: -20px;
-background-size: cover;
-background-position: center center;
-background-image: url("https://source.unsplash.com/6VPEOdpFNAs");
+    height: 96px;
+    width: 96px;
+    margin-left: 48px;
+    border-radius: 50%;
+    border: 2px solid rgb(255, 255, 255);
+    margin-top: -20px;
+    background-size: cover;
+    background-position: center center;
+    background-image: url("https://source.unsplash.com/6VPEOdpFNAs");
 `;
 
 const UserInformationContainer = Styled.div`
@@ -171,12 +170,14 @@ const ProfileBasicInfo = () => {
                     </UserLocationAndPhone>
                 </UserLocationAndPhoneContainer>
             </UserInformationContainer>
-            <div style={{margin: '16px 0px',}}></div>
+            <div style={{ margin: '16px 0px' }}></div>
             <UserPrivacyNoteContainer>
                 <UserPrivacyNoteParagraphContainer>
                     <img src='/icons/security.svg' alt='phone' width='24px' />
                     <PrivacyNoteParagraph>Privacy note:</PrivacyNoteParagraph>
-                    <PrivacyNoteDescriptionParagraph>Specify which companies you had like to be hidden from here.</PrivacyNoteDescriptionParagraph>
+                    <PrivacyNoteDescriptionParagraph>
+                        Specify which companies you had like to be hidden from here.
+                    </PrivacyNoteDescriptionParagraph>
                 </UserPrivacyNoteParagraphContainer>
             </UserPrivacyNoteContainer>
         </Container>
