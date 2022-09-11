@@ -28,7 +28,7 @@ const ButtonStyled = Styled.button`
     cursor: pointer;
 `;
 
-const GhostBtnStyled = Styled.div`
+const GhostBtnStyled = Styled.button`
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -39,6 +39,8 @@ const GhostBtnStyled = Styled.div`
     text-align: center;
 
     color: #000000;
+    background: transparent;
+    border: none;
 `;
 
 const SecondaryBtnStyled = Styled(ButtonStyled)`
@@ -66,35 +68,37 @@ interface BtnProps {
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     labelWithLink?: string;
     icon?: string;
+    actionType?: "button" | "submit" | "reset" | undefined
 }
 
 interface BtnInputProps extends BtnProps {
     type: ButtonType;
 }
 
-const Button: React.FC<BtnInputProps> = ({ label, type, labelWithLink, onClick, icon }) => {
+
+const Button: React.FC<BtnInputProps> = ({ label, type, labelWithLink, onClick, icon, actionType='button' }) => {
     if (type === ButtonType.GHOST) {
-        return <GhostBtn onClick={onClick} label={label} labelWithLink={labelWithLink} />;
+        return <GhostBtn onClick={onClick} label={label} labelWithLink={labelWithLink} actionType={actionType} />;
     }
     if (type === ButtonType.SECONDARY) {
-        return <SecondaryButton label={label} onClick={onClick} icon={icon} />;
+        return <SecondaryButton label={label} onClick={onClick} icon={icon} actionType={actionType}/>;
     }
-    return <ButtonStyled>{label}</ButtonStyled>;
+    return <ButtonStyled type={actionType}>{label}</ButtonStyled>;
 };
 
 export default Button;
 
-const GhostBtn: React.FC<BtnProps> = ({ label, onClick, labelWithLink, icon }) => {
+const GhostBtn: React.FC<BtnProps> = ({ label, onClick, labelWithLink, icon, actionType }) => {
     return (
-        <GhostBtnStyled>
+        <GhostBtnStyled type={actionType}>
             <span>{label}</span> <LinkWithColor onClick={onClick}>{labelWithLink}</LinkWithColor>
         </GhostBtnStyled>
     );
 };
 
-const SecondaryButton: React.FC<BtnProps> = ({ label, onClick, icon= '' }) => {
+const SecondaryButton: React.FC<BtnProps> = ({ label, onClick, icon= '', actionType }) => {
     return (
-        <SecondaryBtnStyled>
+        <SecondaryBtnStyled type={actionType}>
             <Image alt='Social Icon' src={icon} width={24} height={24} />
             <span>{label}</span>
         </SecondaryBtnStyled>
