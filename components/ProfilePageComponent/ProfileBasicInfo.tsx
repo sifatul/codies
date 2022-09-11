@@ -1,5 +1,9 @@
 import React from 'react';
 import Styled from '@emotion/styled';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithubSquare, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import { faLocationDot, faPhone, faShield } from '@fortawesome/free-solid-svg-icons';
+
 
 const Container = Styled.div`
     width: 100%;
@@ -69,7 +73,7 @@ const SocialIconContainer = Styled.div`
     width: 20%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    gap: 10px;
 `;
 
 const UserLocationAndPhoneContainer = Styled.div`
@@ -78,9 +82,16 @@ const UserLocationAndPhoneContainer = Styled.div`
     margin-top: 5px;
 `;
 
-const UserLocationAndPhone = Styled.div`
+const UserLocation = Styled.div`
+    align-items: center;
+    color: #606c78;
     display: flex;
-    gap: 2px;
+    gap: 4px;
+`;
+const UserPhone = Styled.div`
+    align-items: center;
+    display: flex;
+    gap: 4px;
 `;
 
 const UserLocationAndPhoneParagraph = Styled.div`
@@ -151,29 +162,29 @@ const ProfileBasicInfo = () => {
                         </UserDescriptionParagraph>
                     </UserDescriptionContainer>
                     <SocialIconContainer>
-                        <img src='/icons/github.svg' alt='github' />
-                        <img src='/icons/linkedin.svg' alt='linkedin' />
+                        <FontAwesomeIcon icon={faGithubSquare}/>
+                        <FontAwesomeIcon icon={faLinkedinIn} />
                     </SocialIconContainer>
                 </UserDescriptionAndSocialContainer>
                 <UserLocationAndPhoneContainer>
-                    <UserLocationAndPhone>
-                        <img src='/icons/location.svg' alt='location' width='24px' />
+                    <UserLocation>
+                        <FontAwesomeIcon icon={faLocationDot}/>
                         <UserLocationAndPhoneParagraph>
                             Dhaka, Bangladesh
                         </UserLocationAndPhoneParagraph>
-                    </UserLocationAndPhone>
-                    <UserLocationAndPhone>
-                        <img src='/icons/phone.svg' alt='phone' width='24px' />
+                    </UserLocation>
+                    <UserPhone>
+                        <FontAwesomeIcon icon={faPhone} />
                         <UserLocationAndPhoneParagraph>
                             +8801111222333
                         </UserLocationAndPhoneParagraph>
-                    </UserLocationAndPhone>
+                    </UserPhone>
                 </UserLocationAndPhoneContainer>
             </UserInformationContainer>
             <div style={{ margin: '16px 0px' }}></div>
             <UserPrivacyNoteContainer>
                 <UserPrivacyNoteParagraphContainer>
-                    <img src='/icons/security.svg' alt='phone' width='24px' />
+                    <FontAwesomeIcon icon={faShield} />
                     <PrivacyNoteParagraph>Privacy note:</PrivacyNoteParagraph>
                     <PrivacyNoteDescriptionParagraph>
                         Specify which companies you had like to be hidden from here.
