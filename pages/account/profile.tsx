@@ -3,6 +3,7 @@ import { cx, css } from '@emotion/css';
 import DesiredRoles from '../../components/ProfilePageComponent/DesiredRoles';
 import SkillsSection from '../../components/ProfilePageComponent/SkillsSection';
 import ExperienceSection from '../../components/ProfilePageComponent/ExperienceSection';
+import ProfileBasicInfo from '../../components/ProfilePageComponent/ProfileBasicInfo';
 import SideBar from '../../components/ProfilePageComponent/Sidebar';
 
 const Container = Styled.div`
@@ -12,10 +13,10 @@ const Container = Styled.div`
 `;
 
 const ProfileHeader = Styled.div`
-    background-color: #EAE509;
     padding: 20px;
-    height: 300px;
+    height: auto;
     margin-top: 40px;
+    padding: 48px;
 `;
 const ProfileDetailsContainer = Styled.div`
     display: grid;
@@ -35,7 +36,9 @@ const ProfileSkillsSection = Styled.div`
 const ProfilePage: React.FC = () => {
     return (
         <Container>
-            <ProfileHeader>profile and profile image</ProfileHeader>
+            <ProfileHeader>
+                <ProfileBasicInfo/>
+            </ProfileHeader>
             <ProfileDetailsContainer>
                 <ProfileSummaryContainer>
                     <SideBar />
