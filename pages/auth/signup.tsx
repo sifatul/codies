@@ -1,5 +1,7 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
+import { useFormik, Form, FormikProvider } from 'formik';
+import * as Yup from 'yup';
 import Button, { ButtonType } from '../../components/common/Button';
 import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
 import Input, { InputType } from '../../components/common/Input';
@@ -81,8 +83,7 @@ const CheckboxContainer = css`
 `;
 
 const ColoredLink = css`
-    color: #2255F7;
-    margin: 0 5px 0 5px;
+    color: #2255f7;
 `;
 
 const ImageContainer = css`
@@ -93,6 +94,36 @@ const ImageContainer = css`
 `;
 
 const SignupPage: React.FC<{}> = () => {
+    const SignupSchema = Yup.object().shape({
+        userName: Yup.string()
+            .min(2, 'Too Short!')
+            .max(50, 'Too Long!')
+            .required('UserName required'),
+        email: Yup.string().email('Invalid email').required('Email is required'),
+        password: Yup.string()
+            .required('Password is required')
+            .min(6, 'Password must be at least 6 characters')
+            .max(40, 'Password must not exceed 40 characters'),
+        acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required'),
+    });
+
+    const formik = useFormik({
+        initialValues: {
+            userName: '',
+            email: '',
+            password: '',
+            acceptTerms: false,
+        },
+        validationSchema: SignupSchema,
+        onSubmit: (val) => {
+            console.log(val);
+        },
+    });
+
+    const { handleChange, errors, values } = formik;
+
+    console.log(errors);
+
     return (
         <div className={cx(SectionContainer)}>
             <div className={cx(FormSection)}>
@@ -117,32 +148,80 @@ const SignupPage: React.FC<{}> = () => {
                         <span className={cx(DividerText)}>or</span>
                     </div>
                     <div>
-                        <div className={cx(MultipleInput)}>
-                            <Input label='First Name' placeholder='First name' />
-                            <Input label='Last Name' placeholder='Last name' />
-                        </div>
-                        <div className={cx(RowGap)}>
-                            <Input label='Email' placeholder='Enter your email' />
-                        </div>
-                        <div className={cx(RowGap)}>
-                            <Input
-                                label='Password'
-                                placeholder='Password'
-                                type={InputType.PASSWORD}
-                            />
-                        </div>
-                        <div className={cx([RowGap, FlexItem])}>
-                            <div className={cx([CheckboxContainer])}>
-                                <Input label='agree' type={InputType.CHECKBOX} />
-                            </div>
-                            <label htmlFor='agreeToTerms'>I agree to the <span className={cx(ColoredLink)}> Terms and conditions </span> and <span className={cx(ColoredLink)}> Privacy policy</span></label>
-                        </div>
-                        <div className={cx([RowGap])}>
-                            <Button type={ButtonType.PRIMARY} label="Create your account"/>
-                        </div>
-                        <div className={cx([RowGap, FlexItem, JustifyCenter])}>
-                            <Button type={ButtonType.GHOST} label="Already a member?" labelWithLink='Login' />
-                        </div>
+                        <FormikProvider value={formik}>
+                            <Form>
+                                <div className={cx(RowGap)}>
+                                    <Input
+                                        label='User Name'
+                                        placeholder='User name'
+                                        name='userName'
+                                        value={values.userName}
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                        }}
+                                    />
+                                </div>
+                                <div className={cx(RowGap)}>
+                                    <Input
+                                        label='Email'
+                                        placeholder='Enter your email'
+                                        name='email'
+                                        value={values.email}
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                        }}
+                                    />
+                                </div>
+                                <div className={cx(RowGap)}>
+                                    <Input
+                                        label='Password'
+                                        placeholder='Password'
+                                        type={InputType.PASSWORD}
+                                        name='password'
+                                        value={values.password}
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                        }}
+                                    />
+                                </div>
+                                <div className={cx([RowGap, FlexItem])}>
+                                    <div className={cx([CheckboxContainer])}>
+                                        <Input
+                                            label='agree'
+                                            type={InputType.CHECKBOX}
+                                            name='acceptTerms'
+                                            value={values.acceptTerms}
+                                            onChange={(e) => {
+                                                handleChange(e);
+                                            }}
+                                        />
+                                    </div>
+                                    <label htmlFor='agreeToTerms'>
+                                        I agree to the{' '}
+                                        <span className={cx(ColoredLink)}>
+                                            {' '}
+                                            Terms and conditions{' '}
+                                        </span>{' '}
+                                        and <span className={cx(ColoredLink)}> Privacy policy</span>
+                                    </label>
+                                </div>
+                                <div className={cx([RowGap])}>
+                                    <Button
+                                        type={ButtonType.PRIMARY}
+                                        label='Create your account'
+                                        actionType='submit'
+                                    />
+                                </div>
+                                <div className={cx([RowGap, FlexItem, JustifyCenter])}>
+                                    <Button
+                                        type={ButtonType.GHOST}
+                                        label='Already a member?'
+                                        labelWithLink='Login'
+                                        actionType='button'
+                                    />
+                                </div>
+                            </Form>
+                        </FormikProvider>
                     </div>
                 </div>
             </div>

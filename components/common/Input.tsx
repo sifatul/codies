@@ -10,7 +10,7 @@ const InputClass = css`
     display: flex;
     align-items: center;
 
-    color: #6f757e;
+    color: #0F1928;
     background: rgba(34, 85, 247, 0.05);
     border-radius: 8px;
     padding: 14px 24px;
@@ -50,12 +50,15 @@ export enum InputType {
     CHECKBOX = 'checkbox',
 }
 
-const Input: React.FC<{ label: string; placeholder?: string; type?: InputType; id?: string }> = ({
-    label,
-    placeholder,
-    type = InputType.TEXT,
-    id,
-}) => {
+const Input: React.FC<{
+    label: string;
+    placeholder?: string;
+    type?: InputType;
+    id?: string;
+    value: string | boolean | number;
+    name?: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+}> = ({ label, placeholder, type = InputType.TEXT, id, name, onChange }) => {
     const [isFocused, setIsFocused] = useState(false);
     const [value, setValue] = useState('');
     const GetAnyAdditionalClass = (type: string): string[] => {
@@ -81,10 +84,14 @@ const Input: React.FC<{ label: string; placeholder?: string; type?: InputType; i
                 placeholder={placeholder}
                 className={cx([InputClass, GetAnyAdditionalClass(type)])}
                 type={type}
+                name={name}
                 id={id}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                onChange={(e) => setValue(e.target.value)}
+                onChange={(e) => {
+                    setValue(e.target.value);
+                    onChange(e);
+                }}
             />
         </div>
     );
