@@ -5,6 +5,10 @@ import { Provider } from 'react-redux';
 import { app } from '../Utils/firebaseConfig';
 import { useEffect } from 'react';
 import { getAnalytics, logEvent } from 'firebase/analytics';
+import { config } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+config.autoAddCss = false;
+
 function MyApp({ Component, pageProps }: AppProps) {
     useEffect(() => {
         if (!app || !app.name) return;
