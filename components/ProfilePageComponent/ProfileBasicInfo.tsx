@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithubSquare, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import { faLocationDot, faPhone, faShield } from '@fortawesome/free-solid-svg-icons';
 
-
 const Container = Styled.div`
     width: 100%;
 `;
@@ -31,7 +30,6 @@ const UserInformationContainer = Styled.div`
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-    margin-left: 48px;
 `;
 
 const UserNameContainer = Styled.div`
@@ -107,7 +105,6 @@ const UserPrivacyNoteContainer = Styled.div`
     border-radius: 4px;
     color: #1f2228;
     padding: 16px;
-    margin: 0px 48px;
 `;
 
 const UserPrivacyNoteParagraphContainer = Styled.div`
@@ -148,7 +145,6 @@ const ProfileBasicInfo = () => {
                     flexDirection: 'column',
                     alignItems: 'flex-start',
                     gap: '12px',
-                    marginLeft: '48px',
                 }}
             >
                 <UserNameContainer>
@@ -162,13 +158,13 @@ const ProfileBasicInfo = () => {
                         </UserDescriptionParagraph>
                     </UserDescriptionContainer>
                     <SocialIconContainer>
-                        <FontAwesomeIcon icon={faGithubSquare}/>
+                        <FontAwesomeIcon icon={faGithubSquare} />
                         <FontAwesomeIcon icon={faLinkedinIn} />
                     </SocialIconContainer>
                 </UserDescriptionAndSocialContainer>
                 <UserLocationAndPhoneContainer>
                     <UserLocation>
-                        <FontAwesomeIcon icon={faLocationDot}/>
+                        <FontAwesomeIcon icon={faLocationDot} />
                         <UserLocationAndPhoneParagraph>
                             Dhaka, Bangladesh
                         </UserLocationAndPhoneParagraph>
