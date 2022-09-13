@@ -76,14 +76,14 @@ interface BtnInputProps extends BtnProps {
 }
 
 
-const Button: React.FC<BtnInputProps> = ({ label, type, labelWithLink, onClick, icon, actionType='button' }) => {
+const Button: React.FC<BtnInputProps> = ({ label, type, labelWithLink, onClick, icon, actionType = 'button' }) => {
     if (type === ButtonType.GHOST) {
         return <GhostBtn onClick={onClick} label={label} labelWithLink={labelWithLink} actionType={actionType} />;
     }
     if (type === ButtonType.SECONDARY) {
-        return <SecondaryButton label={label} onClick={onClick} icon={icon} actionType={actionType}/>;
+        return <SecondaryButton label={label} onClick={onClick} icon={icon} actionType={actionType} />;
     }
-    return <ButtonStyled type={actionType}>{label}</ButtonStyled>;
+    return <ButtonStyled type={actionType} onClick={onClick}>{label}</ButtonStyled>;
 };
 
 export default Button;
@@ -96,7 +96,7 @@ const GhostBtn: React.FC<BtnProps> = ({ label, onClick, labelWithLink, icon, act
     );
 };
 
-const SecondaryButton: React.FC<BtnProps> = ({ label, onClick, icon= '', actionType }) => {
+const SecondaryButton: React.FC<BtnProps> = ({ label, onClick, icon = '', actionType }) => {
     return (
         <SecondaryBtnStyled type={actionType}>
             <Image alt='Social Icon' src={icon} width={24} height={24} />

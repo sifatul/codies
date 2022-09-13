@@ -1,12 +1,11 @@
 import nextConnect from 'next-connect';
 import { connectToDatabase } from '../../../Utils/mongodb';
 import { ObjectId } from 'mongodb';
-import Users from "./models/UserSchema"
+import Users from './models/UserSchema';
 
 const handler = nextConnect();
 
 const getByID = async (req: any, res: any) => {
-     
     try {
         const {
             query: { id },
@@ -16,9 +15,11 @@ const getByID = async (req: any, res: any) => {
         await connectToDatabase();
 
         const userData = await Users.findOne(query);
-        return res.json(userData)
+
+        return res.json(userData);
     } catch (error) {
         console.error(error);
+
         return res.status(400).json(error);
     }
 };
@@ -34,37 +35,37 @@ const updateUser = async (req: any, res: any) => {
 
         await connectToDatabase();
 
-
         const userData = await Users.updateOne(
             { _id: new ObjectId(id) },
             {
                 $set: body,
             }
         );
-        return res.json(userData)
+
+        return res.json(userData);
     } catch (error) {
         console.error(error);
+
         return res.status(400).json(error);
     }
 };
 
 const deleteByID = async (req: any, res: any) => {
-    
     try {
         const {
             query: { id },
         } = req;
 
         const query = { _id: new ObjectId(id) };
-          await connectToDatabase();
-         
+        await connectToDatabase();
 
-          const userData = await Users.deleteOne(query);
-        return res.json(userData)
+        const userData = await Users.deleteOne(query);
+
+        return res.json(userData);
     } catch (error) {
         console.error(error);
-        return res.status(400).json(error);
 
+        return res.status(400).json(error);
     }
 };
 

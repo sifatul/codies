@@ -3,6 +3,7 @@ import { Gender } from '../../../types/common.types';
 /* eslint-disable import/no-anonymous-default-export */
 import { connectToDatabase } from '../../../Utils/mongodb';
 import User from './models/UserSchema';
+import { sendOtp } from './otp/generate';
 
 /**
  * @swagger
@@ -72,17 +73,30 @@ interface IUserResponse extends NextApiResponse {
 
 export default async (req: NextApiRequest, res: any) => {
     try {
-          await connectToDatabase(); 
-          if(!req.body) return res.status(400).json({ status: 'error', error: 'body param missing' });
+        await connectToDatabase();
+        if (!req.body)
+            return res.status(400).json({ status: 'error', error: 'body param missing' });
 
-          const {userName, email, password} = JSON.parse(req.body);
-          if(!userName || !email || !password) return res.status(400).json({ status: 'error', error: 'required param missing' });
+        const { userName, email, password } = JSON.parse(req.body);
+        if (!userName || !email || !password)
+            return res.status(400).json({ status: 'error', error: 'required param missing' });
 
-        const newUser = await User.create({userName, email, password});
+        const newUser = await User.create({ userName, email, password });
+
+        // user created.
+        // send OTP for verification
+
+        const callback = (result) => {
+            console.log(result);
+        };
+        sendOtp(email, callback);
 
         return res.json(newUser);
     } catch (e) {
         console.log(e);
-        res.status(500).json({ status: 'error', error: 'Something went wrong please try again later' });
+        res.status(500).json({
+            status: 'error',
+            error: 'Something went wrong please try again later',
+        });
     }
 };

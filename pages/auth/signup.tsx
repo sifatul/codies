@@ -6,6 +6,8 @@ import Button, { ButtonType } from '../../components/common/Button';
 import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
 import Input, { InputType } from '../../components/common/Input';
 import { PostData } from '../../Utils/fetchData';
+import { useRouter } from 'next/router';
+
 
 const SectionContainer = css`
     display: flex;
@@ -102,6 +104,8 @@ padding-bottom: 4px;
 
 
 const SignupPage: React.FC<{}> = () => {
+    const router = useRouter()
+
     const SignupSchema = Yup.object().shape({
         userName: Yup.string()
             .min(2, 'Too Short!')
@@ -113,7 +117,7 @@ const SignupPage: React.FC<{}> = () => {
             .required('Email is required'),
         password: Yup.string()
             .required('Password is required')
-            .min(6, 'Password must be at least 6 characters')
+            .min(8, 'Password must be at least 8 characters')
             .max(40, 'Password must not exceed 40 characters'),
         acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required'),
     });
@@ -124,6 +128,8 @@ const SignupPage: React.FC<{}> = () => {
             if (res?.error) throw res?.error
             console.log(res);
             alert("user created")
+            router.push('/auth/verify-email');
+
         } catch (e) {
             console.error(e);
             alert(JSON.stringify(e))

@@ -25,7 +25,6 @@ import User from './models/UserSchema';
  *        description: Success
  */
 
-
 export default async (req: NextApiRequest, res: any) => {
     let client: any;
 
@@ -33,12 +32,11 @@ export default async (req: NextApiRequest, res: any) => {
         const dbResponse = await connectToDatabase();
         client = dbResponse.client;
 
+        const { email } = req.body;
+        const user = await User.findOne({ email });
 
-        const { email } = req.body
-        const user = await User.findOne({email});
-        
-        if(user) {
-           return res.status(400).json({ status: 'error', error: 'Dublicate Email' });
+        if (user) {
+            return res.status(400).json({ status: 'error', error: 'Dublicate Email' });
         }
 
         return res.status(200).json({ status: 'success', message: 'Success' });

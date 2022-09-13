@@ -32,54 +32,26 @@ import User from '../models/UserSchema';
 
 // interface
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-    let client: any;
-    let db: any;
+export const sendOtp = async (email: string, callback) => {
+    const generatedOtp = await generateOtp();
 
-    try {
-        const dbResponse = await connectToDatabase();
-        // client = dbResponse.client;
-        // db = dbResponse.db;
-        // if (!db) return res.json({ error: 'database connection failed' });
+    const expireTime = AddMinutesToDate(new Date(), 10);
 
-        const { email } = req.body;
-        // tslint:disable-next-line: await-promise
-        const isUserExist = await User.findOne({
-            where: { email: email },
-        });
+    const otpObj = {
+        email: email,
+        otp: generatedOtp as unknown as number,
+        expireTime: expireTime,
+    };
 
-        if (!isUserExist)
-            return res.status(400).send({
-                status: 'error',
-                message: 'No user found',
-            });
+    console.log(otpObj);
 
-        const generatedOtp = await generateOtp();
+    const newOtp = await OTP.create(otpObj);
 
-        const expireTime = AddMinutesToDate(new Date(), 10);
-
-        const otpObj = {
-            email: email,
-            otp: generatedOtp as unknown as number,
-            expireTime: expireTime,
-        };
-
-        console.log(otpObj);
-
-        const newOtp = await OTP.create(otpObj);
-
-        if (newOtp) {
-            await sendOtpToEmail(email, newOtp, res);
-        }
-
-        return res.status(400).send({ status: 'Success', message: newOtp });
-    } catch (e) {
-        console.log(e);
-        res.json({ status: 'error', error: 'Something went wrong please try again later' });
-    } finally {
-        if (client) await client.close();
-        // Ensures that the client will close when you finish/error
+    if (newOtp) {
+        await sendOtpToEmail(email, newOtp, callback);
     }
+
+    return newOtp;
 };
 
 const generateOtp = async () => {
@@ -102,7 +74,7 @@ const AddMinutesToDate = (date: Date, minutes: number) => {
     return new Date(date.getTime() + minutes * 60000);
 };
 
-const sendOtpToEmail = async (email: string, newOtpObj: any, res: NextApiResponse) => {
+const sendOtpToEmail = async (email: string, newOtpObj: any, callback) => {
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
@@ -125,10 +97,9 @@ const sendOtpToEmail = async (email: string, newOtpObj: any, res: NextApiRespons
     // tslint:disable-next-line: await-promise
     await transporter.sendMail(mailOptions, (err, response) => {
         if (err) {
-            return res.status(400).send({ status: 'error', message: 'Failure' });
+            return callback({ status: 'error', message: 'Failure' });
         }
-
-        return res.json({ status: 'success', message: 'Success' });
+        callback({ status: 'success', message: 'Success' });
     });
 };
 
@@ -141,4 +112,39 @@ const messageForEmail = (otp: number) => {
         'Regards\n' +
         'Find profiles team\n\n'
     );
+};
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+        await connectToDatabase();
+
+        if (!req.body)
+            return res.status(400).json({ status: 'error', error: 'body param missing' });
+
+        const { email } = JSON.parse(req.body);
+
+        if (!email)
+            return res.status(400).json({ status: 'error', error: 'required param missing' });
+
+        // tslint:disable-next-line: await-promise
+        const isUserExist = await User.findOne({
+            where: { email: email },
+        });
+
+        if (!isUserExist) {
+            return res.status(404).send({
+                status: 'error',
+                error: 'No user found',
+            });
+        }
+
+        const callback = (result: any) => {
+            console.log('otp generate result: ', result);
+        };
+        const newOtp = await sendOtp(email, callback);
+
+        return res.status(400).send({ status: 'Success', message: newOtp });
+    } catch (e) {
+        console.log(e);
+        res.json({ status: 'error', error: 'Something went wrong please try again later' });
+    }
 };
