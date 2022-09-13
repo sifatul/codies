@@ -3,6 +3,8 @@ import Styled from '@emotion/styled';
 import { cx, css } from '@emotion/css';
 import { Field, Form, FormikProvider, useFormik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClose } from '@fortawesome/free-solid-svg-icons';
 
 const Container = Styled.div`
     padding-bottom: 12px;
@@ -71,6 +73,11 @@ const SkillTag = Styled.p`
     font-weight: 500;
 `;
 
+const RemoveIconButtonClass = css`
+    margin-left: 8px;
+    cursor: pointer;
+`;
+
 const validationSchema = Yup.object().shape({
     skillTag: Yup.string().required('Skill tag is required'),
 });
@@ -83,17 +90,22 @@ const SkillsSectionForm = () => {
         },
         validationSchema: validationSchema,
         onSubmit: (val: any) => {
-            const isExist = tags.includes(val);
+            const isExist = tags.includes(val?.skillTag);
 
             if (!isExist) {
                 setTags((prevState: any) => [...prevState, val.skillTag]);
-                resetForm()
+                resetForm();
             } else {
                 alert('already added');
-                resetForm()
+                resetForm();
             }
         },
     });
+
+    const handleRemove = (index: number) => {
+        tags.splice(index, 1);
+        setTags([...tags]);
+    };
 
     const { handleChange, errors, values, setFieldValue, resetForm } = formik;
 
@@ -123,8 +135,16 @@ const SkillsSectionForm = () => {
                 </FormikProvider>
             </FormContainer>
             <SkillsTagContainer>
-                {tags.map((item: string) => (
-                    <SkillTag>{item}</SkillTag>
+                {tags.map((item: string, index: number) => (
+                    <SkillTag key={index}>
+                        {item}
+                        <span
+                            onClick={() => handleRemove(index)}
+                            className={cx(RemoveIconButtonClass)}
+                        >
+                            <FontAwesomeIcon icon={faClose} />
+                        </span>
+                    </SkillTag>
                 ))}
             </SkillsTagContainer>
         </Container>
