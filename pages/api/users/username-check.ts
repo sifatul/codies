@@ -25,7 +25,6 @@ import User from './models/UserSchema';
  *        description: Success
  */
 
-
 export default async (req: NextApiRequest, res: any) => {
     let client: any;
 
@@ -33,11 +32,10 @@ export default async (req: NextApiRequest, res: any) => {
         const dbResponse = await connectToDatabase();
         client = dbResponse.client;
 
+        const { userName } = req.body;
 
-        const { userName } = req.body
-        
-        const user = await User.findOne({userName});
-        if(user) {
+        const user = await User.findOne({ userName });
+        if (user) {
             return res.status(400).json({ status: 'error', error: 'Dublicate userName' });
         }
 

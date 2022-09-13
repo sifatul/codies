@@ -3,9 +3,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { connectToDatabase } from '../../../Utils/mongodb';
 import User from './models/UserSchema';
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
-     await connectToDatabase();
+    await connectToDatabase();
     const param = req.query.param as string;
     if (param === '') {
         res.status(400).send({ status: 'error', message: 'empty param is not allowed' });
