@@ -9,11 +9,11 @@ import { PostData } from '../../Utils/fetchData';
 import { useRouter } from 'next/router';
 
 
-const SectionContainer = css`
+export const SectionContainer = css`
     display: flex;
 `;
 
-const FormSection = css`
+export const FormSection = css`
     width: 821px;
     display: flex;
     justify-content: center;
@@ -22,7 +22,7 @@ const FormSection = css`
     padding: 60px 0;
 `;
 
-const SocialBtnContainer = css`
+export const SocialBtnContainer = css`
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -31,12 +31,12 @@ const SocialBtnContainer = css`
     margin: 35px 0;
 `;
 
-const FormWrap = css`
+export const FormWrap = css`
     width: 488px;
     position: relative;
 `;
 
-const Divider = css`
+export const Divider = css`
     font-style: normal;
     font-weight: 600;
     font-size: 20px;
@@ -57,31 +57,26 @@ const Divider = css`
     }
 `;
 
-const DividerText = css`
+export const DividerText = css`
     background: white;
     display: inline-block;
     padding: 5px 20px;
     z-index: 99;
 `;
 
-const MultipleInput = css`
-    display: flex;
-    gap: 0 16px;
-`;
-
-const RowGap = css`
+export const RowGap = css`
     margin-top: 30px;
 `;
 
-const FlexItem = css`
+export const FlexItem = css`
     display: flex;
 `;
 
-const JustifyCenter = css`
+export const JustifyCenter = css`
     justify-content: center;
 `;
 
-const CheckboxContainer = css`
+export const CheckboxContainer = css`
     display: flex;
 `;
 
@@ -89,7 +84,7 @@ const ColoredLink = css`
     color: #2255f7;
 `;
 
-const ImageContainer = css`
+export const ImageContainer = css`
     background: url(https://images.unsplash.com/photo-1551739440-5dd934d3a94a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80);
     background-size: cover;
     background-repeat: no-repeat;
@@ -153,8 +148,6 @@ const SignupPage: React.FC<{}> = () => {
     });
 
     const { handleChange, errors, values } = formik;
-
-    console.log(errors);
 
     return (
         <div className={cx(SectionContainer)}>

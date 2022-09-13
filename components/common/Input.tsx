@@ -24,6 +24,9 @@ const InputClass = css`
     &:not(:placeholder-shown) {
         background: white;
     }
+    &:placeholder {
+        color: #6F757E;
+    }
 `;
 
 const CheckboxClass = css`
