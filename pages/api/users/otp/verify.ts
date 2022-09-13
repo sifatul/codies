@@ -39,15 +39,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         if (!email || !otp)
             return res.status(400).json({ status: 'error', error: 'required param missing' });
 
-        const isOtpValid = await OTP.findOne({
+        const isOtpValid = await OTP.findOneAndDelete({
             where: { email: email, otp },
         });
+        
 
         if (!isOtpValid) {
             return res.status(404).send({ status: 'error', error: 'invalid otp' });
         }
 
-        return res.status(400).send({ status: 'Success' });
+        return res.status(200).json({ status: 'Success' });
     } catch (e) {
         console.log(e);
         res.json({ status: 'error', error: 'Something went wrong please try again later' });

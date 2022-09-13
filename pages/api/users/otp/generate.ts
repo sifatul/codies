@@ -142,7 +142,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         };
         const newOtp = await sendOtp(email, callback);
 
-        return res.status(400).send({ status: 'Success', message: newOtp });
+        return res.status(200).json({ status: 'Success', message: newOtp });
     } catch (e) {
         console.log(e);
         res.json({ status: 'error', error: 'Something went wrong please try again later' });

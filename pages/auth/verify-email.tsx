@@ -95,7 +95,9 @@ const VerifyEmailPage: React.FC = () => {
             const res: any = await PostData('/api/users/otp/verify', JSON.stringify({ email, otp }))
             if (res?.error) throw res?.error
             alert("user is verified")
+            router.push('/account/profile')
         } catch (e) {
+            alert(JSON.stringify(e))
             console.error(e)
         }
 
