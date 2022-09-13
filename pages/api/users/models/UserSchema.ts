@@ -5,12 +5,12 @@ import { isEmail, isUrl } from 'js-string-helper';
 
 // interface
 interface IUser {
-    firstName: string;
-    lastName: string;
-    userName: string;
+    firstName?: string;
+    lastName?: string;
+    userName?: string;
     email: string;
     password: string;
-    gender: Gender;
+    gender?: Gender;
     linkedin_url?: string;
     github?: string;
     leetcode_url?: string;
@@ -31,8 +31,8 @@ const validateUrl = (value: string) => {
 
 const userSchema = new Schema<IUser>(
     {
-        firstName: { type: String, required: true },
-        lastName: { type: String, required: true },
+        firstName: { type: String, required: false },
+        lastName: { type: String, required: false },
         email: {
             type: String,
             required: [true, 'Email is required'],
@@ -55,7 +55,7 @@ const userSchema = new Schema<IUser>(
         gender: {
             type: String,
             enum: Gender,
-            required: [true, 'Gender is required'],
+            required: [false, 'Gender is required'],
             default: Gender.MALE,
         },
         linkedin_url: {

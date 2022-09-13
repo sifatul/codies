@@ -12,9 +12,9 @@ const GetData = (url: string) => {
             });
     });
 };
-const PostData = (url: string, profileUrl: string) => {
+const PostData = (url: string, data: string) => {
     return new Promise((resolve) => {
-        fetch(url, { method: 'POST', body: profileUrl })
+        fetch(url, { method: 'POST', body: data })
             .then(function (res) {
                 return res.json();
             })

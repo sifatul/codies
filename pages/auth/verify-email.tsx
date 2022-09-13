@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import Styled from '@emotion/styled';
 import { cx, css } from '@emotion/css';
 import OtpInput from 'react-otp-input';
 import Image from 'next/image';
 import Button, { ButtonType } from '../../components/common/Button';
 import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
+import { useRouter } from 'next/router';
+import { PostData } from '../../Utils/fetchData';
 
 const FlexContainer = Styled.div`
     display: flex;
@@ -67,12 +69,40 @@ const OtpErrorClass = css`
 `;
 
 const VerifyEmailPage: React.FC = () => {
+    const router = useRouter()
+    const { email } = router.query
+    console.log(email)
     const [otp, setOpt] = useState<string>();
+    console.log(otp)
 
     const handleOtpChange = (e: string) => {
         console.log(e);
         setOpt(e);
     };
+
+    const sendOtp = useCallback(async () => {
+        try {
+            const res: any = await PostData('/api/users/otp/generate', JSON.stringify({ email }))
+            if (res?.error) throw res?.error
+        } catch (e) {
+            console.error(e)
+        }
+
+    }, [email])
+
+    const veryOtp = useCallback(async () => {
+        try {
+            const res: any = await PostData('/api/users/otp/verify', JSON.stringify({ email, otp }))
+            if (res?.error) throw res?.error
+            alert("user is verified")
+            router.push('/account/profile')
+        } catch (e) {
+            alert(JSON.stringify(e))
+            console.error(e)
+        }
+
+
+    }, [email, otp])
 
     return (
         <FlexContainer>
@@ -92,9 +122,15 @@ const VerifyEmailPage: React.FC = () => {
                         containerStyle={cx(OtpContainerClass)}
                         isInputNum={true}
                     />
-                    <Button type={ButtonType.PRIMARY} label='Verify Email' />
+                    <Button type={ButtonType.PRIMARY} label='Verify Email' onClick={e => {
+
+                        veryOtp()
+
+
+                    }} />
                     <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'center' }}>
                         <Button
+                            onClick={sendOtp}
                             type={ButtonType.GHOST}
                             label="Didn't get the code?"
                             labelWithLink='Resend'
@@ -118,3 +154,5 @@ const VerifyEmailPage: React.FC = () => {
 };
 
 export default VerifyEmailPage;
+
+

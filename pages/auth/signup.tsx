@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { css, cx } from '@emotion/css';
 import { useFormik, Form, FormikProvider } from 'formik';
 import * as Yup from 'yup';
 import Button, { ButtonType } from '../../components/common/Button';
 import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
 import Input, { InputType } from '../../components/common/Input';
+import { PostData } from '../../Utils/fetchData';
+import { useRouter } from 'next/router';
+
 
 export const SectionContainer = css`
     display: flex;
@@ -87,20 +90,47 @@ export const ImageContainer = css`
     background-repeat: no-repeat;
     width: calc(100% - 821px);
 `;
+const errorMessage = css`
+color: #F04848;
+padding-top: 4px;
+padding-bottom: 4px;
+
+`;
+
 
 const SignupPage: React.FC<{}> = () => {
+    const router = useRouter()
+
     const SignupSchema = Yup.object().shape({
         userName: Yup.string()
             .min(2, 'Too Short!')
             .max(50, 'Too Long!')
+            .trim().matches(/^\S*$/, "username must not contain space.")
             .required('UserName required'),
-        email: Yup.string().email('Invalid email').required('Email is required'),
+        email: Yup.string()
+            .email('Invalid email')
+            .required('Email is required'),
         password: Yup.string()
             .required('Password is required')
-            .min(6, 'Password must be at least 6 characters')
+            .min(8, 'Password must be at least 8 characters')
             .max(40, 'Password must not exceed 40 characters'),
         acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required'),
     });
+
+    const createNewUser = useCallback(async (newUser: { userName: string, email: string, password: string }) => {
+        try {
+            const res: any = await PostData('/api/users/add', JSON.stringify(newUser))
+            if (res?.error) throw res?.error
+            console.log(res);
+            alert("user created")
+            router.push('/auth/verify-email?email=' + newUser?.email);
+
+        } catch (e) {
+            console.error(e);
+            alert(JSON.stringify(e))
+        }
+
+    }, [])
 
     const formik = useFormik({
         initialValues: {
@@ -111,7 +141,9 @@ const SignupPage: React.FC<{}> = () => {
         },
         validationSchema: SignupSchema,
         onSubmit: (val) => {
-            console.log(val);
+            console.log("submit val", val);
+            createNewUser({ userName: val.userName, email: val.email, password: val.password })
+
         },
     });
 
@@ -152,6 +184,7 @@ const SignupPage: React.FC<{}> = () => {
                                         onChange={(e) => {
                                             handleChange(e);
                                         }}
+                                        errorMessage={errors.userName}
                                     />
                                 </div>
                                 <div className={cx(RowGap)}>
@@ -163,6 +196,7 @@ const SignupPage: React.FC<{}> = () => {
                                         onChange={(e) => {
                                             handleChange(e);
                                         }}
+                                        errorMessage={errors.email}
                                     />
                                 </div>
                                 <div className={cx(RowGap)}>
@@ -190,14 +224,18 @@ const SignupPage: React.FC<{}> = () => {
                                         />
                                     </div>
                                     <label htmlFor='agreeToTerms'>
-                                        I agree to the{' '}
+                                        I agree to the
                                         <span className={cx(ColoredLink)}>
-                                            {' '}
-                                            Terms and conditions{' '}
-                                        </span>{' '}
+
+                                            Terms and conditions
+                                        </span>
                                         and <span className={cx(ColoredLink)}> Privacy policy</span>
                                     </label>
+
                                 </div>
+                                {errors.acceptTerms && <div className={cx(errorMessage)}>
+                                    <span>{errors.acceptTerms}</span>
+                                </div>}
                                 <div className={cx([RowGap])}>
                                     <Button
                                         type={ButtonType.PRIMARY}

@@ -37,6 +37,16 @@ const CheckboxClass = css`
     margin: 0 8px 0 0;
 `;
 
+const ErrorInputClass = css`
+    border-color: #F04848;
+    &:focus {  border-color: #F04848;}
+`;
+const ErrorMessageClass = css` 
+    color: #F04848;
+    padding-top: 4px;
+    padding-bottom: 4px;
+`;
+
 const LabelClass = css`
     display: block;
     color: #2255f7;
@@ -46,6 +56,7 @@ const LabelClass = css`
     background: #fff;
     padding: 3px 16px;
 `;
+const ErrorLabelClass = css`color:#F04848`;
 
 export enum InputType {
     TEXT = 'text',
@@ -60,8 +71,9 @@ const Input: React.FC<{
     id?: string;
     value: string | boolean | number;
     name?: string;
+    errorMessage?: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-}> = ({ label, placeholder, type = InputType.TEXT, id, name, onChange }) => {
+}> = ({ label, placeholder, type = InputType.TEXT, id, name, onChange, errorMessage }) => {
     const [isFocused, setIsFocused] = useState(false);
     const [value, setValue] = useState('');
     const GetAnyAdditionalClass = (type: string): string[] => {
@@ -82,10 +94,10 @@ const Input: React.FC<{
 
     return (
         <div style={{ position: 'relative' }}>
-            {isLabelRequired() && <label className={cx(LabelClass)}>{label}</label>}
+            {isLabelRequired() && <label className={cx([LabelClass, errorMessage && ErrorLabelClass])}>{label}</label>}
             <input
                 placeholder={placeholder}
-                className={cx([InputClass, GetAnyAdditionalClass(type)])}
+                className={cx([InputClass, GetAnyAdditionalClass(type), errorMessage && ErrorInputClass])}
                 type={type}
                 name={name}
                 id={id}
@@ -96,6 +108,10 @@ const Input: React.FC<{
                     onChange(e);
                 }}
             />
+            <div className={ErrorMessageClass}>
+                <span>{errorMessage}</span>
+            </div>
+
         </div>
     );
 };

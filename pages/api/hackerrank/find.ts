@@ -21,28 +21,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const output = {};
 
     try {
-
         await connectToDatabase();
         const userName = req.query.userName as string;
-        if (!userName) return res.status(400).send({ status: 'error', message: 'empty userName is not allowed' });
-
+        if (!userName)
+            return res
+                .status(400)
+                .send({ status: 'error', message: 'empty userName is not allowed' });
 
         let hackerrank = await Hackerrank.findOne({ user_name: userName });
-        if (hackerrank) return res.json(hackerrank)
+        if (hackerrank) return res.json(hackerrank);
 
         const userProfileApi = getUserProfileApi.replace('userName', userName);
         const hankerRankResponse: any = await PostData(userProfileApi);
-        const newData = hankerRankResponse?.model
+        const newData = hankerRankResponse?.model;
         try {
-            if (newData) hackerrank = await Hackerrank.create(newData)
+            if (newData) hackerrank = await Hackerrank.create(newData);
         } catch (e) {
-            res.status(400).json(e)
+            res.status(400).json(e);
         }
 
-
-
-        if (!hackerrank) res.status(400).json({ message: 'data not found' })
-
+        if (!hackerrank) res.status(400).json({ message: 'data not found' });
 
         res.status(200).json(hackerrank);
     } catch (e) {
