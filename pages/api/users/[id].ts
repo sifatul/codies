@@ -25,8 +25,7 @@ const getByID = async (req: any, res: any) => {
 };
 
 const updateUser = async (req: any, res: any) => {
-    let client: any;
-    let db: any;
+ 
     try {
         const {
             query: { id },

@@ -86,7 +86,7 @@ export default async (req: NextApiRequest, res: any) => {
         // user created.
         // send OTP for verification
 
-        const callback = (result) => {
+        const callback = (result:any) => {
             console.log(result);
         };
         sendOtp(email, callback);

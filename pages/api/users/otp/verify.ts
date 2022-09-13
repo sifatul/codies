@@ -42,7 +42,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         const isOtpValid = await OTP.findOneAndDelete({
             where: { email: email, otp },
         });
-        
 
         if (!isOtpValid) {
             return res.status(404).send({ status: 'error', error: 'invalid otp' });

@@ -4,14 +4,9 @@ import SocialUser from '../users/models/SocialUserSchema';
 import { SocialLoginPlatform } from '../../../types/common.types';
 
 export default async (req: any, res: any) => {
-    let client: any;
-    let db: any;
+    
     try {
-        // const dbResponse =
-        await connectToDatabase();
-        // client = dbResponse.client;
-        // db = dbResponse.db;
-        // if (!db) return res.json({ error: 'database connection failed' });
+        await connectToDatabase(); 
         const { platform, token, userName } = req.body;
 
         const query =
@@ -31,8 +26,5 @@ export default async (req: any, res: any) => {
         return res.json(users);
     } catch (e) {
         console.error(e);
-    } finally {
-        // Ensures that the client will close when you finish/error
-        if (client) await client.close();
-    }
+    }  
 };
