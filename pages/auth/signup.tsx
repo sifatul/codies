@@ -128,7 +128,7 @@ const SignupPage: React.FC<{}> = () => {
             if (res?.error) throw res?.error
             console.log(res);
             alert("user created")
-            router.push('/auth/verify-email');
+            router.push('/auth/verify-email?email=' + newUser?.email);
 
         } catch (e) {
             console.error(e);
