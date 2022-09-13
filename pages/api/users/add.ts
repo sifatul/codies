@@ -71,23 +71,18 @@ interface IUserResponse extends NextApiResponse {
 }
 
 export default async (req: NextApiRequest, res: any) => {
-    let client: any;
-    let db: any;
-
     try {
-          await connectToDatabase();
-        // client = dbResponse.client;
-        // db = dbResponse.db;
-        // if (!db) return res.json({ error: 'database connection failed' });
+          await connectToDatabase(); 
+          if(!req.body) return res.status(400).json({ status: 'error', error: 'body param missing' });
 
-        const newUser = await User.create(req.body);
+          const {userName, email, password} = JSON.parse(req.body);
+          if(!userName || !email || !password) return res.status(400).json({ status: 'error', error: 'required param missing' });
 
-        return res.json({ status: 'success', message: 'User create successfully.' });
+        const newUser = await User.create({userName, email, password});
+
+        return res.json(newUser);
     } catch (e) {
         console.log(e);
-        res.json({ status: 'error', error: 'Something went wrong please try again later' });
-    } finally {
-        if (client) await client.close();
-        // Ensures that the client will close when you finish/error
+        res.status(500).json({ status: 'error', error: 'Something went wrong please try again later' });
     }
 };
