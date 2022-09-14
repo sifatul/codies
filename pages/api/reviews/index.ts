@@ -1,6 +1,8 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import nextConnect from 'next-connect';
 import Review from './model/ReviewSchema';
 import { connectToDatabase } from '../../../Utils/mongodb';
+
+const handler = nextConnect();
 
 const saveReview = async (req: any, res: any) => {
     try {
@@ -12,7 +14,7 @@ const saveReview = async (req: any, res: any) => {
 
         // check if reviewer already give review to user
         const isReviewExistGivenByRevieweer = await Review.findOne({
-            revieweeId: reviewInfo.revieweeId,
+            userId: reviewInfo.revieweeId,
             reviewerId: reviewInfo.reviewerId,
         });
 
@@ -40,45 +42,41 @@ const saveReview = async (req: any, res: any) => {
         });
     }
 };
-export default async function handler(req: NextApiRequest, res: any) {
-    const { method } = req;
-    switch (method) {
-        case 'POST':
-            /**
-             * @swagger
-             * '/api/reviews':
-             *  post:
-             *     tags:
-             *     - Reviews
-             *     summary: Create a user review
-             *     requestBody:
-             *      required: true
-             *      content:
-             *        application/json:
-             *           schema:
-             *            type: object
-             *            properties:
-             *              revieweeId:
-             *                type: string
-             *                default: 6304b9e894a8c241d9705c3b
-             *              reviewerId:
-             *                type: string
-             *                default: 6304b9e894a8c241d9705c3c
-             *              pros:
-             *                type: string
-             *                default: Good knowledge about javascript
-             *              cons:
-             *                type: string
-             *                default: Old school
-             *     responses:
-             *      201:
-             *        description: Created
-             */
 
-            return await saveReview(req, res);
-            break;
-        default:
-            res.status(400).json({ success: false });
-            break;
-    }
-}
+/**
+ * @swagger
+ * '/api/reviews':
+ *  post:
+ *     tags:
+ *     - Reviews
+ *     summary: Create a user review
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *            type: object
+ *            properties:
+ *              userId:
+ *                type: string
+ *                default: 6304b9e894a8c241d9705c3b
+ *              reviewerId:
+ *                type: string
+ *                default: 6304b9e894a8c241d9705c3c
+ *              pros:
+ *                type: string
+ *                default: Good knowledge about javascript
+ *              cons:
+ *                type: string
+ *                default: Old school
+ *     responses:
+ *      201:
+ *        description: Created
+ */
+handler.post(async (req: any, res: any) => {
+    const userReview = await saveReview(req, res);
+
+    return userReview;
+});
+
+export default handler;

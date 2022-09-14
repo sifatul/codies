@@ -8,13 +8,13 @@ const handler = nextConnect();
 
 /**
  * @swagger
- * '/api/reviews/{revieweeId}':
+ * '/api/reviews/{userId}':
  *  get:
  *     tags:
  *     - Reviews
- *     summary: Get reviews by revieweeId
+ *     summary: Get reviews by userId
  *     parameters:
- *       - name: revieweeId
+ *       - name: userId
  *         in: path
  *         description: the unique id of the user
  *         required: true
@@ -26,7 +26,7 @@ const handler = nextConnect();
  *            schema:
  *              type: object
  *              properties:
- *                revieweeId:
+ *                userId:
  *                  type: string
  *                reviewerId:
  *                  type: string
@@ -38,16 +38,16 @@ const handler = nextConnect();
 
 handler.get(async (req: any, res: any) => {
     try {
-        // TODO: revieweeId will come from token so that we don't need to pass id params
+        // TODO: userId will come from token so that we don't need to pass id params
         await connectToDatabase();
         const {
             query: { id },
         } = req;
 
-        const query = { revieweeId: new ObjectId(id) };
+        const query = { userId: new ObjectId(id) };
 
         const userReviews = await Review.find(query)
-            .populate({ path: 'revieweeId', model: Users })
+            .populate({ path: 'userId', model: Users })
             .populate({ path: 'reviewerId', model: Users });
 
         if (userReviews.length <= 0)
