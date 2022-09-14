@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { css, cx } from '@emotion/css';
 import { useFormik, Form, FormikProvider } from 'formik';
 import * as Yup from 'yup';
@@ -9,7 +9,6 @@ import {
     SectionContainer,
     FormSection,
     FormWrap,
-    SocialBtnContainer,
     Divider,
     DividerText,
     RowGap,
@@ -18,6 +17,9 @@ import {
     ImageContainer,
     CheckboxContainer,
 } from './signup';
+import SocialAuthComponent from '../../components/auth/social';
+import { useRouter } from 'next/router';
+import { GetData, PostData } from '../../Utils/fetchData';
 
 const JustifySpaceBetween = css`
     justify-content: space-between;
@@ -35,13 +37,37 @@ const ColorGray = css`
 `;
 
 const SigninPage: React.FC = () => {
+
+
+
+    const router = useRouter()
+    const goToSignup = useCallback(() => {
+        router.push('/auth/signup')
+    }, [])
+    const userSignin = useCallback(async (param: { email: string, password: string }) => {
+
+        try {
+            const res: any = await GetData(`/api/auth/login?email=${param.email}&password=${param.password}`);
+            if (res.status == 200) return router.push('/account/profile')
+            if (res.status == 401) return router.push('/auth/verify-email?email=' + param?.email);
+            else throw res?.message
+        } catch (e) {
+            console.error(e);
+            alert(JSON.stringify(e))
+
+        }
+
+
+    }, [])
+
+
     const SigninSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email').required('Email is required'),
         password: Yup.string()
             .required('Password is required')
             .min(6, 'Password must be at least 6 characters')
             .max(40, 'Password must not exceed 40 characters'),
-        rememberMe: Yup.bool().oneOf([true], 'Remember me Terms is required'),
+        // rememberMe: Yup.bool().oneOf([true], 'Remember me Terms is required'),
     });
 
     const formik = useFormik({
@@ -52,7 +78,9 @@ const SigninPage: React.FC = () => {
         },
         validationSchema: SigninSchema,
         onSubmit: (val) => {
-            console.log(val);
+            console.log("login val", val);
+            const { email, password } = val;
+            userSignin({ email, password })
         },
     });
 
@@ -66,18 +94,8 @@ const SigninPage: React.FC = () => {
                         label='Login to your Account'
                         description='Your own Digital Profile'
                     />
-                    <div className={cx(SocialBtnContainer)}>
-                        <Button
-                            type={ButtonType.SECONDARY}
-                            label='Signup with Google'
-                            icon='/images/auth/Google Logo.png'
-                        />
-                        <Button
-                            type={ButtonType.SECONDARY}
-                            label='Signup with Github'
-                            icon='/images/auth/GitHub-Mark-ai 1.png'
-                        />
-                    </div>
+
+                    <SocialAuthComponent />
                     <div className={cx(Divider)}>
                         <span className={cx(DividerText)}>or</span>
                     </div>
@@ -141,6 +159,7 @@ const SigninPage: React.FC = () => {
                                         label='Not a member yet? '
                                         labelWithLink='Register Now'
                                         actionType='button'
+                                        onClick={goToSignup}
                                     />
                                 </div>
                             </Form>

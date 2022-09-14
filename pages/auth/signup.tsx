@@ -7,6 +7,9 @@ import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
 import Input, { InputType } from '../../components/common/Input';
 import { PostData } from '../../Utils/fetchData';
 import { useRouter } from 'next/router';
+import SocialAuthComponent from '../../components/auth/social';
+import checkUserInfo from "../../Hooks/checkUser.hook"
+import { removeSpecialCharacter } from 'js-string-helper';
 
 
 export const SectionContainer = css`
@@ -22,14 +25,7 @@ export const FormSection = css`
     padding: 60px 0;
 `;
 
-export const SocialBtnContainer = css`
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    gap: 24px 0;
-    margin: 35px 0;
-`;
+
 
 export const FormWrap = css`
     width: 488px;
@@ -101,11 +97,19 @@ padding-bottom: 4px;
 const SignupPage: React.FC<{}> = () => {
     const router = useRouter()
 
+    const { getUserByName, getUserByEmail } = checkUserInfo()
+
+    const goToSignin = useCallback(() => {
+        router.push('/auth/signin')
+    }, [])
+
+
     const SignupSchema = Yup.object().shape({
         userName: Yup.string()
             .min(2, 'Too Short!')
             .max(50, 'Too Long!')
-            .trim().matches(/^\S*$/, "username must not contain space.")
+            .matches(/^\S*$/, "username must not contain space.")
+            .matches(/^[a-zA-Z0-9]*$/, "must not contain any special character")
             .required('UserName required'),
         email: Yup.string()
             .email('Invalid email')
@@ -120,10 +124,11 @@ const SignupPage: React.FC<{}> = () => {
     const createNewUser = useCallback(async (newUser: { userName: string, email: string, password: string }) => {
         try {
             const res: any = await PostData('/api/users/add', JSON.stringify(newUser))
-            if (res?.error) throw res?.error
             console.log(res);
+            if (res.status !== 200) throw res?.message
+            if (!res?.email) throw "email missing in response"
             alert("user created")
-            router.push('/auth/verify-email?email=' + newUser?.email);
+            router.push('/auth/verify-email?email=' + res?.email);
 
         } catch (e) {
             console.error(e);
@@ -140,14 +145,26 @@ const SignupPage: React.FC<{}> = () => {
             acceptTerms: false,
         },
         validationSchema: SignupSchema,
-        onSubmit: (val) => {
+        onSubmit: async (val) => {
             console.log("submit val", val);
-            createNewUser({ userName: val.userName, email: val.email, password: val.password })
+            const userName = val.userName
+            const email = val.email
+
+
+
+
+            const [userNamePromise, emailPromise]: any = await Promise.allSettled([getUserByName(userName), getUserByEmail(email)])
+            console.log("userExits: ", emailPromise, userNamePromise);
+
+            if (emailPromise?.value) return formik.setErrors({ email: "Email already exists." })
+            if (userNamePromise?.value) return formik.setErrors({ userName: "Username already exists." })
+
+            createNewUser({ userName, email, password: val.password })
 
         },
     });
 
-    const { handleChange, errors, values } = formik;
+    const { handleChange, errors, values, setFieldValue } = formik;
 
     return (
         <div className={cx(SectionContainer)}>
@@ -157,18 +174,7 @@ const SignupPage: React.FC<{}> = () => {
                         label="Let's partner up"
                         description="Let's level up your digital profile, together."
                     />
-                    <div className={cx(SocialBtnContainer)}>
-                        <Button
-                            type={ButtonType.SECONDARY}
-                            label='Signup with Google'
-                            icon='/images/auth/Google Logo.png'
-                        />
-                        <Button
-                            type={ButtonType.SECONDARY}
-                            label='Signup with Github'
-                            icon='/images/auth/GitHub-Mark-ai 1.png'
-                        />
-                    </div>
+                    <SocialAuthComponent />
                     <div className={cx(Divider)}>
                         <span className={cx(DividerText)}>or</span>
                     </div>
@@ -182,7 +188,7 @@ const SignupPage: React.FC<{}> = () => {
                                         name='userName'
                                         value={values.userName}
                                         onChange={(e) => {
-                                            handleChange(e);
+                                            handleChange(e)
                                         }}
                                         errorMessage={errors.userName}
                                     />
@@ -227,7 +233,7 @@ const SignupPage: React.FC<{}> = () => {
                                         I agree to the
                                         <span className={cx(ColoredLink)}>
 
-                                            Terms and conditions
+                                            &nbsp;Terms and conditions&nbsp;
                                         </span>
                                         and <span className={cx(ColoredLink)}> Privacy policy</span>
                                     </label>
@@ -249,6 +255,7 @@ const SignupPage: React.FC<{}> = () => {
                                         label='Already a member?'
                                         labelWithLink='Login'
                                         actionType='button'
+                                        onClick={goToSignin}
                                     />
                                 </div>
                             </Form>
