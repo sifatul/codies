@@ -137,7 +137,7 @@ const SignupPage: React.FC<{}> = () => {
 
     }, [])
 
-    const formik = useFormik({
+    const formik: any = useFormik({
         initialValues: {
             userName: '',
             email: '',
