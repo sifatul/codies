@@ -139,7 +139,7 @@ const DesiredRolesForm = () => {
                                         {values.roles &&
                                             values.roles.length > 0 &&
                                             values.roles.map((ex: experienceType, index) => (
-                                                <div key={index}>
+                                                <div key={"slider-idx" + index}>
                                                     <Slider
                                                         name={`${ex.name}`}
                                                         min={1}

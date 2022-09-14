@@ -74,7 +74,7 @@ const getSocialRedirectResult = async () => {
     logEvent(analytics, 'google login successful');
 
     console.log(user)
-    if (user.uid && platform) await socialLogin(platform, user.uid, user?.email)
+    if (user.uid && platform) await socialLogin(platform, user.uid, user?.email || '')
 
     if (!credential) return
     const token = credential.accessToken;
