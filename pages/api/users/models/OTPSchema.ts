@@ -5,8 +5,6 @@ interface IOTP {
     email: string;
     otp: string;
     expireTime: Date;
-    verified?: boolean;
-    verifiedAt?: Date;
 }
 
 const OTPSchema = new Schema<IOTP>(
@@ -25,21 +23,14 @@ const OTPSchema = new Schema<IOTP>(
         },
         expireTime: {
             type: Date,
-            nullable: true,
+            nullable: false,
         },
-        verified: {
-            type: Boolean,
-            default: false,
-            nullable: true,
-        },
-        verifiedAt: {
-            type: Date,
-            default: null,
-            nullable: true,
-        },
+       
     },
     { timestamps: true }
 );
+
+OTPSchema.index( { "expireTime": 1 }, { expireAfterSeconds: 0 } );
 
 const OTP = models.otp || model<IOTP>('otp', OTPSchema);
 

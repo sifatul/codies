@@ -19,6 +19,7 @@ interface IUser {
     medium_url?: string;
     codeforces_url?: string;
     google_token?: string;
+    verified?: boolean;
 }
 
 const validateUrl = (value: string) => {
@@ -49,7 +50,6 @@ const userSchema = new Schema<IUser>(
         password: {
             type: String,
             required: [true, 'Password is required'],
-            select: false,
             minLength: 8,
         },
         gender: {
@@ -128,6 +128,10 @@ const userSchema = new Schema<IUser>(
                     validateUrl(val);
                 },
             },
+            required: false,
+        },
+        verified: {
+            type: Boolean, 
             required: false,
         },
     },

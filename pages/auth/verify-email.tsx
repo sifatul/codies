@@ -73,7 +73,7 @@ const VerifyEmailPage: React.FC = () => {
     const { email } = router.query
     console.log(email)
     const [otp, setOpt] = useState<string>();
-    console.log(otp)
+
 
     const handleOtpChange = (e: string) => {
         console.log(e);
@@ -81,6 +81,8 @@ const VerifyEmailPage: React.FC = () => {
     };
 
     const sendOtp = useCallback(async () => {
+        setOpt('')
+
         try {
             const res: any = await PostData('/api/users/otp/generate', JSON.stringify({ email }))
             if (res?.error) throw res?.error
@@ -93,8 +95,10 @@ const VerifyEmailPage: React.FC = () => {
     const veryOtp = useCallback(async () => {
         try {
             const res: any = await PostData('/api/users/otp/verify', JSON.stringify({ email, otp }))
-            if (res?.error) throw res?.error
-            alert("user is verified")
+            if (res?.status != 200) {
+                throw res?.message
+            }
+            alert("user is verified");
             router.push('/account/profile')
         } catch (e) {
             alert(JSON.stringify(e))

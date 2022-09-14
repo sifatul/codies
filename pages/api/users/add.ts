@@ -75,28 +75,30 @@ export default async (req: NextApiRequest, res: any) => {
     try {
         await connectToDatabase();
         if (!req.body)
-            return res.status(400).json({ status: 'error', error: 'body param missing' });
+            return res.status(400).json({ status: 'error', message: 'body param missing' });
 
         const { userName, email, password } = JSON.parse(req.body);
-        if (!userName || !email || !password)
-            return res.status(400).json({ status: 'error', error: 'required param missing' });
+        if (!userName || !email || !password){
+            return res.status(400).json({ status: 'error', message: 'required param missing' });
+        }
+            
 
         const newUser = await User.create({ userName, email, password });
 
         // user created.
         // send OTP for verification
 
-        const callback = (result:any) => {
+        const callback = (result: any) => {
             console.log(result);
         };
         sendOtp(email, callback);
 
-        return res.json(newUser);
+        return res.status(200).json(newUser);
     } catch (e) {
         console.log(e);
         res.status(500).json({
             status: 'error',
-            error: 'Something went wrong please try again later',
+            message: 'Something went wrong please try again later',
         });
     }
 };
