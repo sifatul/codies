@@ -2,7 +2,7 @@ const GetData = (url: string) => {
     return new Promise((resolve) => {
         fetch(url, { method: 'GET' })
             .then(function (res) {
-                return res.json();
+                return { ...res.json(), status: res.status };
             })
             .then(function (json) {
                 resolve(json);
@@ -16,7 +16,7 @@ const PostData = (url: string, data: string) => {
     return new Promise((resolve) => {
         fetch(url, { method: 'POST', body: data })
             .then(function (res) {
-                return res.json();
+                return { ...res.json(), status: res.status };
             })
             .then(function (json) {
                 resolve(json);
@@ -30,7 +30,7 @@ const PutData = (url: string, profileUrl: string) => {
     return new Promise((resolve) => {
         fetch(url, { method: 'PUT', body: profileUrl })
             .then(function (res) {
-                return res.json();
+                return { ...res.json(), status: res.status };
             })
             .then(function (json) {
                 resolve(json);

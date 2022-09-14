@@ -98,7 +98,7 @@ const GhostBtn: React.FC<BtnProps> = ({ label, onClick, labelWithLink, icon, act
 
 const SecondaryButton: React.FC<BtnProps> = ({ label, onClick, icon = '', actionType }) => {
     return (
-        <SecondaryBtnStyled type={actionType}>
+        <SecondaryBtnStyled type={actionType} onClick={onClick}>
             <Image alt='Social Icon' src={icon} width={24} height={24} />
             <span>{label}</span>
         </SecondaryBtnStyled>

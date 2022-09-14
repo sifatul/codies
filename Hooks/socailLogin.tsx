@@ -1,31 +1,28 @@
-import { signInWithPopup, getAuth, getRedirectResult, GoogleAuthProvider, signInWithRedirect, GithubAuthProvider, OAuthCredential } from "firebase/auth";
-import { googleProvider, githubProvider } from "../Utils/auth/providers";
 import { getAnalytics, logEvent } from "firebase/analytics";
+import { getAuth, getRedirectResult, GithubAuthProvider, GoogleAuthProvider, OAuthCredential, signInWithRedirect } from "firebase/auth";
 import { SocialLoginPlatform } from "../types/common.types";
+import { githubProvider, googleProvider } from "../Utils/auth/providers";
+import { GetData } from "../Utils/fetchData";
 
 
 
-const socialLogin = async (platform: SocialLoginPlatform, idToken: string | OAuthCredential | null | undefined) => {
+const socialLogin = async (platform: SocialLoginPlatform, token: string | OAuthCredential | null | undefined) => {
   try {
-    const res = await fetch('/api/auth/social', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ platform, token: idToken }),
-    });
+    const res: any = await GetData(`/api/auth/social?platform=${platform}&token=${token}`)
+    if (res?.status == 200) return window.location.href = `account/profile`
+    if (res?.status == 404) {
+      // user not found
+      // proceed to create new user
+      window.location.href = `/auth/signup/social?platform=${platform}&token=${token}`
 
-    if (res.status == 400) {
-      alert("user not registered. insert username");
-      window.location.href = `account/userName/?platform=${platform}&token=${idToken}`
-    }
-    else if (res) {
-      alert(JSON.stringify(res))
     }
   } catch (e) {
     console.error(e)
+    alert(JSON.stringify(e))
   }
 }
+
+
 const googleLogin = async () => {
   try {
     if (!getAuth()) return
@@ -40,7 +37,10 @@ const googleLogin = async () => {
 
 const githubLogin = () => {
   try {
-    if (!getAuth()) return
+    if (!getAuth()) {
+      console.error("firebase auth missing")
+      return
+    }
     const auth = getAuth();
     signInWithRedirect(auth, githubProvider)
   } catch (e) {

@@ -7,6 +7,7 @@ import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
 import Input, { InputType } from '../../components/common/Input';
 import { PostData } from '../../Utils/fetchData';
 import { useRouter } from 'next/router';
+import SocialAuthComponent from '../../components/auth/social';
 
 
 export const SectionContainer = css`
@@ -22,14 +23,7 @@ export const FormSection = css`
     padding: 60px 0;
 `;
 
-export const SocialBtnContainer = css`
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    gap: 24px 0;
-    margin: 35px 0;
-`;
+
 
 export const FormWrap = css`
     width: 488px;
@@ -157,18 +151,7 @@ const SignupPage: React.FC<{}> = () => {
                         label="Let's partner up"
                         description="Let's level up your digital profile, together."
                     />
-                    <div className={cx(SocialBtnContainer)}>
-                        <Button
-                            type={ButtonType.SECONDARY}
-                            label='Signup with Google'
-                            icon='/images/auth/Google Logo.png'
-                        />
-                        <Button
-                            type={ButtonType.SECONDARY}
-                            label='Signup with Github'
-                            icon='/images/auth/GitHub-Mark-ai 1.png'
-                        />
-                    </div>
+                    <SocialAuthComponent />
                     <div className={cx(Divider)}>
                         <span className={cx(DividerText)}>or</span>
                     </div>
@@ -227,7 +210,7 @@ const SignupPage: React.FC<{}> = () => {
                                         I agree to the
                                         <span className={cx(ColoredLink)}>
 
-                                            Terms and conditions
+                                            &nbsp;Terms and conditions&nbsp;
                                         </span>
                                         and <span className={cx(ColoredLink)}> Privacy policy</span>
                                     </label>

@@ -9,7 +9,6 @@ import {
     SectionContainer,
     FormSection,
     FormWrap,
-    SocialBtnContainer,
     Divider,
     DividerText,
     RowGap,
@@ -18,6 +17,7 @@ import {
     ImageContainer,
     CheckboxContainer,
 } from './signup';
+import SocialAuthComponent from '../../components/auth/social';
 
 const JustifySpaceBetween = css`
     justify-content: space-between;
@@ -66,18 +66,8 @@ const SigninPage: React.FC = () => {
                         label='Login to your Account'
                         description='Your own Digital Profile'
                     />
-                    <div className={cx(SocialBtnContainer)}>
-                        <Button
-                            type={ButtonType.SECONDARY}
-                            label='Signup with Google'
-                            icon='/images/auth/Google Logo.png'
-                        />
-                        <Button
-                            type={ButtonType.SECONDARY}
-                            label='Signup with Github'
-                            icon='/images/auth/GitHub-Mark-ai 1.png'
-                        />
-                    </div>
+
+                    <SocialAuthComponent />
                     <div className={cx(Divider)}>
                         <span className={cx(DividerText)}>or</span>
                     </div>
