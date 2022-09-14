@@ -50,18 +50,13 @@ handler.get(async (req: any, res: any) => {
             .populate({ path: 'userId', model: Users })
             .populate({ path: 'reviewerId', model: Users });
 
-        if (userReviews.length <= 0)
-            return res.json({ code: 404, status: 'error', message: 'No review found.' });
+        if (userReviews.length <= 0) return res.status(404).json({ message: 'No review found.' });
 
-        return res.json({ code: 200, status: 'success', data: userReviews });
+        return res.status(200).json(userReviews);
     } catch (e) {
         console.log(e);
 
-        return res.json({
-            code: 500,
-            status: 'error',
-            error: e,
-        });
+        return res.status(500).json({ message: 'something went wrong' });
     }
 });
 

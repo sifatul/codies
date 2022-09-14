@@ -19,10 +19,8 @@ const saveReview = async (req: any, res: any) => {
         });
 
         if (isReviewExistGivenByRevieweer) {
-            return res.json({
-                code: 400,
-                status: 'error',
-                error: 'You already give review for this user',
+            return res.status(400).json({
+                message: 'You already give review for this user',
             });
         }
         // TODO:
@@ -31,15 +29,11 @@ const saveReview = async (req: any, res: any) => {
 
         await Review.create(reviewInfo);
 
-        return res.json({ code: 201, status: 'success', message: ' Review given successfully.' });
+        return res.status(201).json({ message: ' Review given successfully.' });
     } catch (e) {
         console.log(e);
 
-        return res.json({
-            code: 500,
-            status: 'error',
-            error: e,
-        });
+        return res.status(500).json({ message: 'something went wrong' });
     }
 };
 
