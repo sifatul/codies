@@ -6,9 +6,9 @@ import { GetData } from "../Utils/fetchData";
 
 
 
-const socialLogin = async (platform: SocialLoginPlatform, token: string | OAuthCredential | null | undefined) => {
+const socialLogin = async (platform: SocialLoginPlatform, token: string | OAuthCredential | null | undefined, email?: string) => {
   try {
-    const res: any = await GetData(`/api/auth/social?platform=${platform}&token=${token}`)
+    const res: any = await GetData(`/api/auth/social?platform=${platform}&token=${token}&email=${email}`)
     if (res?.status == 200) return window.location.href = `account/profile`
     if (res?.status == 404) {
       // user not found
@@ -73,7 +73,8 @@ const getSocialRedirectResult = async () => {
     const analytics = getAnalytics();
     logEvent(analytics, 'google login successful');
 
-    if (user.uid && platform) await socialLogin(platform, user.uid)
+    console.log(user)
+    if (user.uid && platform) await socialLogin(platform, user.uid, user?.email)
 
     if (!credential) return
     const token = credential.accessToken;

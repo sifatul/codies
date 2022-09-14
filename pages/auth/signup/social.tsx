@@ -30,7 +30,7 @@ const ColorGray = css`
 
 const SocialSignup: React.FC = () => {
     const router = useRouter()
-    const { platform, token } = router.query
+    const { platform, token, email } = router.query
 
     const SigninSchema = Yup.object().shape({
         userName: Yup.string()

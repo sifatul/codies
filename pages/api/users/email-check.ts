@@ -26,20 +26,22 @@ import User from './models/UserSchema';
  */
 
 export default async (req: NextApiRequest, res: any) => {
-    let client: any;
 
     try {
-        const dbResponse = await connectToDatabase();
-        client = dbResponse.client;
+         await connectToDatabase(); 
 
-        const { email } = req.body;
+        const { email } = req.query;
+
+        if (!email) {
+            return res.status(400).json({ message: 'params missing' });
+        }
         const user = await User.findOne({ email });
 
-        if (user) {
-            return res.status(400).json({ status: 'error', error: 'Dublicate Email' });
+        if (!user) {
+            return res.status(404).json({ message: 'user not found' });
         }
 
-        return res.status(200).json({ status: 'success', message: 'Success' });
+        return res.status(200).json(user);
     } catch (error) {
         return res.status(500).json(error || 'Something went wrong please try again later');
     }

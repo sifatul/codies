@@ -97,9 +97,9 @@ const sendOtpToEmail = async (email: string, newOtpObj: any, callback: any) => {
     // tslint:disable-next-line: await-promise
     await transporter.sendMail(mailOptions, (err, response) => {
         if (err) {
-            return callback({ status: 'error', message: 'Failure' });
+            return callback(false);
         }
-        callback({ status: 'success', message: 'Success' });
+        callback(true);
     });
 };
 
