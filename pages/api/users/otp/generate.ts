@@ -32,7 +32,7 @@ import User from '../models/UserSchema';
 
 // interface
 
-export const sendOtp = async (email: string, callback:any) => {
+export const sendOtp = async (email: string, callback: any) => {
     const generatedOtp = await generateOtp();
 
     const expireTime = AddMinutesToDate(new Date(), 10);
@@ -74,7 +74,7 @@ const AddMinutesToDate = (date: Date, minutes: number) => {
     return new Date(date.getTime() + minutes * 60000);
 };
 
-const sendOtpToEmail = async (email: string, newOtpObj: any, callback:any) => {
+const sendOtpToEmail = async (email: string, newOtpObj: any, callback: any) => {
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,

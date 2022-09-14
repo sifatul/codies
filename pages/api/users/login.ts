@@ -3,9 +3,8 @@ import User from './models/UserSchema';
 import bcrypt from 'bcryptjs';
 
 export default async (req: any, res: any) => {
- 
     try {
-        await connectToDatabase(); 
+        await connectToDatabase();
         const { email, password } = req.body;
 
         const salt = await bcrypt.genSalt(8);
