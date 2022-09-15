@@ -47,7 +47,7 @@ const SocialSignup: React.FC = () => {
 
     const socailSignup = useCallback(async (userName: any) => {
         try {
-            const body = JSON.stringify({ platform, token, userName })
+            const body = JSON.stringify({ platform, token, userName, email })
             if (!platform || !token || !userName) {
                 alert("params missing")
             }
@@ -61,7 +61,7 @@ const SocialSignup: React.FC = () => {
         }
     }, [platform, token])
 
-    const formik = useFormik({
+    const formik: any = useFormik({
         initialValues: {
             userName: ''
         },
@@ -69,8 +69,8 @@ const SocialSignup: React.FC = () => {
         onSubmit: async (val) => {
             console.log(val);
             const username = val.userName
-            const userInfo = getUserByName(username)
-            if (userInfo) return formik.setErrors({ userName: "Username already exists." })
+            const userInfo: any = getUserByName(username)
+            if (userInfo && userInfo?.status == 200) return formik.setErrors({ userName: "Username already exists." })
             socailSignup(username)
         },
     });
