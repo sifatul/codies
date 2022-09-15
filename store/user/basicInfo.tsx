@@ -68,7 +68,7 @@ export const userSlice = createSlice({
         },
         setUserInfo: (state: Draft<typeof initialState>, action: PayloadAction<UserState>) => {
             console.log("action.payload: ", action.payload)
-            state = action.payload;
+            state._id = "action.payload";
         },
     },
 });
