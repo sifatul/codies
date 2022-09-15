@@ -133,7 +133,7 @@ const userSchema = new Schema<IUser>(
             // sparse: true
         },
         verified: {
-            type: Boolean, 
+            type: Boolean,
             required: false,
         },
     },

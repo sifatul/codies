@@ -67,6 +67,7 @@ export const userSlice = createSlice({
             state.mobile = action.payload;
         },
         setUserInfo: (state: Draft<typeof initialState>, action: PayloadAction<UserState>) => {
+            console.log("action.payload: ", action.payload)
             state = action.payload;
         },
     },

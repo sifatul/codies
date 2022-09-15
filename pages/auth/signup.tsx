@@ -1,15 +1,14 @@
-import React, { useCallback } from 'react';
 import { css, cx } from '@emotion/css';
-import { useFormik, Form, FormikProvider } from 'formik';
+import { Form, FormikProvider, useFormik } from 'formik';
+import { useRouter } from 'next/router';
+import React, { useCallback } from 'react';
 import * as Yup from 'yup';
+import SocialAuthComponent from '../../components/auth/social';
 import Button, { ButtonType } from '../../components/common/Button';
 import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
 import Input, { InputType } from '../../components/common/Input';
+import checkUserInfo from "../../Hooks/checkUser.hook";
 import { PostData } from '../../Utils/fetchData';
-import { useRouter } from 'next/router';
-import SocialAuthComponent from '../../components/auth/social';
-import checkUserInfo from "../../Hooks/checkUser.hook"
-import { removeSpecialCharacter } from 'js-string-helper';
 
 
 export const SectionContainer = css`
@@ -96,6 +95,7 @@ padding-bottom: 4px;
 
 const SignupPage: React.FC<{}> = () => {
     const router = useRouter()
+
 
     const { getUserByName, getUserByEmail } = checkUserInfo()
 

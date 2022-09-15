@@ -78,10 +78,9 @@ export default async (req: NextApiRequest, res: any) => {
             return res.status(400).json({ status: 'error', message: 'body param missing' });
 
         const { userName, email, password } = JSON.parse(req.body);
-        if (!userName || !email || !password){
+        if (!userName || !email || !password) {
             return res.status(400).json({ status: 'error', message: 'required param missing' });
         }
-            
 
         const newUser = await User.create({ userName, email, password });
 

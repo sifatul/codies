@@ -20,6 +20,8 @@ import {
 import SocialAuthComponent from '../../components/auth/social';
 import { useRouter } from 'next/router';
 import { GetData, PostData } from '../../Utils/fetchData';
+import { UseAppDispatch } from '../../store';
+import { setUserInfo } from '../../store/user/basicInfo';
 
 const JustifySpaceBetween = css`
     justify-content: space-between;
@@ -38,6 +40,7 @@ const ColorGray = css`
 
 const SigninPage: React.FC = () => {
 
+    const dispatch = UseAppDispatch();
 
 
     const router = useRouter()
@@ -48,7 +51,11 @@ const SigninPage: React.FC = () => {
 
         try {
             const res: any = await GetData(`/api/auth/login?email=${param.email}&password=${param.password}`);
-            if (res.status == 200) return router.push('/account/profile')
+            if (res.status == 200) {
+                delete res.status
+                dispatch(setUserInfo(res))
+                return router.push(`/account/profile?username=${res.userName}`)
+            }
             if (res.status == 401) return router.push('/auth/verify-email?email=' + param?.email);
             else throw res?.message
         } catch (e) {
@@ -103,8 +110,16 @@ const SigninPage: React.FC = () => {
                         <FormikProvider value={formik}>
                             <Form>
                                 <div className={cx(RowGap)}>
-
-
+                                    <Input
+                                        label='Email'
+                                        placeholder='Email or User name'
+                                        type={InputType.TEXT}
+                                        name='email'
+                                        value={values.email}
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                        }}
+                                    />
                                 </div>
                                 <div className={cx(RowGap)}>
                                     <Input

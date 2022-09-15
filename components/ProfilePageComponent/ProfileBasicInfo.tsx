@@ -3,6 +3,8 @@ import Styled from '@emotion/styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithubSquare, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import { faLocationDot, faPhone, faShield } from '@fortawesome/free-solid-svg-icons';
+import { UseAppSelector } from '../../store';
+import { getUserState } from '../../store/user/basicInfo';
 
 const Container = Styled.div`
     width: 100%;
@@ -129,6 +131,10 @@ const PrivacyNoteDescriptionParagraph = Styled.div`
     margin: 0px;
 `;
 const ProfileBasicInfo = () => {
+
+    const githubUserInfo = UseAppSelector(getUserState);
+    console.log(githubUserInfo)
+
     return (
         <Container>
             <HeaderContainer />

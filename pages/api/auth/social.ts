@@ -21,17 +21,19 @@ handler.get(async (req: any, res: any) => {
         //     user = await User.findOne({email});
         // }
         if (email) {
-            user = await User.findOne({ $or: [query, {email}] });
+            user = await User.findOne({ $or: [query, { email }] });
         }
-       if(!user){
-        user = await User.findOne(query);
-       }
+        if (!user) {
+            user = await User.findOne(query);
+        }
 
         if (!user) return res.status(404).json(null);
+
         return res.status(200).json(user);
     } catch (e) {
         console.error(e);
-        return res.status(500).json({message:'something went wrong'});
+
+        return res.status(500).json({ message: 'something went wrong' });
     }
 });
 

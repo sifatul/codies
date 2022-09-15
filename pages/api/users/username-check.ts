@@ -34,12 +34,12 @@ handler.get(async (req: NextApiRequest, res: any) => {
 
         const { userName } = req.query;
         if (!userName) {
-            return res.status(400).json({  message: 'params missing' });
+            return res.status(400).json({ message: 'params missing' });
         }
 
         const user = await User.findOne({ userName });
         if (!user) {
-            return res.status(404).json({  message: 'user not found' });
+            return res.status(404).json({ message: 'user not found' });
         }
 
         return res.status(200).json(user);

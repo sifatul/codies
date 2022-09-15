@@ -34,10 +34,12 @@ const ProfileSkillsSection = Styled.div`
 `;
 
 const ProfilePage: React.FC = () => {
+
+
     return (
         <Container>
             <ProfileHeader>
-                <ProfileBasicInfo/>
+                <ProfileBasicInfo />
             </ProfileHeader>
             <ProfileDetailsContainer>
                 <ProfileSummaryContainer>

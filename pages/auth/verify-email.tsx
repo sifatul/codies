@@ -7,6 +7,8 @@ import Button, { ButtonType } from '../../components/common/Button';
 import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
 import { useRouter } from 'next/router';
 import { PostData } from '../../Utils/fetchData';
+import { UseAppDispatch } from '../../store';
+import { setUserInfo } from '../../store/user/basicInfo';
 
 const FlexContainer = Styled.div`
     display: flex;
@@ -71,7 +73,8 @@ const OtpErrorClass = css`
 const VerifyEmailPage: React.FC = () => {
     const router = useRouter()
     const { email } = router.query
-    console.log(email)
+    const dispatch = UseAppDispatch();
+
     const [otp, setOpt] = useState<string>();
 
 
@@ -99,7 +102,10 @@ const VerifyEmailPage: React.FC = () => {
                 throw res?.message
             }
             alert("user is verified");
-            router.push('/account/profile')
+            delete res.status
+            dispatch(setUserInfo(res))
+
+            router.push(`/account/profile?username=${res.userName}`)
         } catch (e) {
             alert(JSON.stringify(e))
             console.error(e)

@@ -1,27 +1,14 @@
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { FacebookAuthProvider, fetchSignInMethodsForEmail, getAuth, getRedirectResult, GithubAuthProvider, GoogleAuthProvider, OAuthCredential, signInWithRedirect } from "firebase/auth";
+import { UseAppDispatch } from "../store";
+import { setUserInfo } from "../store/user/basicInfo";
 import { SocialLoginPlatform } from "../types/common.types";
 import { githubProvider, googleProvider } from "../Utils/auth/providers";
 import { GetData } from "../Utils/fetchData";
 
 
 
-const socialLogin = async (platform: SocialLoginPlatform, token: string | OAuthCredential | null | undefined, email?: string | null | undefined) => {
-  try {
-    const query = `platform=${platform}&token=${token}&email=${email}`;
-    const res: any = await GetData(`/api/auth/social?${query}`)
-    if (res?.status == 200) return window.location.href = `/account/profile?username=${res?.userName}`
-    if (res?.status == 404) {
-      // user not found
-      // proceed to create new user
-      window.location.href = `/auth/signup/social?${query}`
 
-    }
-  } catch (e) {
-    console.error(e)
-    alert(JSON.stringify(e))
-  }
-}
 
 
 const googleLogin = async () => {
@@ -63,7 +50,7 @@ function getProvider(providerId: string) {
   }
 }
 
-const getSocialRedirectResult = async () => {
+const getSocialRedirectResult = async (callback: { (platform: SocialLoginPlatform, token: string | OAuthCredential | null | undefined, email?: string | null | undefined): Promise<void>; (arg0: SocialLoginPlatform, arg1: string, arg2: string): any; }) => {
   const supportedPopupSignInMethods = [
     GoogleAuthProvider.PROVIDER_ID,
     FacebookAuthProvider.PROVIDER_ID,
@@ -72,6 +59,7 @@ const getSocialRedirectResult = async () => {
 
   try {
     const auth = getAuth();
+
     console.log(auth)
     const result = await getRedirectResult(auth)
     console.log("result: ", result)
@@ -92,8 +80,8 @@ const getSocialRedirectResult = async () => {
     logEvent(analytics, 'google login successful');
 
     console.log(user)
-    debugger
-    if (user.uid && platform) await socialLogin(platform, user.uid, user?.email || '')
+
+    if (user.uid && platform) await callback(platform, user.uid, user?.email || '')
 
     if (!credential) return
     const token = credential.accessToken;

@@ -25,12 +25,11 @@ const OTPSchema = new Schema<IOTP>(
             type: Date,
             nullable: false,
         },
-       
     },
     { timestamps: true }
 );
 
-OTPSchema.index( { "expireTime": 1 }, { expireAfterSeconds: 0 } );
+OTPSchema.index({ expireTime: 1 }, { expireAfterSeconds: 0 });
 
 const OTP = models.otp || model<IOTP>('otp', OTPSchema);
 

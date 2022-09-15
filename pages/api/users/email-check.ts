@@ -26,9 +26,8 @@ import User from './models/UserSchema';
  */
 
 export default async (req: NextApiRequest, res: any) => {
-
     try {
-         await connectToDatabase(); 
+        await connectToDatabase();
 
         const { email } = req.query;
 
