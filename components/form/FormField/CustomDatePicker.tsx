@@ -14,7 +14,7 @@ const InputField = css`
 `;
 
 const MUIDatePicker = ({ ...props }: any) => {
-    const { setFieldValue } = useFormikContext();
+    const { setFieldValue, setFieldTouched } = useFormikContext();
     const [field] = useField(props);
 
     return (
@@ -26,6 +26,9 @@ const MUIDatePicker = ({ ...props }: any) => {
                 selected={(field.value && new Date(field.value)) || null}
                 onChange={(val) => {
                     setFieldValue(field.name, val);
+                }}
+                onChangeRaw={(e) => {
+                    setFieldTouched(field.name, true, true);
                 }}
             />
         </div>

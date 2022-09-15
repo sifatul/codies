@@ -10,7 +10,7 @@ const InputClass = css`
     display: flex;
     align-items: center;
 
-    color: #0F1928;
+    color: #0f1928;
     background: rgba(34, 85, 247, 0.05);
     border-radius: 8px;
     padding: 14px 24px;
@@ -25,7 +25,7 @@ const InputClass = css`
         background: white;
     }
     &:placeholder {
-        color: #6F757E;
+        color: #6f757e;
     }
 `;
 
@@ -38,11 +38,13 @@ const CheckboxClass = css`
 `;
 
 const ErrorInputClass = css`
-    border-color: #F04848;
-    &:focus {  border-color: #F04848;}
+    border-color: #f04848;
+    &:focus {
+        border-color: #f04848;
+    }
 `;
-const ErrorMessageClass = css` 
-    color: #F04848;
+const ErrorMessageClass = css`
+    color: #f04848;
     padding-top: 4px;
     padding-bottom: 4px;
 `;
@@ -56,12 +58,15 @@ const LabelClass = css`
     background: #fff;
     padding: 3px 16px;
 `;
-const ErrorLabelClass = css`color:#F04848`;
+const ErrorLabelClass = css`
+    color: #f04848;
+`;
 
 export enum InputType {
     TEXT = 'text',
     PASSWORD = 'password',
     CHECKBOX = 'checkbox',
+    TEXTAREA = 'textarea',
 }
 
 const Input: React.FC<{
@@ -72,7 +77,7 @@ const Input: React.FC<{
     value: string | boolean | number;
     name?: string;
     errorMessage?: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }> = ({ label, placeholder, type = InputType.TEXT, id, name, onChange, errorMessage }) => {
     const [isFocused, setIsFocused] = useState(false);
     const [value, setValue] = useState('');
@@ -94,10 +99,16 @@ const Input: React.FC<{
 
     return (
         <div style={{ position: 'relative' }}>
-            {isLabelRequired() && <label className={cx([LabelClass, errorMessage && ErrorLabelClass])}>{label}</label>}
+            {isLabelRequired() && (
+                <label className={cx([LabelClass, errorMessage && ErrorLabelClass])}>{label}</label>
+            )}
             <input
                 placeholder={placeholder}
-                className={cx([InputClass, GetAnyAdditionalClass(type), errorMessage && ErrorInputClass])}
+                className={cx([
+                    InputClass,
+                    GetAnyAdditionalClass(type),
+                    errorMessage && ErrorInputClass,
+                ])}
                 type={type}
                 name={name}
                 id={id}
@@ -111,7 +122,6 @@ const Input: React.FC<{
             <div className={ErrorMessageClass}>
                 <span>{errorMessage}</span>
             </div>
-
         </div>
     );
 };
