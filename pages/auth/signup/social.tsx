@@ -12,6 +12,7 @@ import {
     FormWrap, ImageContainer, RowGap, SectionContainer
 } from '../signup';
 import { PostData } from '../../../Utils/fetchData';
+import checkUserInfo from '../../../Hooks/checkUser.hook';
 
 const JustifySpaceBetween = css`
     justify-content: space-between;
@@ -31,6 +32,8 @@ const ColorGray = css`
 const SocialSignup: React.FC = () => {
     const router = useRouter()
     const { platform, token, email } = router.query
+    const { getUserByName } = checkUserInfo()
+
 
     const SigninSchema = Yup.object().shape({
         userName: Yup.string()
@@ -42,9 +45,9 @@ const SocialSignup: React.FC = () => {
 
 
 
-    const socailSignup = useCallback(async ({ userName }: any) => {
+    const socailSignup = useCallback(async (userName: any) => {
         try {
-            const body = JSON.stringify({ platform, token, userName })
+            const body = JSON.stringify({ platform, token, userName, email })
             if (!platform || !token || !userName) {
                 alert("params missing")
             }
@@ -58,14 +61,17 @@ const SocialSignup: React.FC = () => {
         }
     }, [platform, token])
 
-    const formik = useFormik({
+    const formik: any = useFormik({
         initialValues: {
             userName: ''
         },
         validationSchema: SigninSchema,
-        onSubmit: (val) => {
+        onSubmit: async (val) => {
             console.log(val);
-            socailSignup(val)
+            const username = val.userName
+            const userInfo: any = getUserByName(username)
+            if (userInfo && userInfo?.status == 200) return formik.setErrors({ userName: "Username already exists." })
+            socailSignup(username)
         },
     });
 

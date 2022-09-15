@@ -12,13 +12,14 @@ interface IUser {
     password: string;
     gender?: Gender;
     linkedin_url?: string;
-    github?: string;
+    github_url?: string;
     leetcode_url?: string;
     hackerrank_url?: string;
     codepen_url?: string;
     medium_url?: string;
     codeforces_url?: string;
     google_token?: string;
+    github_token?: string;
     verified?: boolean;
 }
 
@@ -36,7 +37,7 @@ const userSchema = new Schema<IUser>(
         lastName: { type: String, required: false },
         email: {
             type: String,
-            required: [true, 'Email is required'],
+            // required: [true, 'Email is required'],
             unique: true,
             index: true,
             validate: [isEmail, 'Invalid email'],
@@ -49,7 +50,7 @@ const userSchema = new Schema<IUser>(
         },
         password: {
             type: String,
-            required: [true, 'Password is required'],
+            // required: [true, 'Password is required'],
             minLength: 8,
         },
         gender: {
@@ -67,7 +68,7 @@ const userSchema = new Schema<IUser>(
             },
             required: false,
         },
-        github: {
+        github_url: {
             type: String,
             validate: {
                 validator: (val: string) => {
@@ -123,12 +124,13 @@ const userSchema = new Schema<IUser>(
         },
         google_token: {
             type: String,
-            validate: {
-                validator: (val: string) => {
-                    validateUrl(val);
-                },
-            },
-            required: false,
+            // unique: true,
+            // sparse: true
+        },
+        github_token: {
+            type: String,
+            // unique: true,
+            // sparse: true
         },
         verified: {
             type: Boolean, 
