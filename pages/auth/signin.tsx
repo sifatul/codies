@@ -65,7 +65,7 @@ const SigninPage: React.FC = () => {
         email: Yup.string().email('Invalid email').required('Email is required'),
         password: Yup.string()
             .required('Password is required')
-            .min(6, 'Password must be at least 6 characters')
+            .min(8, 'Password must be at least 8 characters')
             .max(40, 'Password must not exceed 40 characters'),
         // rememberMe: Yup.bool().oneOf([true], 'Remember me Terms is required'),
     });
