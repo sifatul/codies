@@ -1,39 +1,61 @@
-import { connectToDatabase } from '../../../Utils/mongodb';
-import { ObjectId } from 'mongodb';
-import SocialUser from '../users/models/SocialUserSchema';
+import nextConnect from 'next-connect';
 import { SocialLoginPlatform } from '../../../types/common.types';
+import { connectToDatabase } from '../../../Utils/mongodb';
+import User from '../users/models/UserSchema';
+const handler = nextConnect();
 
-export default async (req: any, res: any) => {
-    let client: any;
-    let db: any;
+handler.get(async (req: any, res: any) => {
     try {
-        // const dbResponse =
         await connectToDatabase();
-        // client = dbResponse.client;
-        // db = dbResponse.db;
-        // if (!db) return res.json({ error: 'database connection failed' });
-        const { platform, token,userName } = req.body;
+        const { platform, token, email } = req.query;
+        if (!token || !platform) {
+            return res.status(400).json({ message: 'request body is missing' });
+        }
 
         const query =
             platform === SocialLoginPlatform.GOOGLE
                 ? { google_token: token }
                 : { github_token: token };
-        let users = await SocialUser.findOne(query);
-        if(!users && !userName){
-            return res.status(400).json({message: 'user not found'});
+        let user = null;
+        // if(email){
+        //     user = await User.findOne({email});
+        // }
+        if (email) {
+            user = await User.findOne({ $or: [query, {email}] });
         }
-        else if (!users && userName) {
-            users = await SocialUser.create({ ...query, userName: userName });
-            console.log('new user created');
-        }
+       if(!user){
+        user = await User.findOne(query);
+       }
 
-        console.log('user login : ', users);
+        if (!user) return res.status(404).json(null);
+        return res.status(200).json(user);
+    } catch (e) {
+        console.error(e);
+        return res.status(500).json({message:'something went wrong'});
+    }
+});
+
+handler.post(async (req: any, res: any) => {
+    await connectToDatabase();
+    if (!req.body) {
+        return res.status(400).json({ message: 'request body is missing' });
+    }
+    const { platform, token, userName, email } = JSON.parse(req.body);
+
+    const query =
+        platform === SocialLoginPlatform.GOOGLE ? { google_token: token } : { github_token: token };
+    if (!platform || !token || !userName) {
+        res.status(400).json({ message: 'param is missing' });
+    }
+    try {
+        const users = await User.create({ ...query, userName, email });
+        console.log('new user created');
 
         return res.json(users);
     } catch (e) {
-        console.error(e);
-    } finally {
-        // Ensures that the client will close when you finish/error
-        if (client) await client.close();
+        console.log(e);
+        res.status(500).send({ message: 'failed to create new social user' });
     }
-};
+});
+
+export default handler;

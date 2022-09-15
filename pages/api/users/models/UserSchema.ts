@@ -5,20 +5,22 @@ import { isEmail, isUrl } from 'js-string-helper';
 
 // interface
 interface IUser {
-    firstName: string;
-    lastName: string;
-    userName: string;
+    firstName?: string;
+    lastName?: string;
+    userName?: string;
     email: string;
     password: string;
-    gender: Gender;
+    gender?: Gender;
     linkedin_url?: string;
-    github?: string;
+    github_url?: string;
     leetcode_url?: string;
     hackerrank_url?: string;
     codepen_url?: string;
     medium_url?: string;
     codeforces_url?: string;
     google_token?: string;
+    github_token?: string;
+    verified?: boolean;
 }
 
 const validateUrl = (value: string) => {
@@ -31,11 +33,11 @@ const validateUrl = (value: string) => {
 
 const userSchema = new Schema<IUser>(
     {
-        firstName: { type: String, required: true },
-        lastName: { type: String, required: true },
+        firstName: { type: String, required: false },
+        lastName: { type: String, required: false },
         email: {
             type: String,
-            required: [true, 'Email is required'],
+            // required: [true, 'Email is required'],
             unique: true,
             index: true,
             validate: [isEmail, 'Invalid email'],
@@ -48,14 +50,13 @@ const userSchema = new Schema<IUser>(
         },
         password: {
             type: String,
-            required: [true, 'Password is required'],
-            select: false,
+            // required: [true, 'Password is required'],
             minLength: 8,
         },
         gender: {
             type: String,
             enum: Gender,
-            required: [true, 'Gender is required'],
+            required: [false, 'Gender is required'],
             default: Gender.MALE,
         },
         linkedin_url: {
@@ -67,7 +68,7 @@ const userSchema = new Schema<IUser>(
             },
             required: false,
         },
-        github: {
+        github_url: {
             type: String,
             validate: {
                 validator: (val: string) => {
@@ -123,11 +124,16 @@ const userSchema = new Schema<IUser>(
         },
         google_token: {
             type: String,
-            validate: {
-                validator: (val: string) => {
-                    validateUrl(val);
-                },
-            },
+            // unique: true,
+            // sparse: true
+        },
+        github_token: {
+            type: String,
+            // unique: true,
+            // sparse: true
+        },
+        verified: {
+            type: Boolean, 
             required: false,
         },
     },

@@ -42,7 +42,7 @@
     "next": "12.2.2",
     "next-connect": "^0.13.0",
     "next-swagger-doc": "^0.3.6",
-    "node-fetch": "^3.2.9",
+    "node-fetch": "^3.2.10",
     "nodemailer": "^6.7.8",
     "octokit": "^2.0.7",
     "react": "18.2.0",

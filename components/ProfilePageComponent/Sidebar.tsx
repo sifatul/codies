@@ -170,9 +170,9 @@ const SideBar = () => {
 
                 <SidebarItemContainer>
 
-               {Array.from({length: 15}, (_, i) => i + 1).map(() => {
+               {Array.from({length: 15}, (_, i) => i + 1).map((index) => {
                     return (
-                    <Paragraph>Frankfurt <SmallText>  (+$400000) </SmallText> </Paragraph>
+                    <Paragraph key={index}>Frankfurt <SmallText>  (+$400000) </SmallText> </Paragraph>
                     )
                 })}
 
@@ -181,7 +181,7 @@ const SideBar = () => {
 
                 <SidebarItemContainer>
                     <Title>Contributions</Title>
-                    <Paragraph>You currently do not have any contributions. Recruiters won't see this section while it's empty. </Paragraph>
+                    <Paragraph>You currently do not have any contributions. Recruiters won{"'"}t see this section while it{"'"}s empty. </Paragraph>
                 </SidebarItemContainer>
 
 

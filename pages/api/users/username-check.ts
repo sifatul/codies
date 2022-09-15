@@ -1,4 +1,5 @@
 import { NextApiRequest } from 'next';
+import nextConnect from 'next-connect';
 /* eslint-disable import/no-anonymous-default-export */
 import { connectToDatabase } from '../../../Utils/mongodb';
 import User from './models/UserSchema';
@@ -25,24 +26,26 @@ import User from './models/UserSchema';
  *        description: Success
  */
 
+const handler = nextConnect();
 
-export default async (req: NextApiRequest, res: any) => {
-    let client: any;
-
+handler.get(async (req: NextApiRequest, res: any) => {
     try {
-        const dbResponse = await connectToDatabase();
-        client = dbResponse.client;
+        await connectToDatabase();
 
-
-        const { userName } = req.body
-        
-        const user = await User.findOne({userName});
-        if(user) {
-            return res.status(400).json({ status: 'error', error: 'Dublicate userName' });
+        const { userName } = req.query;
+        if (!userName) {
+            return res.status(400).json({  message: 'params missing' });
         }
 
-        return res.status(200).json({ status: 'success', message: 'Success' });
+        const user = await User.findOne({ userName });
+        if (!user) {
+            return res.status(404).json({  message: 'user not found' });
+        }
+
+        return res.status(200).json(user);
     } catch (error) {
         return res.status(500).json(error || 'Something went wrong please try again later');
     }
-};
+});
+
+export default handler;
