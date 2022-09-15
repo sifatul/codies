@@ -29,7 +29,7 @@ const ProfileCollectModal: React.FC<ModalProps> = ({
     afterOpenModal,
 }) => {
     return (
-        <div>
+        <div onClick={closeModal}>
             <Modal
                 className=''
                 isOpen={modalIsOpen}
@@ -40,8 +40,8 @@ const ProfileCollectModal: React.FC<ModalProps> = ({
                 contentLabel='Category'
                 ariaHideApp={false}
             >
-                <div>
-                    <ProfileCollectForm />
+                <div onClick={e => e.stopPropagation()}>
+                    <ProfileCollectForm callback={closeModal} />
                 </div>
             </Modal>
         </div>

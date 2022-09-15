@@ -78,9 +78,9 @@ const Input: React.FC<{
     name?: string;
     errorMessage?: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}> = ({ label, placeholder, type = InputType.TEXT, id, name, onChange, errorMessage }) => {
+}> = ({ label, placeholder, type = InputType.TEXT, id, name, onChange, errorMessage, value: initialVal }) => {
     const [isFocused, setIsFocused] = useState(false);
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState(initialVal);
     const GetAnyAdditionalClass = (type: string): string[] => {
         const arr = [];
         if (type === InputType.CHECKBOX) {
@@ -118,6 +118,7 @@ const Input: React.FC<{
                     setValue(e.target.value);
                     onChange(e);
                 }}
+                defaultValue={initialVal.toString()}
             />
             <div className={ErrorMessageClass}>
                 <span>{errorMessage}</span>

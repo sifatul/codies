@@ -1,12 +1,11 @@
-import '../styles/globals.css';
-import type { AppProps } from 'next/app';
-import { store } from '../store';
-import { Provider } from 'react-redux';
-import { app } from '../Utils/firebaseConfig';
-import { useEffect } from 'react';
-import { getAnalytics, logEvent } from 'firebase/analytics';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
+import { getAnalytics, logEvent } from 'firebase/analytics';
+import type { AppProps } from 'next/app';
+import { useEffect } from 'react';
+import { wrapper } from '../store';
+import '../styles/globals.css';
+import { app } from '../Utils/firebaseConfig';
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -16,11 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         logEvent(analytics, 'page view');
     }, []);
 
-    return (
-        <Provider store={store}>
-            <Component {...pageProps} />
-        </Provider>
-    );
+    return <Component {...pageProps} />;
 }
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);

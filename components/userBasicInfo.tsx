@@ -4,7 +4,7 @@ import { getUserState } from '../store/user/basicInfo';
 
 const UserBasicInfo = () => {
     const {
-        name = '',
+        userName = '',
         email = '',
         mobile = '',
         country = '',
@@ -22,7 +22,7 @@ const UserBasicInfo = () => {
                 <Grid container spacing={3}>
                     <Grid item lg={8} md={8} sm={12}>
                         <Typography variant='body1' mb={1}>
-                            <span>Name:</span> <span>{name ? name : '-'}</span>
+                            <span>Name:</span> <span>{userName ? userName : '-'}</span>
                         </Typography>
                         <Typography variant='body1' mb={1}>
                             <span>Email:</span> <span>{email ? email : '-'}</span>

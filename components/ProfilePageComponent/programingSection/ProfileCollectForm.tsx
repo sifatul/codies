@@ -11,6 +11,7 @@ import { PatchData } from '../../../Utils/fetchData';
 import { UseAppDispatch, UseAppSelector } from '../../../store';
 import { getGithubUserInfo, getTopRepos, setGithubUsername } from '../../../store/platforms/github';
 import { getLastPathname } from 'js-string-helper';
+import { getUserState, setUserInfo } from '../../../store/user/basicInfo';
 
 
 const Container = Styled.div`
@@ -80,10 +81,13 @@ const validationSchema = Yup.object().shape({
 
 });
 
-const ProfileCollectForm = () => {
+const ProfileCollectForm = (props: any) => {
+    const { callback } = props
     const githubUserInfo = UseAppSelector(getGithubUserInfo);
     const githubTopRepos = UseAppSelector(getTopRepos) || [];
+    const { _id = '', github_url, leetcode_url, hackerrank_url } = UseAppSelector(getUserState);
     const dispatch = UseAppDispatch();
+    console.log(_id, github_url)
 
 
     const updateUserInfo = useCallback(async (links: any) => {
@@ -93,21 +97,25 @@ const ProfileCollectForm = () => {
             leetcode_url = '',
         } = links
 
-        // await PatchData(`pages/api/users/${id}`, JSON.stringify(links))
+        dispatch(setUserInfo(links))
 
-        const userName = getLastPathname(github_url) || ''
-        dispatch(setGithubUsername(userName));
+        try {
+            await PatchData(`/api/users/${_id}`, JSON.stringify(links))
+            callback()
+        } catch (e) {
+            console.error(e)
+        }
 
-
-    }, [])
+    }, [_id])
 
 
     const formik = useFormik({
         initialValues: {
-            github_url: '',
-            hackerrank_url: '',
-            leetcode_url: '',
+            github_url: github_url || '',
+            hackerrank_url: hackerrank_url || '',
+            leetcode_url: leetcode_url || '',
         },
+        enableReinitialize: true,
         validationSchema: validationSchema,
         onSubmit: (val: any) => {
 
@@ -122,7 +130,7 @@ const ProfileCollectForm = () => {
     const { handleChange, errors, values, setFieldValue, resetForm } = formik;
 
     return (
-        <Container>
+        <Container >
             <FromHeader>Social platforms</FromHeader>
             <div>
                 <h4>Build your profile right away</h4>
@@ -142,7 +150,7 @@ const ProfileCollectForm = () => {
                                 <Input
 
                                     type={InputType.TEXT}
-                                    value={values.github_url}
+                                    value={github_url || values.github_url}
                                     label='Github profile'
                                     placeholder='https://github.com/username'
                                     name='github_url'
