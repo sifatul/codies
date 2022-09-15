@@ -1,6 +1,8 @@
 import React from 'react';
 import Styled from '@emotion/styled';
 import EditButton from './EditButton';
+import GithubProgramming from './programingSection/github';
+
 
 const SitebarMainContainer = Styled.div`
     border-bottom: 1px solid #e1e1e1;
@@ -96,6 +98,10 @@ const CommitCount = Styled.p`
     margin: 0;
 `
 
+const ProgrammingSection = Styled.div`
+    display: flex;
+`
+
 const SideBar = () => {
     const [modalIsOpen, setIsOpen] = React.useState(false);
     function openModal() {
@@ -170,17 +176,23 @@ const SideBar = () => {
 
                 <SidebarItemContainer>
 
-               {Array.from({length: 15}, (_, i) => i + 1).map((index) => {
-                    return (
-                    <Paragraph key={index}>Frankfurt <SmallText>  (+$400000) </SmallText> </Paragraph>
-                    )
-                })}
+                    {Array.from({ length: 15 }, (_, i) => i + 1).map((index) => {
+                        return (
+                            <Paragraph key={index}>Frankfurt <SmallText>  (+$400000) </SmallText> </Paragraph>
+                        )
+                    })}
 
                 </SidebarItemContainer>
 
 
                 <SidebarItemContainer>
-                    <Title>Contributions</Title>
+                    <ProgrammingSection>
+
+                        <GithubProgramming />
+
+                    </ProgrammingSection>
+
+
                     <Paragraph>You currently do not have any contributions. Recruiters won{"'"}t see this section while it{"'"}s empty. </Paragraph>
                 </SidebarItemContainer>
 

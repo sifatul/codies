@@ -1,6 +1,7 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
+    _id?: string;
     email: string;
     name: string;
     country: string;
@@ -15,6 +16,7 @@ export interface UserState {
  * Default state object with initial values.
  */
 const initialState: UserState = {
+    _id: '',
     name: '',
     email: '',
     country: '',

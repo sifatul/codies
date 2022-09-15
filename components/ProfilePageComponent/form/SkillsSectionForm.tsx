@@ -125,6 +125,7 @@ const SkillsSectionForm = () => {
                                 label='Skill tag'
                                 placeholder='Skill Tag'
                                 name='skillTag'
+
                             />
                             <Button type='submit'>Add</Button>
                         </FormWrapper>

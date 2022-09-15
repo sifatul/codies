@@ -1,5 +1,5 @@
 import { getAnalytics, logEvent } from "firebase/analytics";
-import { getAuth, getRedirectResult, GithubAuthProvider, GoogleAuthProvider, OAuthCredential, signInWithRedirect } from "firebase/auth";
+import { FacebookAuthProvider, fetchSignInMethodsForEmail, getAuth, getRedirectResult, GithubAuthProvider, GoogleAuthProvider, OAuthCredential, signInWithRedirect } from "firebase/auth";
 import { SocialLoginPlatform } from "../types/common.types";
 import { githubProvider, googleProvider } from "../Utils/auth/providers";
 import { GetData } from "../Utils/fetchData";
@@ -50,8 +50,25 @@ const githubLogin = () => {
 
 }
 
+function getProvider(providerId: string) {
+  switch (providerId) {
+    case GoogleAuthProvider.PROVIDER_ID:
+      return new GoogleAuthProvider();
+    case FacebookAuthProvider.PROVIDER_ID:
+      return new FacebookAuthProvider();
+    case GithubAuthProvider.PROVIDER_ID:
+      return new GithubAuthProvider();
+    default:
+      throw new Error(`No provider implemented for ${providerId}`);
+  }
+}
 
 const getSocialRedirectResult = async () => {
+  const supportedPopupSignInMethods = [
+    GoogleAuthProvider.PROVIDER_ID,
+    FacebookAuthProvider.PROVIDER_ID,
+    GithubAuthProvider.PROVIDER_ID,
+  ];
 
   try {
     const auth = getAuth();
@@ -75,21 +92,40 @@ const getSocialRedirectResult = async () => {
     logEvent(analytics, 'google login successful');
 
     console.log(user)
+    debugger
     if (user.uid && platform) await socialLogin(platform, user.uid, user?.email || '')
 
     if (!credential) return
     const token = credential.accessToken;
 
     // The signed-in user info.
-  } catch (error: any) {
-    console.error(error);
+  } catch (err: any) {
+    const auth = getAuth();
+
+    // if (err.email && err.credential && err.code === 'auth/account-exists-with-different-credential') {
+    //   const providers = await fetchSignInMethodsForEmail(auth, err.email)
+    //   const firstPopupProviderMethod = providers.find(p => supportedPopupSignInMethods.includes(p));
+
+    //   // Test: Could this happen with email link then trying social provider?
+    //   if (!firstPopupProviderMethod) {
+    //     throw new Error(`Your account is linked to a provider that isn't supported.`);
+    //   }
+
+    //   const linkedProvider = getProvider(firstPopupProviderMethod);
+    //   linkedProvider.setCustomParameters({ login_hint: err.email });
+
+    //   const result: any = await signInWithRedirect(auth, linkedProvider);
+    //   if (!result?.user) return
+    //   result.user.linkWithCredential(err.credential);
+    // }
+    console.error(err);
 
     console.error("getGithubRedirectResult > error")
     // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
+    const errorCode = err.code;
+    const errorMessage = err.message;
     // The email of the user's account used.
-    const email = error.customData.email;
+    const email = err.customData.email;
     // The AuthCredential type that was used.
     // const credential = GithubAuthProvider.credentialFromError(error);
     console.error(`${email} is registered under a different platform`)

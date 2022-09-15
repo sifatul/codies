@@ -183,5 +183,9 @@ handler.delete(async (req: any, res: any) => {
     await deleteByID(req, res);
     res.json({ message: 'user deleted successfully.' });
 });
+handler.patch(async (req: any, res: any) => {
+    await updateUser(req, res);
+    res.json({ message: 'user deleted successfully.' });
+});
 
 export default handler;

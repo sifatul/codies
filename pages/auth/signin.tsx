@@ -103,16 +103,8 @@ const SigninPage: React.FC = () => {
                         <FormikProvider value={formik}>
                             <Form>
                                 <div className={cx(RowGap)}>
-                                    <Input
-                                        label='Email'
-                                        placeholder='Email or User name'
-                                        type={InputType.TEXT}
-                                        name='email'
-                                        value={values.email}
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                        }}
-                                    />
+
+
                                 </div>
                                 <div className={cx(RowGap)}>
                                     <Input

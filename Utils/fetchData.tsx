@@ -25,4 +25,13 @@ const PutData = (url: string, profileUrl: string) => {
             });
     });
 };
-export { GetData, PostData, PutData };
+const PatchData = (url: string, profileUrl: string) => {
+    return new Promise((resolve) => {
+        fetch(url, { method: 'PATCH', body: profileUrl })
+            .then(r => r.json().then(data => resolve({ status: r.status, ...data })))
+            .catch((e) => {
+                throw e;
+            });
+    });
+};
+export { GetData, PostData, PutData, PatchData };
