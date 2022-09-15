@@ -9,7 +9,7 @@ import { GetData } from "../Utils/fetchData";
 const socialLogin = async (platform: SocialLoginPlatform, token: string | OAuthCredential | null | undefined, email?: string) => {
   try {
     const res: any = await GetData(`/api/auth/social?platform=${platform}&token=${token}&email=${email}`)
-    if (res?.status == 200) return window.location.href = `account/profile`
+    if (res?.status == 200) return window.location.href = `/account/profile`
     if (res?.status == 404) {
       // user not found
       // proceed to create new user

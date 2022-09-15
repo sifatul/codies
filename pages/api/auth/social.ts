@@ -17,15 +17,21 @@ handler.get(async (req: any, res: any) => {
                 ? { google_token: token }
                 : { github_token: token };
         let user = null;
-        if (email) user = await SocialUser.findOne({ $or: [query, email] });
-        else user = await SocialUser.findOne(query);
-
+        // if(email){
+        //     user = await SocialUser.findOne({email});
+        // }
+        if (email) {
+            user = await SocialUser.findOne({ $or: [query, {email}] });
+        }
+       if(!user){
+        user = await SocialUser.findOne(query);
+       }
 
         if (!user) return res.status(404).json(null);
         return res.status(200).json(user);
     } catch (e) {
         console.error(e);
-        return res.status(500).json('something went wrong');
+        return res.status(500).json({message:'something went wrong'});
     }
 });
 
