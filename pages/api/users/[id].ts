@@ -30,13 +30,17 @@ const updateUser = async (req: any, res: any) => {
             query: { id },
             body,
         } = req;
+        if (!req.body) {
+            return res.status(400).json({ status: 'error', message: 'body param missing' });
+        }
+        const updateData = JSON.parse(req.body);
 
         await connectToDatabase();
 
         const userData = await Users.updateOne(
             { _id: new ObjectId(id) },
             {
-                $set: body,
+                $set: updateData,
             }
         );
 

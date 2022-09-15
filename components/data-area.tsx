@@ -4,7 +4,6 @@ import LeetCodeArea from '../components/leetcode-area';
 import { UseAppSelector } from '../store';
 import { getFilterState } from '../store/filter';
 import { Filter } from '../types/common.types';
-import BasicInfo from './basicInfo';
 import CodePenArea from './codepen-area';
 import GithubArea from './github-area';
 import HackerrankArea from './hackerrank-area';

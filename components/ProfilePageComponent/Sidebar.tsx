@@ -2,6 +2,7 @@ import React from 'react';
 import Styled from '@emotion/styled';
 import EditButton from './EditButton';
 import GithubProgramming from './programingSection/github';
+import LeetcodeProgramming from './programingSection/leetcode';
 
 
 const SitebarMainContainer = Styled.div`
@@ -99,7 +100,7 @@ const CommitCount = Styled.p`
 `
 
 const ProgrammingSection = Styled.div`
-    display: flex;
+    display: block;
 `
 
 const SideBar = () => {
@@ -176,7 +177,7 @@ const SideBar = () => {
 
                 <SidebarItemContainer>
 
-                    {Array.from({ length: 15 }, (_, i) => i + 1).map((index) => {
+                    {Array.from({ length: 5 }, (_, i) => i + 1).map((index) => {
                         return (
                             <Paragraph key={index}>Frankfurt <SmallText>  (+$400000) </SmallText> </Paragraph>
                         )
@@ -193,14 +194,22 @@ const SideBar = () => {
                     </ProgrammingSection>
 
 
-                    <Paragraph>You currently do not have any contributions. Recruiters won{"'"}t see this section while it{"'"}s empty. </Paragraph>
+
+
+
                 </SidebarItemContainer>
 
 
 
                 <SidebarItemContainer>
-                    <Title>Programming</Title>
-                    <CommitList>
+                    <ProgrammingSection>
+
+                        <LeetcodeProgramming />
+
+                    </ProgrammingSection>
+
+                    {/* <Title>Programming</Title> */}
+                    {/* <CommitList>
 
                         {programming.map((prg) => {
                             return (
@@ -220,7 +229,7 @@ const SideBar = () => {
                         })}
 
 
-                    </CommitList>
+                    </CommitList> */}
                 </SidebarItemContainer>
 
             </SidebarContainer>

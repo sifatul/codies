@@ -60,13 +60,19 @@ const SocialAuthComponent = () => {
 
     <div className={cx(SocialBtnContainer)}>
       <Button
-        onClick={e => googleLogin()}
+        onClick={e => {
+          e.preventDefault()
+          googleLogin()
+        }}
         type={ButtonType.SECONDARY}
         label='Connect with Google'
         icon='/images/auth/Google Logo.png'
       />
       <Button
-        onClick={e => githubLogin()}
+        onClick={e => {
+          e.preventDefault()
+          githubLogin()
+        }}
         type={ButtonType.SECONDARY}
         label='Connect with Github'
         icon='/images/auth/GitHub-Mark-ai 1.png'
