@@ -52,7 +52,7 @@ const SocialSignup: React.FC = () => {
                 alert("params missing")
             }
             const res: any = await PostData(`/api/auth/social`, body)
-            if (res?.status == 200) return window.location.href = `/account/profile`
+            if (res?.status == 200) return window.location.href = `/account/profile?username=${res?.userName}`
             throw res?.message
         } catch (e) {
             console.error(e)
