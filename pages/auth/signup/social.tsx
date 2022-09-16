@@ -13,6 +13,8 @@ import {
 } from '../signup';
 import { PostData } from '../../../Utils/fetchData';
 import checkUserInfo from '../../../Hooks/checkUser.hook';
+import { UseAppDispatch } from '../../../store';
+import { setUserInfo } from '../../../store/user/basicInfo';
 
 const JustifySpaceBetween = css`
     justify-content: space-between;
@@ -31,8 +33,9 @@ const ColorGray = css`
 
 const SocialSignup: React.FC = () => {
     const router = useRouter()
-    const { platform, token, email } = router.query
+    const { platform, token, email, fullName = '', profilePic = '' } = router.query
     const { getUserByName } = checkUserInfo()
+    const dispatch = UseAppDispatch();
 
 
     const SigninSchema = Yup.object().shape({
@@ -47,12 +50,19 @@ const SocialSignup: React.FC = () => {
 
     const socailSignup = useCallback(async (userName: any) => {
         try {
-            const body = JSON.stringify({ platform, token, userName, email })
             if (!platform || !token || !userName) {
                 alert("params missing")
             }
+            const data = { platform, token, userName, email, fullName, profilePic }
+
+            const body = JSON.stringify(data)
+
             const res: any = await PostData(`/api/auth/social`, body)
-            if (res?.status == 200) return window.location.href = `/account/profile?username=${res?.userName}`
+            if (res?.status == 200) {
+                dispatch(setUserInfo(res))
+                router.push(`/account/profile?username=${res?.userName}`)
+                return
+            }
             throw res?.message
         } catch (e) {
             console.error(e)

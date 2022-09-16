@@ -131,8 +131,9 @@ const GithubProgramming = () => {
         <FontAwesomeIcon icon={faGithub} />
       </div>
     </ProgrammingSectionHeader>
-    {repoListWithLang.length <= 0 && <Paragraph > You currently do not have any contributions. Recruiters won{"'"}t see this section while it{"'"}s empty. </Paragraph>}
-    {repoListWithLang.length && <CountList arr={repoListWithLang} />}
+    {!githubUserInfo?.html_url && <Paragraph > Your Github profile is not connected. </Paragraph>}
+    {githubUserInfo?.html_url && repoListWithLang.length <= 0 && <Paragraph > You currently do not have any contributions </Paragraph>}
+    {repoListWithLang.length > 0 && <CountList arr={repoListWithLang} />}
 
 
     <ProfileCollectModal

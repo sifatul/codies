@@ -6,12 +6,14 @@ import { GetData, PatchData } from '../Utils/fetchData';
 export default function checkUserInfo() {
   const dispatch = UseAppDispatch();
   const { _id = '' } = UseAppSelector(getUserState);
+  console.log("user id: ", _id)
 
 
 
   const getUserByName = useCallback(async (userName: string) => {
     try {
-      const response: any = await GetData(`/api/users/username-check?userName=${userName}`);
+
+      const response: any = await GetData(`/api/users/find?param=${JSON.stringify({ userName })}`)
       if (response?.status == 200) return response
       else throw response?.message
 
@@ -25,7 +27,7 @@ export default function checkUserInfo() {
   const getUserByEmail = useCallback(async (email: string) => {
     try {
 
-      const response: any = await GetData(`/api/users/email-check?email=${email}`);
+      const response: any = await GetData(`/api/users/find?param=${JSON.stringify({ email })}`)
       if (response?.status == 200) return response
       else throw response?.message
 
@@ -37,6 +39,10 @@ export default function checkUserInfo() {
 
   }, [])
   const updateUserInfo = useCallback(async (data: any, callback?: any) => {
+    if (!_id) {
+      console.error("user id missing")
+      return
+    }
 
 
     dispatch(setUserInfo(data))

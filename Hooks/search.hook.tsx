@@ -1,13 +1,16 @@
 import { getDomain, isEmail } from 'js-string-helper';
+import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import { UseAppDispatch } from '../store';
 import { resetSearchType, setSearchTypeEmail, setSearchTypeName, setSearchTypeUrl, userInfoType } from '../store/search';
-import { setEmail } from '../store/user/basicInfo';
+import { setEmail, setUserInfo } from '../store/user/basicInfo';
 import { Filter } from '../types/common.types';
 import { GetData } from '../Utils/fetchData';
 
 export default function SearchHelper(searchVal: string) {
   const dispatch = UseAppDispatch();
+  const router = useRouter()
+
 
   const getUserByPlatform = useCallback(async () => {
     const hostnameAndQueryKey = {
@@ -29,10 +32,10 @@ export default function SearchHelper(searchVal: string) {
       [queryKey]: searchVal
     }
 
-    return await GetData(`api/platform/platform?param=${JSON.stringify(param)}`)
+    return await GetData(`/api/users/find?param=${JSON.stringify(param)}`)
 
 
-  }, [])
+  }, [searchVal])
   const updateStoreWithUserInfo = useCallback((userInfo: userInfoType) => {
     dispatch(setSearchTypeEmail({ userFound: userInfo, originalSearchVal: userInfo.email }))
     dispatch(setEmail(userInfo.email))
@@ -45,13 +48,12 @@ export default function SearchHelper(searchVal: string) {
     dispatch(resetSearchType)
 
     if (isEmail(searchVal)) {
-      const param = {
-        email: searchVal
-      }
-      const userInfo = await GetData(`api/platform/platform?param=${JSON.stringify(param)}`)
 
-      if (userInfo) {
-        updateStoreWithUserInfo(userInfo as userInfoType)
+      const userInfo: any = await GetData(`/api/users/find?param=${JSON.stringify({ email: searchVal })}`)
+
+      if (userInfo.status == 200) {
+        dispatch(setUserInfo(userInfo))
+        router.push(`/account/profile?username=${userInfo?.userName}`)
         return
       }
     }
@@ -63,9 +65,10 @@ export default function SearchHelper(searchVal: string) {
       let { protocol, hostname, pathname } = new URL(searchVal);
 
       // check values exists in database
-      const userInfo = await getUserByPlatform()
-      if (userInfo) {
-        updateStoreWithUserInfo(userInfo as userInfoType)
+      const userInfo: any = await getUserByPlatform()
+      if (userInfo && userInfo?.status == 200) {
+        dispatch(setUserInfo(userInfo))
+        router.push(`/account/profile?username=${userInfo?.userName}`)
         return
       }
 

@@ -1,7 +1,5 @@
 import { css, cx } from '@emotion/css';
 import Styled from '@emotion/styled';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDomain, getLastPathname } from 'js-string-helper';
 import React, { useEffect, useMemo, useState } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../../../store';
@@ -46,12 +44,8 @@ const LeetcodeProgramming = () => {
   const leetcodeUserInfo = UseAppSelector(getLeetcodeUserInfo);
 
   const { languageProblemCount = [] } = leetcodeUserInfo
-  console.log("leetcodeUserInfo: ", leetcodeUserInfo)
 
-
-
-
-  const { _id = '', github_url, leetcode_url, hackerrank_url } = UseAppSelector(getUserState);
+  const { _id = '', leetcode_url } = UseAppSelector(getUserState);
   const dispatch = UseAppDispatch();
 
 
@@ -117,7 +111,8 @@ const LeetcodeProgramming = () => {
         <img src='/icons/leetcode.png' alt='leetcode-icon' style={{ height: '20px' }} />
       </div>
     </ProgrammingSectionHeader>
-    {languageProblemCount.length <= 0 && <Paragraph > You currently do not have any contributions. </Paragraph>}
+    {!leetcode_url && <Paragraph > Your HackerRank profile is not connected. </Paragraph>}
+    {leetcode_url && languageProblemCount.length <= 0 && <Paragraph > You currently do not have any contributions. </Paragraph>}
     {languageProblemCount.length > 0 && <CountList arr={LanguageAndCount} />}
 
 

@@ -46,13 +46,10 @@ const Paragraph = Styled.p`
 const HackerrankProgramming = () => {
   const [showProfileLinkModal, setShowProfileLinkModal] = useState(false)
   const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
-  const { _id = '', github_url, leetcode_url, profilePic } = UseAppSelector(getUserState);
+  const { profilePic } = UseAppSelector(getUserState);
 
   const { languages = [] } = hackerrankUserInfo
-  console.log("hackerrankUserInfo: ", hackerrankUserInfo)
   const { updateUserInfo } = checkUserInfo()
-
-
 
 
   const { hackerrank_url } = UseAppSelector(getUserState);
@@ -90,12 +87,8 @@ const HackerrankProgramming = () => {
 
     const hackerRankdata: hackerRankDataType = data || {};
     const { avatar, country, name } = hackerRankdata;
-    // if (name) dispatch(setName(name));
-    // if (avatar) dispatch(setProfilePic(avatar));
-    // if (country) dispatch(setCountry(country));
 
     dispatch(setHackerRankInfo(hackerRankdata));
-    console.log("hackerRankdata> ", hackerRankdata);
     return hackerRankdata;
   }, []);
 
@@ -132,7 +125,6 @@ const HackerrankProgramming = () => {
 
 
 
-  console.log("languages: ", languages)
   return <>
     <ProgrammingSectionHeader>
       <Title>Hackerranking</Title>
@@ -141,7 +133,8 @@ const HackerrankProgramming = () => {
         <FontAwesomeIcon icon={faHackerrank} />
       </div>
     </ProgrammingSectionHeader>
-    {languagesVersionTogether.length <= 0 && <Paragraph > You currently do not have any contributions yet. </Paragraph>}
+    {!hackerrank_url && <Paragraph > Your HackerRank profile is not connected. </Paragraph>}
+    {hackerrank_url && languagesVersionTogether.length <= 0 && <Paragraph > You currently do not have any contributions yet. </Paragraph>}
     {languagesVersionTogether.length > 0 && <CountList arr={languagesVersionTogether} />}
 
 

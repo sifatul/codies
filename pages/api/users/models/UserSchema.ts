@@ -5,11 +5,11 @@ import { isEmail, isUrl } from 'js-string-helper';
 
 // interface
 interface IUser {
-    firstName?: string;
-    lastName?: string;
+    fullName?: string;
     userName?: string;
     email: string;
     password: string;
+    profilePic?: string;
     gender?: Gender;
     linkedin_url?: string;
     github_url?: string;
@@ -33,8 +33,7 @@ const validateUrl = (value: string) => {
 
 const userSchema = new Schema<IUser>(
     {
-        firstName: { type: String, required: false },
-        lastName: { type: String, required: false },
+        fullName: { type: String, required: false },
         email: {
             type: String,
             // required: [true, 'Email is required'],
@@ -50,8 +49,10 @@ const userSchema = new Schema<IUser>(
         },
         password: {
             type: String,
-            // required: [true, 'Password is required'],
             minLength: 8,
+        },
+        profilePic: {
+            type: String,
         },
         gender: {
             type: String,

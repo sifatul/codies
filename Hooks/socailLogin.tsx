@@ -50,7 +50,7 @@ function getProvider(providerId: string) {
   }
 }
 
-const getSocialRedirectResult = async (callback: { (platform: SocialLoginPlatform, token: string | OAuthCredential | null | undefined, email?: string | null | undefined): Promise<void>; (arg0: SocialLoginPlatform, arg1: string, arg2: string): any; }) => {
+const getSocialRedirectResult = async (callback: any) => {
   const supportedPopupSignInMethods = [
     GoogleAuthProvider.PROVIDER_ID,
     FacebookAuthProvider.PROVIDER_ID,
@@ -79,9 +79,7 @@ const getSocialRedirectResult = async (callback: { (platform: SocialLoginPlatfor
     const analytics = getAnalytics();
     logEvent(analytics, 'google login successful');
 
-    console.log(user)
-
-    if (user.uid && platform) await callback(platform, user.uid, user?.email || '')
+    if (user.uid && platform) await callback(platform, user.uid, user?.email || '', user?.displayName, user?.photoURL)
 
     if (!credential) return
     const token = credential.accessToken;

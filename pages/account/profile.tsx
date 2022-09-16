@@ -5,6 +5,11 @@ import SkillsSection from '../../components/ProfilePageComponent/SkillsSection';
 import ExperienceSection from '../../components/ProfilePageComponent/ExperienceSection';
 import ProfileBasicInfo from '../../components/ProfilePageComponent/ProfileBasicInfo';
 import SideBar from '../../components/ProfilePageComponent/Sidebar';
+import { useEffect } from 'react';
+import { useRouter } from "next/router";
+import { UseAppSelector } from '../../store';
+import { getUserState } from '../../store/user/basicInfo';
+
 
 const Container = Styled.div`
     margin: 0 auto;
@@ -34,6 +39,15 @@ const ProfileSkillsSection = Styled.div`
 `;
 
 const ProfilePage: React.FC = () => {
+    const router = useRouter()
+    const { userName = '', _id } = UseAppSelector(getUserState);
+
+
+    useEffect(() => {
+        console.log(userName)
+        // if (!userName || !_id) router.replace('/auth/signin')
+        // router.push('/account/profile', `/${userName}`, { shallow: true })
+    }, [])
 
 
     return (

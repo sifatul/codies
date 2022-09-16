@@ -133,8 +133,8 @@ const PrivacyNoteDescriptionParagraph = Styled.div`
 const ProfileBasicInfo = () => {
 
     const githubUserInfo = UseAppSelector(getUserState);
-    const { profilePic = "https://source.unsplash.com/6VPEOdpFNAs" } = githubUserInfo
-    console.log(githubUserInfo)
+    const { profilePic = "https://source.unsplash.com/6VPEOdpFNAs", fullName = '' } = githubUserInfo
+
 
     return (
         <Container>
@@ -155,7 +155,7 @@ const ProfileBasicInfo = () => {
                 }}
             >
                 <UserNameContainer>
-                    <UserNameParagraph>Muhammad Hussain</UserNameParagraph>
+                    <UserNameParagraph>{fullName}</UserNameParagraph>
                 </UserNameContainer>
                 <UserDescriptionAndSocialContainer>
                     <UserDescriptionContainer>

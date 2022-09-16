@@ -3,7 +3,9 @@ import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 export interface UserState {
     _id?: string;
     email: string;
+    fullName?: string;
     userName: string;
+
     country: string;
     gender: string;
     dob: string;
@@ -24,6 +26,7 @@ export interface UserState {
 const initialState: UserState = {
     _id: '',
     userName: '',
+    fullName: 'unknown',
     email: '',
     country: '',
     gender: '',
@@ -81,7 +84,7 @@ export const userSlice = createSlice({
         },
         setUserInfo: (state: Draft<typeof initialState>, action: PayloadAction<UserState>) => {
             console.log("action.payload: ", action.payload)
-            const { _id = '', userName = '', github_url = '', hackerrank_url = '', leetcode_url = '', linkedin_url = '', profilePic = '' } = action.payload
+            const { _id = '', userName = '', github_url = '', hackerrank_url = '', leetcode_url = '', linkedin_url = '', profilePic = '', fullName = '' } = action.payload
             state._id = _id;
             state.userName = userName;
             state.github_url = github_url;
@@ -89,6 +92,7 @@ export const userSlice = createSlice({
             state.leetcode_url = leetcode_url;
             state.linkedin_url = linkedin_url;
             state.profilePic = profilePic;
+            state.fullName = fullName;
         },
         setProfileLinks: (state: Draft<typeof initialState>, action: PayloadAction<UserState>) => {
             console.log("action.payload: ", action.payload)
