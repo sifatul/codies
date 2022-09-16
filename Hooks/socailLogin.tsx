@@ -74,12 +74,17 @@ export default function FirebaseLoginManage() {
     try {
       const query = `platform=${platform}&token=${token}&email=${email}&fullName=${fullName}&profilePic=${profilePic}`;
       const res: any = await GetData(`/api/auth/social?${query}`)
-      if (res?.status == 200) {
+
+      if (res?.status == 200 && !res.verified) {
+        router.push('/auth/verify-email?email=' + res?.email);
+      }
+      if (res?.status == 200 && res.verified) {
         delete res.status
 
         dispatch(setUserInfo(res))
         router.push(`/account/profile?username=${res?.userName}`)
       }
+
       if (res?.status == 404) {
         // user not found
         // proceed to create new user

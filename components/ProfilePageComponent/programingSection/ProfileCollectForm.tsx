@@ -26,7 +26,7 @@ const FormContainer = Styled.div`
     padding: 20px;
 `;
 const FormWrapper = Styled.div`
-    display: flex;
+    display: block;
     justify-content: space-between;
     align-items: center;
     gap: 60px;
@@ -38,6 +38,7 @@ const InputFieldWrapper = css`
 `;
 const InputFieldWrapperInner = css`
     width: 100%; 
+    min-width: 100%; 
 `;
 
 
