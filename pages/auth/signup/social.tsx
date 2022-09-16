@@ -42,8 +42,9 @@ const SocialSignup: React.FC = () => {
         userName: Yup.string()
             .min(2, 'Too Short!')
             .max(50, 'Too Long!')
-            .trim().matches(/^\S*$/, "username must not contain space.")
-            .required('UserName required')
+            .matches(/^\S*$/, "username must not contain space.")
+            .matches(/^[a-zA-Z0-9]*$/, "must not contain any special character")
+            .required('UserName required'),
     });
 
 
