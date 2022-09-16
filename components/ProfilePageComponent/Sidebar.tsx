@@ -3,6 +3,7 @@ import Styled from '@emotion/styled';
 import EditButton from './EditButton';
 import GithubProgramming from './programingSection/github';
 import LeetcodeProgramming from './programingSection/leetcode';
+import HackerrankProgramming from './programingSection/hackerrank';
 
 
 const SitebarMainContainer = Styled.div`
@@ -72,35 +73,13 @@ const SmallText = Styled.span`
     color: #444444;
 `;
 
-const CommitList = Styled.ul`
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-`
-
-const CommitItem = Styled.li`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-`
 
 
-const CommitSkill = Styled.h4`
-    font-weight: 400;
-    color: #0969da;
-    margin: 0;
-`
 
-
-const CommitCount = Styled.p`
-    color: #444444;
-    margin: 0;
-`
 
 const ProgrammingSection = Styled.div`
     display: block;
+    width:100%;
 `
 
 const SideBar = () => {
@@ -109,24 +88,6 @@ const SideBar = () => {
         setIsOpen(true);
     }
 
-    const programming = [
-
-        {
-            id: 1,
-            name: 'Typescript'
-        },
-
-        {
-            id: 2,
-            name: 'HTML'
-        },
-
-
-        {
-            id: 13,
-            name: 'JavaScript'
-        },
-    ]
 
 
     return (
@@ -142,15 +103,15 @@ const SideBar = () => {
                     <Title>Contact</Title>
                     <Paragraph>Full-time</Paragraph>
                 </SidebarItemContainer>
-                <SidebarItemContainer>
+                {/* <SidebarItemContainer>
                     <Title>Earliest start date</Title>
                     <Paragraph>After 3 months notice period</Paragraph>
-                </SidebarItemContainer>
-
+                </SidebarItemContainer> */}
+                {/* 
                 <SidebarItemContainer>
                     <Title>Work permit</Title>
                     <Paragraph>No <SmallText>  (more information about the visa may be found in the summery) </SmallText> </Paragraph>
-                </SidebarItemContainer>
+                </SidebarItemContainer> */}
 
 
 
@@ -165,17 +126,17 @@ const SideBar = () => {
 
             </SidebarContainer>
 
-            <SidebarHeaderContainer>
+            {/* <SidebarHeaderContainer>
                 <SidebarHeader>Work location and salary </SidebarHeader>
                 <div>
                     <EditButton onClick={openModal} />
                 </div>
-            </SidebarHeaderContainer>
+            </SidebarHeaderContainer> */}
 
             <SidebarContainer>
 
 
-                <SidebarItemContainer>
+                {/* <SidebarItemContainer>
 
                     {Array.from({ length: 5 }, (_, i) => i + 1).map((index) => {
                         return (
@@ -183,7 +144,7 @@ const SideBar = () => {
                         )
                     })}
 
-                </SidebarItemContainer>
+                </SidebarItemContainer> */}
 
 
                 <SidebarItemContainer>
@@ -192,12 +153,17 @@ const SideBar = () => {
                         <GithubProgramming />
 
                     </ProgrammingSection>
-
-
-
-
-
                 </SidebarItemContainer>
+
+                <SidebarItemContainer>
+                    <ProgrammingSection>
+
+                        <HackerrankProgramming />
+
+                    </ProgrammingSection>
+                </SidebarItemContainer>
+
+
 
 
 

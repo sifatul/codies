@@ -1,17 +1,16 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
-import Styled from '@emotion/styled';
 import { css, cx } from '@emotion/css';
-import React, { useEffect, useMemo, useState } from 'react';
-import ProfileCollectModal from './profileCollectModal';
-import { UseAppDispatch, UseAppSelector } from '../../../store';
-import { getGithubUserInfo, getTopRepos, setGithubUserInfo } from '../../../store/platforms/github';
-import { getUserState } from '../../../store/user/basicInfo';
+import Styled from '@emotion/styled';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDomain, getLastPathname } from 'js-string-helper';
-import { GetData } from '../../../Utils/fetchData';
+import React, { useEffect, useMemo, useState } from 'react';
+import { UseAppDispatch, UseAppSelector } from '../../../store';
+import { getLeetcodeUserInfo, setLeetcodeLanguageProblemCount, setLeetcodeTagProblemCounts, setLeetcodeUserInfo } from '../../../store/platforms/leetcode';
+import { getUserState } from '../../../store/user/basicInfo';
 import { Filter } from '../../../types/common.types';
-import { getLeetCodeSubmissionSummary, getLeetcodeUserInfo, setLeetcodeLanguageProblemCount, setLeetcodeTagProblemCounts, setLeetcodeUserInfo } from '../../../store/platforms/leetcode';
-import { getHackerRankTotalProblemSolved } from '../../../store/platforms/hackerrank';
+import { GetData } from '../../../Utils/fetchData';
+import CountList from './countList';
+import ProfileCollectModal from './profileCollectModal';
 
 
 const Title = Styled.p`
@@ -103,18 +102,23 @@ const LeetcodeProgramming = () => {
 
   }, [leetcodeUserName]);
 
+  const LanguageAndCount = useMemo(() => {
+    return languageProblemCount.map(item => {
+      return [item.languageName, item.problemsSolved + '']
+    })
+  }, [languageProblemCount?.length])
 
 
   return <>
     <ProgrammingSectionHeader>
-      <Title>Programming</Title>
+      <Title>Leetcoding</Title>
 
       <div className={cx(iconClass)} onClick={e => setShowProfileLinkModal(true)}>
-        <FontAwesomeIcon icon={faGithub} />
+        <img src='/icons/leetcode.png' alt='leetcode-icon' style={{ height: '20px' }} />
       </div>
     </ProgrammingSectionHeader>
-    {languageProblemCount.length <= 0 && <Paragraph > You currently do not have any contributions. Recruiters won{"'"}t see this section while it{"'"}s empty. </Paragraph>}
-    {languageProblemCount.length && <>Public repos: { languageProblemCount.length} </>}
+    {languageProblemCount.length <= 0 && <Paragraph > You currently do not have any contributions. </Paragraph>}
+    {languageProblemCount.length > 0 && <CountList arr={LanguageAndCount} />}
 
 
     <ProfileCollectModal

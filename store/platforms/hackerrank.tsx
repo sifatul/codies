@@ -68,7 +68,30 @@ export const hackerRankUser = createSlice({
     setHackerRankInfo: (
       state: Draft<typeof initialState>,
       action: PayloadAction<hackerRankDataType>
-    ) => action.payload,
+    ) => {
+      const {
+        username = '',
+        name = '',
+        linkedin_url = '',
+        github_url = '',
+        leetcode_url = '',
+        country = '',
+        avatar = '',
+        created_at = '',
+        level = 0,
+        website = '',
+        personal_first_name = " ",
+        personal_last_name = "",
+        company = "",
+        local_language = " ",
+        job_title = "",
+        jobs_headline = "",
+        followers_count = 0,
+        short_bio = "",
+        languages = []
+      } = action.payload
+      state.languages = languages;
+    },
     setHackerRankSubmissionHistory: (
       state: Draft<typeof initialState>,
       action: PayloadAction<{ [key: string]: string }>

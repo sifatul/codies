@@ -10,6 +10,7 @@ import { getUserState } from '../../../store/user/basicInfo';
 import { getDomain, getLastPathname } from 'js-string-helper';
 import { GetData } from '../../../Utils/fetchData';
 import { Filter } from '../../../types/common.types';
+import CountList from './countList';
 
 
 const Title = Styled.p`
@@ -42,11 +43,11 @@ const Paragraph = Styled.p`
 
 const GithubProgramming = () => {
   const [showProfileLinkModal, setShowProfileLinkModal] = useState(false)
-  const githubTopRepos = UseAppSelector(getTopRepos) || [];
   const githubUserInfo = UseAppSelector(getGithubUserInfo);
 
   const { _id = '', github_url, leetcode_url, hackerrank_url } = UseAppSelector(getUserState);
   const dispatch = UseAppDispatch();
+  console.log(githubUserInfo)
 
 
   const githubUserName = useMemo(() => {
@@ -89,18 +90,37 @@ const GithubProgramming = () => {
     dispatch(setGithubUserInfo({ ...gitHubBasicInfo, repos, username: githubUserName }))
   }, [githubUserName]);
 
+  const repoListWithLang = useMemo(() => {
+    const langRepoMapper: { [key: string]: number; } = {};
+    (githubUserInfo?.repos || []).map(item => {
+      const language = item.language;
+      const counter = langRepoMapper?.[language] || 0;
+      langRepoMapper[language] = counter + 1
+
+    })
+    const repoList: [string, string][] = Object.keys(langRepoMapper).map((lang: string) => {
+      return [lang, langRepoMapper[lang] + '']
+    })
+
+    return repoList
+
+
+  }, [githubUserInfo?.repos])
+
+
+
 
 
   return <>
     <ProgrammingSectionHeader>
-      <Title>Contributions</Title>
+      <Title>Projects</Title>
 
       <div className={cx(iconClass)} onClick={e => setShowProfileLinkModal(true)}>
         <FontAwesomeIcon icon={faGithub} />
       </div>
     </ProgrammingSectionHeader>
-    {githubTopRepos.length <= 0 && <Paragraph > You currently do not have any contributions. Recruiters won{"'"}t see this section while it{"'"}s empty. </Paragraph>}
-    {githubTopRepos.length && <>Public repos: { githubTopRepos.length} </>}
+    {repoListWithLang.length <= 0 && <Paragraph > You currently do not have any contributions. Recruiters won{"'"}t see this section while it{"'"}s empty. </Paragraph>}
+    {repoListWithLang.length && <CountList arr={repoListWithLang} />}
 
 
     <ProfileCollectModal

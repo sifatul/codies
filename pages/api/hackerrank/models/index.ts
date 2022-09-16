@@ -1,4 +1,3 @@
-import { isEmail } from 'js-string-helper';
 import { model, models, Schema } from 'mongoose';
 import { hackerRankDataType } from '../../../../store/platforms/hackerrank';
 // interface
@@ -32,9 +31,7 @@ const HackerrankDataSchema = new Schema<hackerRankDataType>(
             unique: true,
         },
         languages: {
-            type: [{ String: String }],
-            required: false,
-            unique: true,
+            type: [[String]],
         },
         avatar: {
             type: String,
