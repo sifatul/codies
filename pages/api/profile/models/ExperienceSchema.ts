@@ -1,6 +1,7 @@
-import { model, models, Schema } from 'mongoose';
+import { model, models, Schema, Types } from 'mongoose';
 
 interface IUserExperience {
+    userId: Types.ObjectId;
     companyName: string;
     position: string;
     startDate: Date;
@@ -12,6 +13,7 @@ interface IUserExperience {
 
 const ExperienceSchema = new Schema<IUserExperience>(
     {
+        userId: { type: Schema.Types.ObjectId, required: true, ref: 'users', index: true },
         companyName: {
             type: String,
             required: [true, 'Company name is required'],
