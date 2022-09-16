@@ -1,7 +1,7 @@
 import { getAnalytics, logEvent } from "firebase/analytics";
-import { FacebookAuthProvider, fetchSignInMethodsForEmail, getAuth, getRedirectResult, GithubAuthProvider, GoogleAuthProvider, OAuthCredential, onAuthStateChanged, signInWithRedirect } from "firebase/auth";
+import { createUserWithEmailAndPassword, EmailAuthProvider, FacebookAuthProvider, fetchSignInMethodsForEmail, getAuth, getRedirectResult, GithubAuthProvider, GoogleAuthProvider, OAuthCredential, onAuthStateChanged, signInWithEmailAndPassword, signInWithRedirect } from "firebase/auth";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useCallback } from "react";
 import { UseAppDispatch } from "../store";
 import { setUserInfo } from "../store/user/basicInfo";
 import { SocialLoginPlatform } from "../types/common.types";
@@ -12,10 +12,8 @@ const supportedPopupSignInMethods = [
   GoogleAuthProvider.PROVIDER_ID,
   FacebookAuthProvider.PROVIDER_ID,
   GithubAuthProvider.PROVIDER_ID,
+  EmailAuthProvider.PROVIDER_ID,
 ];
-
-
-
 
 const googleLogin = async () => {
   try {
@@ -171,6 +169,7 @@ export default function FirebaseLoginManage() {
         if (!user.email) return alert("email is missing")
         const providers = await fetchSignInMethodsForEmail(auth, user.email)
 
+
         const firstPopupProviderMethod = providers.find(p => supportedPopupSignInMethods.includes(p as "google.com" | "facebook.com" | "github.com"));
         if (!firstPopupProviderMethod) return
         if (user.uid) await socialLogin(firstPopupProviderMethod, user.uid, user?.email || '', user?.displayName || '', user?.photoURL || '')
@@ -184,18 +183,50 @@ export default function FirebaseLoginManage() {
       } else {
         // User is signed out
         // ...
-        debugger
+
       }
     });
   }
 
+  const createEmailAndPasswordUser = useCallback((email: string, password: string) => {
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
 
-  React.useEffect(() => {
-    getSocialRedirectResult()
 
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        console.error(error)
+      });
   }, [])
 
-  return { socialLogin, getAuthStateChange }
+  const singinEmailUser = useCallback((email: string, password: string) => {
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        debugger
+
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        debugger
+        createEmailAndPasswordUser(email, password)
+      });
+  }, [])
+
+
+
+
+  return {
+    socialLogin, createEmailAndPasswordUser, singinEmailUser, getSocialRedirectResult, getAuthStateChange
+  }
 
 }
 

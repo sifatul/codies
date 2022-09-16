@@ -8,6 +8,7 @@ import Button, { ButtonType } from '../../components/common/Button';
 import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
 import Input, { InputType } from '../../components/common/Input';
 import checkUserInfo from "../../Hooks/checkUser.hook";
+import FirebaseLoginManage from '../../Hooks/socailLogin';
 import { PostData } from '../../Utils/fetchData';
 
 
@@ -98,6 +99,7 @@ const SignupPage: React.FC<{}> = () => {
 
 
     const { getUserByName, getUserByEmail } = checkUserInfo()
+    const { createEmailAndPasswordUser } = FirebaseLoginManage()
 
     const goToSignin = useCallback(() => {
         router.push('/auth/signin')
@@ -128,6 +130,7 @@ const SignupPage: React.FC<{}> = () => {
             if (res.status !== 200) throw res?.message
             if (!res?.email) throw "email missing in response"
             alert("user created")
+            createEmailAndPasswordUser(newUser.email, newUser.password)
             router.push('/auth/verify-email?email=' + res?.email);
 
         } catch (e) {

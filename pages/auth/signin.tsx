@@ -22,6 +22,7 @@ import { useRouter } from 'next/router';
 import { GetData, PostData } from '../../Utils/fetchData';
 import { UseAppDispatch } from '../../store';
 import { setUserInfo } from '../../store/user/basicInfo';
+import FirebaseLoginManage from '../../Hooks/socailLogin';
 
 const JustifySpaceBetween = css`
     justify-content: space-between;
@@ -41,6 +42,7 @@ const ColorGray = css`
 const SigninPage: React.FC = () => {
 
     const dispatch = UseAppDispatch();
+    const { singinEmailUser } = FirebaseLoginManage()
 
 
     const router = useRouter()
@@ -54,6 +56,7 @@ const SigninPage: React.FC = () => {
             if (res.status == 200) {
                 delete res.status
                 dispatch(setUserInfo(res))
+                singinEmailUser(param.email, param.password)
                 return router.push(`/account/profile?username=${res.userName}`)
             }
             if (res.status == 401) return router.push('/auth/verify-email?email=' + param?.email);

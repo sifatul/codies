@@ -10,14 +10,18 @@ import { app } from '../Utils/firebaseConfig';
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }: AppProps) {
-    const { getAuthStateChange } = FirebaseLoginManage()
+    const { getSocialRedirectResult, getAuthStateChange } = FirebaseLoginManage()
     useEffect(() => {
         if (!app || !app.name) return;
         const analytics = getAnalytics();
         logEvent(analytics, 'page view');
 
+        getSocialRedirectResult()
         getAuthStateChange()
+
+
     }, []);
+
 
     return <Component {...pageProps} />;
 }
