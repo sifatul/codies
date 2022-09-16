@@ -93,7 +93,12 @@ export const userSlice = createSlice({
             if (linkedin_url) state.linkedin_url = linkedin_url;
             if (profilePic) state.profilePic = profilePic;
             if (fullName) state.fullName = fullName;
-        }
+        },
+        resetState: (
+            state: Draft<typeof initialState>
+        ) => {
+            state = initialState
+        },
     },
 });
 
@@ -101,6 +106,6 @@ export const userSlice = createSlice({
 export const getUserState = (state: { user: UserState }) => state.user;
 
 // Exports all actions
-export const { setName, setEmail, setUserInfo, setProfilePic, setCountry } = userSlice.actions;
+export const { setName, setEmail, setUserInfo, setProfilePic, setCountry, resetState } = userSlice.actions;
 
 export default userSlice.reducer;
