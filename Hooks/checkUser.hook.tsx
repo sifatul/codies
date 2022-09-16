@@ -6,7 +6,7 @@ import { GetData, PatchData } from '../Utils/fetchData';
 export default function checkUserInfo() {
   const dispatch = UseAppDispatch();
   const { _id = '' } = UseAppSelector(getUserState);
-  console.log("user id: ", _id)
+  // console.log("user id: ", _id)
 
 
 
@@ -18,7 +18,7 @@ export default function checkUserInfo() {
       else throw response?.message
 
     } catch (e) {
-      console.log(e);
+      console.error(e);
       return null
     }
 
@@ -32,7 +32,7 @@ export default function checkUserInfo() {
       else throw response?.message
 
     } catch (e) {
-      console.log(e);
+      console.error(e);
       return null
     }
 

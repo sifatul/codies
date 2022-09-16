@@ -39,7 +39,7 @@ const CodePenArea = () => {
         return userName
     }, [searchBy])
 
-    console.log("codepenUserName", codepenUserName)
+    // console.log("codepenUserName", codepenUserName)
 
     const getCodepenData = useCallback(async () => {
         if (!codepenUserName) return

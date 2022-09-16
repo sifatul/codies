@@ -7,7 +7,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import checkUserInfo from '../../../Hooks/checkUser.hook';
 import { UseAppDispatch, UseAppSelector } from '../../../store';
 import { getHackerRankUserInfo, hackerRankDataType, setHackerRankInfo } from '../../../store/platforms/hackerrank';
-import { getUserState, setProfilePic } from '../../../store/user/basicInfo';
+import { getUserState } from '../../../store/user/basicInfo';
 import { Filter } from '../../../types/common.types';
 import { GetData } from '../../../Utils/fetchData';
 import CountList from "./countList";
@@ -68,7 +68,7 @@ const HackerrankProgramming = () => {
       return '';
     }
     return userName;
-  }, []);
+  }, [hackerrank_url]);
 
 
 

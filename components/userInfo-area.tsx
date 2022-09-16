@@ -13,7 +13,7 @@ import {
 import React from 'react';
 const UserInfoArea = (props: any) => {
     const { email, languages, leetcode_url, blog, github_url, linkedin_url } = props;
-    console.log('props: ', props);
+    // console.log('props: ', props);
     return (
         <>
             <Box

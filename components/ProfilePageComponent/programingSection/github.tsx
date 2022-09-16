@@ -49,7 +49,6 @@ const GithubProgramming = () => {
 
   const { _id = '', github_url, leetcode_url, hackerrank_url, profilePic } = UseAppSelector(getUserState);
   const dispatch = UseAppDispatch();
-  console.log(githubUserInfo)
   const { updateUserInfo } = checkUserInfo()
 
 
@@ -82,7 +81,6 @@ const GithubProgramming = () => {
 
   const getGithubData = React.useCallback(async () => {
     if (window == undefined || !githubUserName) return;
-    console.log("calling getGithubData")
     const gitHubBasicInfo: any = await GetData(`/api/${Filter.GITHUB.toLocaleLowerCase()}/find?userName=${githubUserName}`);
     // if (email) dispatch(setEmail(email))
 

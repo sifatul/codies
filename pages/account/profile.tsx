@@ -44,9 +44,8 @@ const ProfilePage: React.FC = () => {
 
 
     useEffect(() => {
-        console.log(userName)
-        // if (!userName || !_id) router.replace('/auth/signin')
-        // router.push('/account/profile', `/${userName}`, { shallow: true })
+        if (!userName || !_id) router.replace('/auth/signin')
+        router.push('/account/profile', `/${userName}`, { shallow: true })
     }, [])
 
 

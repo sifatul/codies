@@ -52,7 +52,7 @@ const GithubArea = () => {
 
   const getGithubData = React.useCallback(async () => {
     if (window == undefined || !githubUserName) return;
-    console.log("calling getGithubData")
+    // console.log("calling getGithubData")
     const gitHubBasicInfo: any = await GetData(`/api/${Filter.GITHUB.toLocaleLowerCase()}/find?userName=${githubUserName}`);
 
     const { email } = gitHubBasicInfo;

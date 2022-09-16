@@ -124,7 +124,7 @@ const SignupPage: React.FC<{}> = () => {
     const createNewUser = useCallback(async (newUser: { userName: string, email: string, password: string }) => {
         try {
             const res: any = await PostData('/api/users/add', JSON.stringify(newUser))
-            console.log(res);
+            // console.log(res);
             if (res.status !== 200) throw res?.message
             if (!res?.email) throw "email missing in response"
             alert("user created")
@@ -146,7 +146,7 @@ const SignupPage: React.FC<{}> = () => {
         },
         validationSchema: SignupSchema,
         onSubmit: async (val) => {
-            console.log("submit val", val);
+
             const userName = val.userName
             const email = val.email
 
@@ -154,7 +154,7 @@ const SignupPage: React.FC<{}> = () => {
 
 
             const [userNamePromise, emailPromise]: any = await Promise.allSettled([getUserByName(userName), getUserByEmail(email)])
-            console.log("userExits: ", emailPromise, userNamePromise);
+
 
             if (emailPromise?.value) return formik.setErrors({ email: "Email already exists." })
             if (userNamePromise?.value) return formik.setErrors({ userName: "Username already exists." })

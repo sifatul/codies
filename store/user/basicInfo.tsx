@@ -83,25 +83,17 @@ export const userSlice = createSlice({
             state.mobile = action.payload;
         },
         setUserInfo: (state: Draft<typeof initialState>, action: PayloadAction<UserState>) => {
-            console.log("action.payload: ", action.payload)
+
             const { _id = '', userName = '', github_url = '', hackerrank_url = '', leetcode_url = '', linkedin_url = '', profilePic = '', fullName = '' } = action.payload
-            state._id = _id;
-            state.userName = userName;
-            state.github_url = github_url;
-            state.hackerrank_url = hackerrank_url;
-            state.leetcode_url = leetcode_url;
-            state.linkedin_url = linkedin_url;
-            state.profilePic = profilePic;
-            state.fullName = fullName;
-        },
-        setProfileLinks: (state: Draft<typeof initialState>, action: PayloadAction<UserState>) => {
-            console.log("action.payload: ", action.payload)
-            const { github_url, hackerrank_url, leetcode_url, linkedin_url } = action.payload
+            if (_id) state._id = _id;
+            if (userName) state.userName = userName;
             if (github_url) state.github_url = github_url;
             if (hackerrank_url) state.hackerrank_url = hackerrank_url;
             if (leetcode_url) state.leetcode_url = leetcode_url;
             if (linkedin_url) state.linkedin_url = linkedin_url;
-        },
+            if (profilePic) state.profilePic = profilePic;
+            if (fullName) state.fullName = fullName;
+        }
     },
 });
 
@@ -109,6 +101,6 @@ export const userSlice = createSlice({
 export const getUserState = (state: { user: UserState }) => state.user;
 
 // Exports all actions
-export const { setName, setEmail, setUserInfo, setProfilePic, setCountry, setProfileLinks } = userSlice.actions;
+export const { setName, setEmail, setUserInfo, setProfilePic, setCountry } = userSlice.actions;
 
 export default userSlice.reducer;

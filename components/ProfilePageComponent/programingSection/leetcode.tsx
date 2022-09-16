@@ -61,7 +61,7 @@ const LeetcodeProgramming = () => {
       return '';
     }
     return userName;
-  }, []);
+  }, [leetcode_url]);
 
 
 

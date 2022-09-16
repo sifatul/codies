@@ -77,7 +77,7 @@ const SocialSignup: React.FC = () => {
         },
         validationSchema: SigninSchema,
         onSubmit: async (val) => {
-            console.log(val);
+
             const username = val.userName
             const userInfo: any = getUserByName(username)
             if (userInfo && userInfo?.status == 200) return formik.setErrors({ userName: "Username already exists." })

@@ -1,17 +1,13 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { css, cx } from '@emotion/css';
 import Styled from '@emotion/styled';
-import { cx, css } from '@emotion/css';
-import { Field, Form, FormikProvider, useFormik, ErrorMessage } from 'formik';
+import { ErrorMessage, Form, FormikProvider, useFormik } from 'formik';
+import React, { useCallback } from 'react';
 import * as Yup from 'yup';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose } from '@fortawesome/free-solid-svg-icons';
-import Input, { InputType } from '../../common/Input';
-import Button, { ButtonType } from '../../common/Button';
-import { PatchData } from '../../../Utils/fetchData';
 import { UseAppDispatch, UseAppSelector } from '../../../store';
-import { getGithubUserInfo, getTopRepos, setGithubUsername } from '../../../store/platforms/github';
-import { getLastPathname } from 'js-string-helper';
 import { getUserState, setUserInfo } from '../../../store/user/basicInfo';
+import { PatchData } from '../../../Utils/fetchData';
+import Button, { ButtonType } from '../../common/Button';
+import Input, { InputType } from '../../common/Input';
 
 
 const Container = Styled.div`
@@ -52,22 +48,7 @@ const ErrorMessageClass = css`
     font-size: 14px;
 `;
 
-const SkillsTagContainer = Styled.div`
-    padding: 8px 12px;
-    display: flex;
-    flex-wrap: wrap;
-`;
 
-const SkillTag = Styled.p`
-    margin: 4px 5px;
-    padding: 4px 8px;
-    background-color: #e1e1e1;
-    font-size: 14px;
-    color: #73777B;
-    border: 1px solid gray;
-    border-radius: 4px;
-    font-weight: 500;
-`;
 
 
 const validationSchema = Yup.object().shape({
@@ -83,11 +64,9 @@ const validationSchema = Yup.object().shape({
 
 const ProfileCollectForm = (props: any) => {
     const { callback } = props
-    const githubUserInfo = UseAppSelector(getGithubUserInfo);
-    const githubTopRepos = UseAppSelector(getTopRepos) || [];
+
     const { _id = '', github_url, leetcode_url, hackerrank_url } = UseAppSelector(getUserState);
     const dispatch = UseAppDispatch();
-    console.log(_id, github_url)
 
 
     const updateUserInfo = useCallback(async (links: any) => {
@@ -119,7 +98,7 @@ const ProfileCollectForm = (props: any) => {
 
         },
     });
-    console.log("githubTopRepos: ", githubTopRepos)
+    // console.log("githubTopRepos: ", githubTopRepos)
 
 
 

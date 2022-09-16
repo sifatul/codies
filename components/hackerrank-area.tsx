@@ -60,7 +60,7 @@ const HackerrankArea = () => {
         if (avatar) dispatch(setProfilePic(avatar));
         if (country) dispatch(setCountry(country));
         dispatch(setHackerRankInfo(hackerRankdata));
-        console.log("hackerRankdata> ", hackerRankdata);
+        // console.log("hackerRankdata> ", hackerRankdata);
         return hackerRankdata;
     }, []);
 

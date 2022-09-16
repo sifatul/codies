@@ -37,7 +37,7 @@ const MediumArea = () => {
     return userName
   }, [searchBy])
 
-  console.log("mediumUserName", mediumUserName)
+  // console.log("mediumUserName", mediumUserName)
 
 
   const fetchMediumData = useCallback(async () => {
@@ -74,7 +74,7 @@ const MediumArea = () => {
       data: mediumData
     }
     PutData(`/api/platform/${Filter.MEDIUM}`, JSON.stringify(param))
-}, [mediumData?.mediums?.length, gotNewData])
+  }, [mediumData?.mediums?.length, gotNewData])
 
   return <>
     <h1> Medium data area </h1>

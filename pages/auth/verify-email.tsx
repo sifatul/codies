@@ -79,7 +79,7 @@ const VerifyEmailPage: React.FC = () => {
 
 
     const handleOtpChange = (e: string) => {
-        console.log(e);
+
         setOpt(e);
     };
 

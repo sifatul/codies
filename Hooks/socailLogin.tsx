@@ -1,5 +1,5 @@
 import { getAnalytics, logEvent } from "firebase/analytics";
-import { FacebookAuthProvider, fetchSignInMethodsForEmail, getAuth, getRedirectResult, GithubAuthProvider, GoogleAuthProvider, OAuthCredential, signInWithRedirect } from "firebase/auth";
+import { FacebookAuthProvider, fetchSignInMethodsForEmail, getAuth, getRedirectResult, GithubAuthProvider, GoogleAuthProvider, OAuthCredential, onAuthStateChanged, signInWithRedirect } from "firebase/auth";
 import { useRouter } from "next/router";
 import React from "react";
 import { UseAppDispatch } from "../store";
@@ -8,7 +8,11 @@ import { SocialLoginPlatform } from "../types/common.types";
 import { githubProvider, googleProvider } from "../Utils/auth/providers";
 import { GetData } from "../Utils/fetchData";
 
-
+const supportedPopupSignInMethods = [
+  GoogleAuthProvider.PROVIDER_ID,
+  FacebookAuthProvider.PROVIDER_ID,
+  GithubAuthProvider.PROVIDER_ID,
+];
 
 
 
@@ -53,9 +57,12 @@ function getProvider(providerId: string) {
 }
 
 
+
 export default function FirebaseLoginManage() {
   const dispatch = UseAppDispatch();
   const router = useRouter()
+  const auth = getAuth();
+
 
 
   const socialLogin = async (providerId: string, token: string | OAuthCredential | null | undefined, email?: string | null | undefined, fullName?: string, profilePic?: string) => {
@@ -99,9 +106,9 @@ export default function FirebaseLoginManage() {
     try {
       const auth = getAuth();
 
-      console.log(auth)
+      // console.log(auth)
       const result = await getRedirectResult(auth)
-      console.log("result: ", result)
+      // console.log("result: ", result)
       if (!result) return
 
       const user = result.user;
@@ -156,12 +163,39 @@ export default function FirebaseLoginManage() {
 
   }
 
+  const getAuthStateChange = () => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        if (!user.email) return alert("email is missing")
+        const providers = await fetchSignInMethodsForEmail(auth, user.email)
+
+        const firstPopupProviderMethod = providers.find(p => supportedPopupSignInMethods.includes(p as "google.com" | "facebook.com" | "github.com"));
+        if (!firstPopupProviderMethod) return
+        if (user.uid) await socialLogin(firstPopupProviderMethod, user.uid, user?.email || '', user?.displayName || '', user?.photoURL || '')
+
+
+        // Test: Could this happen with email link then trying social provider?
+        if (!firstPopupProviderMethod) {
+          throw new Error(`Your account is linked to a provider that isn't supported.`);
+        }
+
+      } else {
+        // User is signed out
+        // ...
+        debugger
+      }
+    });
+  }
+
 
   React.useEffect(() => {
     getSocialRedirectResult()
+
   }, [])
 
-  return { socialLogin }
+  return { socialLogin, getAuthStateChange }
 
 }
 

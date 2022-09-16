@@ -85,7 +85,7 @@ const SigninPage: React.FC = () => {
         },
         validationSchema: SigninSchema,
         onSubmit: (val) => {
-            console.log("login val", val);
+            // console.log("login val", val);
             const { email, password } = val;
             userSignin({ email, password })
         },

@@ -51,11 +51,11 @@ handler.post(async (req: any, res: any) => {
     }
     try {
         const users = await User.create({ ...query, userName, email, profilePic, fullName });
-        console.log('new user created');
+        // console.log('new user created');
 
         return res.json(users);
     } catch (e) {
-        console.log(e);
+        console.error(e);
         res.status(500).send({ message: 'failed to create new social user' });
     }
 });
