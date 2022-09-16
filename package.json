@@ -41,6 +41,7 @@
     "nanoid": "^4.0.0",
     "next": "12.2.2",
     "next-connect": "^0.13.0",
+    "next-redux-wrapper": "^8.0.0",
     "next-swagger-doc": "^0.3.6",
     "node-fetch": "^3.2.10",
     "nodemailer": "^6.7.8",

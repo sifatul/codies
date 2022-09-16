@@ -3084,6 +3084,11 @@ next-connect@^0.13.0:
   dependencies:
     trouter "^3.2.0"
 
+next-redux-wrapper@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/next-redux-wrapper/-/next-redux-wrapper-8.0.0.tgz#588f2d89146c60c77d4a40c0af7e5282acfe4773"
+  integrity sha512-zKRdpvDeqNXQr1j5DUWwsB2fz6XpHR32iy2qJGItTKLsbLB9GvtxDL9b4mFCfhDvnzy5dw97UqMjWDpFY8h0zA==
+
 next-swagger-doc@^0.3.6:
   version "0.3.6"
   resolved "https://registry.npmjs.org/next-swagger-doc/-/next-swagger-doc-0.3.6.tgz"
