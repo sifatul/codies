@@ -10,11 +10,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         res.status(400).send({ status: 'error', message: 'empty param is not allowed' });
     }
 
-    const emailQuery = JSON.parse(param) as object;
+    const searchQuery = JSON.parse(param) as object;
 
-    if (!emailQuery) return res.status(400).json({ message: 'email missing' });
+    if (!searchQuery) return res.status(400).json({ message: 'email missing' });
 
-    const userData = await User.findOne(emailQuery);
+    const userData = await User.findOne(searchQuery);
     if (!userData) return res.status(404).json({ message: 'no user found' });
 
     return res.status(200).json(userData);

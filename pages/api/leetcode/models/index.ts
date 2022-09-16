@@ -33,11 +33,11 @@ const LeetcodeDataSchema = new Schema<LeetcodeUserInfoType>(
             solutionCount: { type: Number },
             websites: { type: [String] },
         },
-        languageProblemCount: { languageName: { type: String }, problemsSolved: { type: String } },
+        languageProblemCount: [{ languageName: String, problemsSolved: String }],
         tagProblemCounts: {
-            advanced: { tagName: String, tagSlug: Number, problemsSolved: Number },
-            medium: { tagName: String, tagSlug: Number, problemsSolved: Number },
-            fundamental: { tagName: String, tagSlug: Number, problemsSolved: Number },
+            advanced: [{ tagName: String, tagSlug: String, problemsSolved: Number }],
+            intermediate: [{ tagName: String, tagSlug: String, problemsSolved: Number }],
+            fundamental: [{ tagName: String, tagSlug: String, problemsSolved: Number }],
         },
     },
     { timestamps: true }

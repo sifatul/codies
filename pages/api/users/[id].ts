@@ -25,16 +25,15 @@ const getByID = async (req: any, res: any) => {
 };
 
 const updateUser = async (req: any, res: any) => {
+    const {
+        query: { id },
+        body,
+    } = req;
+    if (!body) {
+        return res.status(400).json({ status: 'error', message: 'body param missing' });
+    }
+    const updateData = JSON.parse(body);
     try {
-        const {
-            query: { id },
-            body,
-        } = req;
-        if (!req.body) {
-            return res.status(400).json({ status: 'error', message: 'body param missing' });
-        }
-        const updateData = JSON.parse(req.body);
-
         await connectToDatabase();
 
         const userData = await Users.updateOne(
@@ -48,7 +47,7 @@ const updateUser = async (req: any, res: any) => {
     } catch (error) {
         console.error(error);
 
-        return res.status(400).json(error);
+        return res.status(500).json(error);
     }
 };
 
@@ -111,7 +110,8 @@ const deleteByID = async (req: any, res: any) => {
 
 handler.get(async (req: any, res: any) => {
     const user = await getByID(req, res);
-    res.json(user);
+
+    return res.json(user);
 });
 
 /**
@@ -160,8 +160,7 @@ handler.get(async (req: any, res: any) => {
  */
 
 handler.put(async (req: any, res: any) => {
-    await updateUser(req, res);
-    res.json({ message: 'user update successfully.' });
+    return updateUser(req, res);
 });
 /**
  * @swagger
@@ -184,12 +183,10 @@ handler.put(async (req: any, res: any) => {
  *        description: Not Found
  */
 handler.delete(async (req: any, res: any) => {
-    await deleteByID(req, res);
-    res.json({ message: 'user deleted successfully.' });
+    return deleteByID(req, res);
 });
 handler.patch(async (req: any, res: any) => {
-    await updateUser(req, res);
-    res.json({ message: 'user deleted successfully.' });
+    return updateUser(req, res);
 });
 
 export default handler;

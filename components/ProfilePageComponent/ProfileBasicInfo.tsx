@@ -15,7 +15,7 @@ const HeaderContainer = Styled.div`
     width: 100%;
 `;
 
-const UserProfilePic = Styled.div`
+const UserProfilePic = Styled.img`
     height: 96px;
     width: 96px;
     margin-left: 48px;
@@ -24,7 +24,7 @@ const UserProfilePic = Styled.div`
     margin-top: -20px;
     background-size: cover;
     background-position: center center;
-    background-image: url("https://source.unsplash.com/6VPEOdpFNAs");
+    
 `;
 
 const UserInformationContainer = Styled.div`
@@ -133,12 +133,13 @@ const PrivacyNoteDescriptionParagraph = Styled.div`
 const ProfileBasicInfo = () => {
 
     const githubUserInfo = UseAppSelector(getUserState);
-    console.log(githubUserInfo)
+    const { profilePic = "https://source.unsplash.com/6VPEOdpFNAs", fullName = '' } = githubUserInfo
+
 
     return (
         <Container>
             <HeaderContainer />
-            <UserProfilePic />
+            <UserProfilePic src={profilePic} />
             <div
                 style={{
                     margin: '0px 0px 8px',
@@ -154,7 +155,7 @@ const ProfileBasicInfo = () => {
                 }}
             >
                 <UserNameContainer>
-                    <UserNameParagraph>Muhammad Hussain</UserNameParagraph>
+                    <UserNameParagraph>{fullName}</UserNameParagraph>
                 </UserNameContainer>
                 <UserDescriptionAndSocialContainer>
                     <UserDescriptionContainer>

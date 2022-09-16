@@ -37,12 +37,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         try {
             if (newData) hackerrank = await Hackerrank.create(newData);
         } catch (e) {
-            res.status(400).json(e);
+            return res.status(400).json(e);
         }
 
-        if (!hackerrank) res.status(400).json({ message: 'data not found' });
+        if (!hackerrank) return res.status(400).json({ message: 'data not found' });
 
-        res.status(200).json(hackerrank);
+        return res.status(200).json(hackerrank);
     } catch (e) {
         console.log(e);
     }

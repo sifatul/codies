@@ -1,6 +1,8 @@
 
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 import { removeSpecialCharacter } from 'js-string-helper';
+import { Filter } from '../../types/common.types';
+import { GetData } from '../../Utils/fetchData';
 
 export interface githubRepoType {
   language: string;

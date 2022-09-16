@@ -91,11 +91,7 @@ const ProfileCollectForm = (props: any) => {
 
 
     const updateUserInfo = useCallback(async (links: any) => {
-        const {
-            github_url = '',
-            hackerrank_url = '',
-            leetcode_url = '',
-        } = links
+
 
         dispatch(setUserInfo(links))
 

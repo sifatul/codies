@@ -28,10 +28,10 @@ const SocialAuthComponent = () => {
   const router = useRouter()
 
 
-  const socialLogin = async (platform: SocialLoginPlatform, token: string | OAuthCredential | null | undefined, email?: string | null | undefined) => {
+  const socialLogin = async (platform: SocialLoginPlatform, token: string | OAuthCredential | null | undefined, email?: string | null | undefined, fullName?: string, profilePic?: string) => {
 
     try {
-      const query = `platform=${platform}&token=${token}&email=${email}`;
+      const query = `platform=${platform}&token=${token}&email=${email}&fullName=${fullName}&profilePic=${profilePic}`;
       const res: any = await GetData(`/api/auth/social?${query}`)
       if (res?.status == 200) {
         delete res.status

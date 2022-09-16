@@ -42,7 +42,7 @@ handler.post(async (req: any, res: any) => {
     if (!req.body) {
         return res.status(400).json({ message: 'request body is missing' });
     }
-    const { platform, token, userName, email } = JSON.parse(req.body);
+    const { platform, token, userName, email, profilePic, fullName } = JSON.parse(req.body);
 
     const query =
         platform === SocialLoginPlatform.GOOGLE ? { google_token: token } : { github_token: token };
@@ -50,7 +50,7 @@ handler.post(async (req: any, res: any) => {
         res.status(400).json({ message: 'param is missing' });
     }
     try {
-        const users = await User.create({ ...query, userName, email });
+        const users = await User.create({ ...query, userName, email, profilePic, fullName });
         console.log('new user created');
 
         return res.json(users);
