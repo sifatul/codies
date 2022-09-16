@@ -56,6 +56,8 @@ const ProfilePage: React.FC = () => {
             router.replace('/auth/signin')
         }).catch((error) => {
             // An error happened.
+            console.error(error)
+            alert(error)
         });
     }, [])
 
