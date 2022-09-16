@@ -162,11 +162,6 @@ const SideBar = () => {
 
                     </ProgrammingSection>
                 </SidebarItemContainer>
-
-
-
-
-
                 <SidebarItemContainer>
                     <ProgrammingSection>
 
@@ -174,28 +169,6 @@ const SideBar = () => {
 
                     </ProgrammingSection>
 
-                    {/* <Title>Programming</Title> */}
-                    {/* <CommitList>
-
-                        {programming.map((prg) => {
-                            return (
-                                <CommitItem key={prg.id}>
-
-                                    <CommitSkill>
-                                        {prg.name}
-
-                                    </CommitSkill>
-
-                                    <CommitCount>
-                                        18 commits
-                                    </CommitCount>
-
-                                </CommitItem>
-                            )
-                        })}
-
-
-                    </CommitList> */}
                 </SidebarItemContainer>
 
             </SidebarContainer>

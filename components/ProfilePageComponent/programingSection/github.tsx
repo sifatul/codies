@@ -6,11 +6,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import ProfileCollectModal from './profileCollectModal';
 import { UseAppDispatch, UseAppSelector } from '../../../store';
 import { getGithubUserInfo, getTopRepos, setGithubUserInfo } from '../../../store/platforms/github';
-import { getUserState } from '../../../store/user/basicInfo';
+import { getUserState, setProfilePic, setUserInfo } from '../../../store/user/basicInfo';
 import { getDomain, getLastPathname } from 'js-string-helper';
 import { GetData } from '../../../Utils/fetchData';
 import { Filter } from '../../../types/common.types';
 import CountList from './countList';
+import UserBasicInfo from '../../userBasicInfo';
+import checkUserInfo from '../../../Hooks/checkUser.hook';
 
 
 const Title = Styled.p`
@@ -45,9 +47,11 @@ const GithubProgramming = () => {
   const [showProfileLinkModal, setShowProfileLinkModal] = useState(false)
   const githubUserInfo = UseAppSelector(getGithubUserInfo);
 
-  const { _id = '', github_url, leetcode_url, hackerrank_url } = UseAppSelector(getUserState);
+  const { _id = '', github_url, leetcode_url, hackerrank_url, profilePic } = UseAppSelector(getUserState);
   const dispatch = UseAppDispatch();
   console.log(githubUserInfo)
+  const { updateUserInfo } = checkUserInfo()
+
 
 
   const githubUserName = useMemo(() => {
@@ -80,8 +84,6 @@ const GithubProgramming = () => {
     if (window == undefined || !githubUserName) return;
     console.log("calling getGithubData")
     const gitHubBasicInfo: any = await GetData(`/api/${Filter.GITHUB.toLocaleLowerCase()}/find?userName=${githubUserName}`);
-
-    // const { email } = gitHubBasicInfo;
     // if (email) dispatch(setEmail(email))
 
 
@@ -89,6 +91,16 @@ const GithubProgramming = () => {
 
     dispatch(setGithubUserInfo({ ...gitHubBasicInfo, repos, username: githubUserName }))
   }, [githubUserName]);
+
+  useEffect(() => {
+
+    if (profilePic) return
+    if (!githubUserInfo.avatar_url) return
+    const consent = window.confirm('Use Github avatar as profile picture?'); // open the window with 
+    if (!consent) return
+    updateUserInfo({ profilePic: githubUserInfo.avatar_url })
+
+  }, [githubUserInfo.avatar_url, profilePic])
 
   const repoListWithLang = useMemo(() => {
     const langRepoMapper: { [key: string]: number; } = {};

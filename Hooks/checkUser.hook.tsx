@@ -1,7 +1,12 @@
 import { useCallback } from 'react';
-import { GetData } from '../Utils/fetchData';
+import { UseAppDispatch, UseAppSelector } from '../store';
+import { getUserState, setUserInfo } from '../store/user/basicInfo';
+import { GetData, PatchData } from '../Utils/fetchData';
 
 export default function checkUserInfo() {
+  const dispatch = UseAppDispatch();
+  const { _id = '' } = UseAppSelector(getUserState);
+
 
 
   const getUserByName = useCallback(async (userName: string) => {
@@ -31,6 +36,20 @@ export default function checkUserInfo() {
 
 
   }, [])
-  return { getUserByName, getUserByEmail }
+  const updateUserInfo = useCallback(async (data: any, callback?: any) => {
+
+
+    dispatch(setUserInfo(data))
+
+    try {
+      await PatchData(`/api/users/${_id}`, JSON.stringify(data))
+      callback()
+    } catch (e) {
+      console.error(e)
+    }
+
+  }, [_id])
+
+  return { getUserByName, getUserByEmail, updateUserInfo }
 
 }

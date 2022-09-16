@@ -4,9 +4,10 @@ import { faHackerrank } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDomain, getLastPathname } from 'js-string-helper';
 import React, { useEffect, useMemo, useState } from 'react';
+import checkUserInfo from '../../../Hooks/checkUser.hook';
 import { UseAppDispatch, UseAppSelector } from '../../../store';
 import { getHackerRankUserInfo, hackerRankDataType, setHackerRankInfo } from '../../../store/platforms/hackerrank';
-import { getUserState } from '../../../store/user/basicInfo';
+import { getUserState, setProfilePic } from '../../../store/user/basicInfo';
 import { Filter } from '../../../types/common.types';
 import { GetData } from '../../../Utils/fetchData';
 import CountList from "./countList";
@@ -45,9 +46,11 @@ const Paragraph = Styled.p`
 const HackerrankProgramming = () => {
   const [showProfileLinkModal, setShowProfileLinkModal] = useState(false)
   const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
+  const { _id = '', github_url, leetcode_url, profilePic } = UseAppSelector(getUserState);
 
   const { languages = [] } = hackerrankUserInfo
   console.log("hackerrankUserInfo: ", hackerrankUserInfo)
+  const { updateUserInfo } = checkUserInfo()
 
 
 
@@ -95,6 +98,19 @@ const HackerrankProgramming = () => {
     console.log("hackerRankdata> ", hackerRankdata);
     return hackerRankdata;
   }, []);
+
+  useEffect(() => {
+
+    if (profilePic) return
+    if (!hackerrankUserInfo.avatar) return
+    const consent = window.confirm('Use HackerRank avatar as profile picture?'); // open the window with 
+    if (!consent) return
+    // dispatch(setProfilePic(hackerrankUserInfo.avatar))
+    updateUserInfo({ profilePic: hackerrankUserInfo.avatar })
+
+  }, [hackerrankUserInfo.avatar, profilePic])
+
+
   const languagesVersionTogether = useMemo(() => {
     let mapLang: { [key: string]: number } = {}
     for (let i = 0; i < languages.length; i++) {
@@ -111,6 +127,10 @@ const HackerrankProgramming = () => {
     return output
 
   }, [languages.length])
+
+
+
+
 
   console.log("languages: ", languages)
   return <>
