@@ -39,7 +39,7 @@ const Home: NextPage = () => {
                 if (!user.email) return alert("email is missing")
                 const providers = await fetchSignInMethodsForEmail(auth, user.email)
 
-                const firstPopupProviderMethod = providers.find(p => supportedPopupSignInMethods.includes(p));
+                const firstPopupProviderMethod = providers.find(p => supportedPopupSignInMethods.includes(p as "google.com" | "facebook.com" | "github.com"));
                 if (!firstPopupProviderMethod) return
                 if (user.uid) await socialLogin(firstPopupProviderMethod, user.uid, user?.email || '', user?.displayName || '', user?.photoURL || '')
 

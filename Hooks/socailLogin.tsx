@@ -58,7 +58,7 @@ export default function FirebaseLoginManage() {
   const router = useRouter()
 
 
-  const socialLogin = async (providerId: String, token: string | OAuthCredential | null | undefined, email?: string | null | undefined, fullName?: string, profilePic?: string) => {
+  const socialLogin = async (providerId: string, token: string | OAuthCredential | null | undefined, email?: string | null | undefined, fullName?: string, profilePic?: string) => {
     let platform;
     if (providerId === GithubAuthProvider.PROVIDER_ID) {
       platform = SocialLoginPlatform.GITHUB
