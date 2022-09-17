@@ -10,6 +10,7 @@ import SideBar from '../../components/ProfilePageComponent/Sidebar';
 import SkillsSection from '../../components/ProfilePageComponent/SkillsSection';
 import { UseAppDispatch, UseAppSelector } from '../../store';
 import { getUserState, resetState } from '../../store/user/basicInfo';
+import ProfileWrapper from '../../Hoc/profileWrapper'
 
 
 const Container = Styled.div`
@@ -64,36 +65,26 @@ const ProfilePage: React.FC = () => {
 
     return (
         <>
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static">
-                    <Toolbar  >
-                        <div style={{ width: '100%', maxWidth: '1024px', margin: '0 auto', display: 'flex' }}>
-                            <Typography variant="h6" component="div" sx={{ flexGrow: 1, }}>
-                                Codies
-          </Typography>
-                            <Button color="inherit" onClick={logout}>Logout</Button>
-                        </div>
 
 
-                    </Toolbar>
-                </AppBar>
-            </Box >
+            <ProfileWrapper>
+                <>
+                    <ProfileHeader>
+                        <ProfileBasicInfo />
+                    </ProfileHeader>
+                    <ProfileDetailsContainer>
+                        <ProfileSummaryContainer>
+                            <SideBar />
+                        </ProfileSummaryContainer>
+                        <ProfileSkillsSection>
+                            <DesiredRoles />
+                            <SkillsSection />
+                            <ExperienceSection />
+                        </ProfileSkillsSection>
+                    </ProfileDetailsContainer>
+                </>
+            </ProfileWrapper>
 
-            <Container>
-                <ProfileHeader>
-                    <ProfileBasicInfo />
-                </ProfileHeader>
-                <ProfileDetailsContainer>
-                    <ProfileSummaryContainer>
-                        <SideBar />
-                    </ProfileSummaryContainer>
-                    <ProfileSkillsSection>
-                        <DesiredRoles />
-                        <SkillsSection />
-                        <ExperienceSection />
-                    </ProfileSkillsSection>
-                </ProfileDetailsContainer>
-            </Container>
         </>
     );
 };
