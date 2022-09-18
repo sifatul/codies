@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Styled from '@emotion/styled';
 import { cx, css } from '@emotion/css';
 import { ErrorMessage, Field, Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import CustomDatePicker from '../../form/FormField/CustomDatePicker';
+import Button, { ButtonType } from "../../common/Button"
+import { PostData } from '../../../Utils/fetchData';
+import { UseAppSelector } from '../../../store';
+import { getUserState } from '../../../store/user/basicInfo';
 
 const FormContainer = Styled.div`
     padding: 20px;
@@ -30,18 +34,7 @@ const InputField = css`
     display: block;
 `;
 
-const Button = Styled.button`
-    padding: 8px 36px;
-    background: #277BC0;
-    border-radius: 8px;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    color: #fff;
-    border: none;
-    outline: none;
-    cursor: pointer;
-`;
+
 
 const ButtonContainer = Styled.div`
     display: flex;
@@ -72,7 +65,10 @@ const validationSchema = Yup.object().shape({
     techStach: Yup.array(),
 });
 
+
 const AddNewCompanyForm = () => {
+    const { _id = '', } = UseAppSelector(getUserState);
+
     const formik = useFormik({
         initialValues: {
             companyName: '',
@@ -84,7 +80,15 @@ const AddNewCompanyForm = () => {
             techStack: [],
         },
         validationSchema: validationSchema,
-        onSubmit: (val: any) => {},
+        onSubmit: (val: any) => {
+            console.log("experience ", JSON.stringify(val))
+            const body = {
+                userId: _id,
+                ...val
+            }
+            PostData('/api/experience', JSON.stringify(body))
+
+        },
     });
 
     const { handleChange, errors, values, setFieldValue, resetForm } = formik;
@@ -147,7 +151,12 @@ const AddNewCompanyForm = () => {
                         />
                     </div>
                     <ButtonContainer>
-                        <Button type='submit'>Add work experience</Button>
+                        <Button
+                            type={ButtonType.PRIMARY}
+                            label='Submit'
+                            actionType='submit'
+                        // onClick={uploadToServer}
+                        />
                     </ButtonContainer>
                 </Form>
             </FormikProvider>

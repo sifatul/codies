@@ -1,10 +1,8 @@
+import fs from 'fs';
 import { getLinksFromText } from 'js-string-helper';
-import path from 'path';
-import textract from 'textract';
+import pdf from 'pdf-parse';
 import _ from 'underscore';
 
-import  fs  from 'fs'
-import pdf from 'pdf-parse'
 
 
 
@@ -58,7 +56,7 @@ const dictionary = {
 
 
 
-function restoreTextByRows(rowNum, allRows) {
+function restoreTextByRows(rowNum:any, allRows: any) {
   rowNum = rowNum - 1;
   var rows = [];
 
@@ -69,10 +67,10 @@ function restoreTextByRows(rowNum, allRows) {
 
   return rows.join("\n");
 }
-function countWords(str) {
+function countWords(str: string) {
   return str.split(' ').length;
 }
-function parseDictionaryTitles(Resume, rows: string[], rowIdx: number) {
+function parseDictionaryTitles(Resume:any, rows: string[], rowIdx: number) {
   var allTitles = _.flatten(_.toArray(dictionary.titles)).join('|'),
     searchExpression = '',
     row = cleanStr(rows[rowIdx]),
@@ -106,10 +104,10 @@ function parseDictionaryTitles(Resume, rows: string[], rowIdx: number) {
 }
 
 
-function cleanStr(str) {
+function cleanStr(str: string) {
   return str.replace(/\r?\n|\r|\t|\n/g, ' ').trim();
 }
-function cleanTextByRows(data) {
+function cleanTextByRows(data: string) {
   var rows,
     clearRow,
     clearRows = [];
@@ -125,7 +123,7 @@ function cleanTextByRows(data) {
   return clearRows.join("\n") + "\n{end}";
 }
 
-function parseDictionaryRegular(data) {
+function parseDictionaryRegular(data:string) {
   const output: any = {}
   var regularDictionary = dictionary.regular,
     find;
@@ -144,7 +142,7 @@ function parseDictionaryRegular(data) {
 
 export default async (req: any, res: any) => {
 
-  const { text, error, data, json } = getDataFromCV();
+  const { text='', error, data, json } = await getDataFromCV();
 
   return res.json({ text, error, data, json });
 };
@@ -206,4 +204,4 @@ const getDataFromCV = async (fileLocalPath = '/public/test.pdf') => {
   }
   return { text, error, data, json }
 }
-export {getDataFromCV}
+export { getDataFromCV };

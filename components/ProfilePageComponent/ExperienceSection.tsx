@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Styled from '@emotion/styled';
 import { cx, css } from '@emotion/css';
 import SkillTags from './SkillTags';
 import EditButton from './EditButton';
 import ExperienceSectionModal from './ExperienceSectionModal';
+import { GetData } from '../../Utils/fetchData';
+import { UseAppSelector } from '../../store';
+import { getUserState } from '../../store/user/basicInfo';
+import { DateString } from '../../Utils/timFormat';
 
 const Container = Styled.div`
     border-bottom: 1px solid #e1e1e1;
@@ -60,6 +64,9 @@ const JobDescription = Styled.p`
 
 const ExperienceSection = () => {
     const [modalIsOpen, setIsOpen] = React.useState(false);
+    const { _id = '', } = UseAppSelector(getUserState);
+    const [experiences, setExperiences] = useState([])
+
     function openModal() {
         setIsOpen(true);
     }
@@ -72,6 +79,13 @@ const ExperienceSection = () => {
     function closeModal() {
         setIsOpen(false);
     }
+    useEffect(() => {
+        GetData('/api/experience?userId=' + _id).then((output: any) => {
+            const { data = [], status } = output
+            if (status == 201) setExperiences(data)
+        })
+
+    }, [])
     return (
         <Container>
             <ExperienceSectionHeaderContainer>
@@ -85,24 +99,31 @@ const ExperienceSection = () => {
                     />
                 </div>
             </ExperienceSectionHeaderContainer>
-            <ExperienceCards>
-                <ExperienceCardHeaderContainer>
-                    <div>
-                        <DesignationName>Fullstack Developer</DesignationName>
-                        <CompnayName>Teracomix</CompnayName>
-                    </div>
-                    <div>
-                        <JobTimePeriod>January 2021 - ongoing</JobTimePeriod>
-                    </div>
-                </ExperienceCardHeaderContainer>
-                <JobDescription>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum soluta quam,
-                    libero sapiente omnis minima sed doloribus consectetur nihil. Explicabo cumque
-                    voluptatem quaerat quis, aut saepe id velit porro ullam provident libero error
-                    illo optio facilis qui illum omnis earum.
-                </JobDescription>
-            </ExperienceCards>
-            <SkillTags />
+
+            {experiences.map(experience => {
+                const { companyName = '', _id, position, startDate, summary, isPresentCompany, endDate } = experience
+                const stateTime = DateString(startDate)
+                const endTime = isPresentCompany ? 'ongoing' : DateString(endDate)
+
+                return <div key={"experience" + _id}>
+                    <ExperienceCards>
+                        <ExperienceCardHeaderContainer>
+                            <div>
+                                <DesignationName>{position}</DesignationName>
+                                <CompnayName>{companyName}</CompnayName>
+                            </div>
+                            <div>
+                                <JobTimePeriod>{stateTime} - {endTime}</JobTimePeriod>
+                            </div>
+                        </ExperienceCardHeaderContainer>
+                        <JobDescription>
+                            {summary}
+                        </JobDescription>
+                    </ExperienceCards>
+                    <SkillTags />
+                </div>
+            })}
+
         </Container>
     );
 };

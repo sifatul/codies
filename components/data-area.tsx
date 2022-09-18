@@ -9,7 +9,6 @@ import GithubArea from './github-area';
 import HackerrankArea from './hackerrank-area';
 import MediumArea from './medium-area';
 import SummaryPage from './Summary';
-import UserBasicInfo from './userBasicInfo';
 
 const DataArea = () => {
     const filterState = UseAppSelector(getFilterState);
