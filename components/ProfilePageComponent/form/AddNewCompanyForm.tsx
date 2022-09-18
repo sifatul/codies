@@ -60,6 +60,9 @@ const validationSchema = Yup.object().shape({
             },
             then: Yup.date().required('End date is required').nullable(),
         })
+
+        .when("startDate",
+            (startDate: any, Yup: any) => startDate && Yup.min(startDate, "End time cannot be before start time"))
         .nullable(),
     summary: Yup.string(),
     techStach: Yup.array(),
