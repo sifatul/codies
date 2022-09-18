@@ -43,10 +43,10 @@ const ProfilePage: React.FC = () => {
     const { userName = '', _id } = UseAppSelector(getUserState);
 
 
-    // useEffect(() => {
-    //     if (!userName || !_id) router.replace('/auth/signin')
-    //     router.push('/account/profile', `/${userName}`, { shallow: true })
-    // }, [])
+    useEffect(() => {
+        if (!userName || !_id) router.replace('/auth/signin')
+        router.push('/account/profile', `/${userName}`, { shallow: true })
+    }, [])
 
 
     return (
