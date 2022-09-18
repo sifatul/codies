@@ -3,6 +3,9 @@ import path from 'path';
 import textract from 'textract';
 import _ from 'underscore';
 
+import  fs  from 'fs'
+import pdf from 'pdf-parse'
+
 
 
 const dictionary = {
@@ -147,14 +150,46 @@ export default async (req: any, res: any) => {
 };
 
 const getDataFromCV = async (fileLocalPath = '/public/test.pdf') => {
+
+
+  let dataBuffer = fs.readFileSync(fileLocalPath);
+ 
+
+
+
   const { text, error } = await new Promise(resolve => {
 
-    const filePath = path.join(process.cwd(), fileLocalPath)
-    textract.fromFileWithPath(filePath, function (error, text) {
-      resolve({ text, error })
-      // console.log()
+    pdf(dataBuffer).then(function(data) {
+    
+      // number of pages
+      console.log(data.numpages);
+      // number of rendered pages
+      console.log(data.numrender);
+      // PDF info
+      console.log(data.info);
+      // PDF metadata
+      console.log(data.metadata); 
+      // PDF.js version
+      // check https://mozilla.github.io/pdf.js/getting_started/
+      console.log(data.version);
+      // PDF text
+      console.log(data.text);
+      resolve({ text: data.text, error:'' })
+      
     })
+    .catch(function(error){
+        // handle exceptions
+        resolve({ text:'', error })
+    })
+
+    // const filePath = path.join(process.cwd(), fileLocalPath)
+    // textract.fromFileWithPath(filePath, function (error, text) {
+    //   resolve({ text, error })
+    //   // console.log()
+    // })
   })
+
+  fs.unlinkSync(fileLocalPath);
   const data = cleanTextByRows(text.toLowerCase());
 
   const rows = text.toLowerCase().split("\n")
