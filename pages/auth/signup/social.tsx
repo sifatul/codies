@@ -61,7 +61,7 @@ const SocialSignup: React.FC = () => {
             const res: any = await PostData(`/api/auth/social`, body)
             if (res?.status == 200) {
                 dispatch(setUserInfo(res))
-                router.push(`/account/profile?username=${res?.userName}`)
+                router.push(`/${res?.userName}`)
                 return
             }
             throw res?.message

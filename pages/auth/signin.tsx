@@ -57,7 +57,7 @@ const SigninPage: React.FC = () => {
                 delete res.status
                 dispatch(setUserInfo(res))
                 singinEmailUser(param.email, param.password)
-                return router.push(`/account/profile?username=${res.userName}`)
+                return router.push(`/${res.userName}`)
             }
             if (res.status == 401) return router.push('/auth/verify-email?email=' + param?.email);
             else throw res?.message

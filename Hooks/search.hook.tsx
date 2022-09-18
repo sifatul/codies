@@ -53,7 +53,7 @@ export default function SearchHelper(searchVal: string) {
 
       if (userInfo.status == 200) {
         dispatch(setUserInfo(userInfo))
-        router.push(`/account/profile?username=${userInfo?.userName}`)
+        router.push(`/${userInfo?.userName}`)
         return
       }
     }
@@ -68,7 +68,7 @@ export default function SearchHelper(searchVal: string) {
       const userInfo: any = await getUserByPlatform()
       if (userInfo && userInfo?.status == 200) {
         dispatch(setUserInfo(userInfo))
-        router.push(`/account/profile?username=${userInfo?.userName}`)
+        router.push(`/${userInfo?.userName}`)
         return
       }
 

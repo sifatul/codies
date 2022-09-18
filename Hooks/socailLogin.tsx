@@ -82,7 +82,7 @@ export default function FirebaseLoginManage() {
         delete res.status
 
         dispatch(setUserInfo(res))
-        router.push(`/account/profile?username=${res?.userName}`)
+        router.push(`/${res?.userName}`)
       }
 
       if (res?.status == 404) {

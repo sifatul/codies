@@ -19,8 +19,7 @@ const ProfileWrapper = (props: any) => {
 
 
   useEffect(() => {
-    // if (!userName || !_id) router.replace('/auth/signin')
-    // router.push('/account/profile', `/${userName}`, { shallow: true })
+    if (!userName || !_id) router.replace('/auth/signin')
   }, [])
   const logout = useCallback(() => {
     const auth = getAuth();
@@ -45,7 +44,7 @@ const ProfileWrapper = (props: any) => {
               <Typography variant="h6" component="div" sx={{ flexGrow: 1, }}>
                 Codies
           </Typography>
-              <Button color="inherit" onClick={logout}>Logout</Button>
+              {_id && <Button color="inherit" onClick={logout}>Logout</Button>}
             </div>
 
 

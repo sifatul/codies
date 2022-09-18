@@ -105,7 +105,7 @@ const VerifyEmailPage: React.FC = () => {
             delete res.status
             dispatch(setUserInfo(res))
 
-            router.push(`/account/profile?username=${res.userName}`)
+            router.push(`/${res.userName}`)
         } catch (e) {
             alert(JSON.stringify(e))
             console.error(e)

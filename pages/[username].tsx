@@ -3,14 +3,14 @@ import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 import { getAuth, signOut } from 'firebase/auth';
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect } from 'react';
-import DesiredRoles from '../../components/ProfilePageComponent/DesiredRoles';
-import ExperienceSection from '../../components/ProfilePageComponent/ExperienceSection';
-import ProfileBasicInfo from '../../components/ProfilePageComponent/ProfileBasicInfo';
-import SideBar from '../../components/ProfilePageComponent/Sidebar';
-import SkillsSection from '../../components/ProfilePageComponent/SkillsSection';
-import { UseAppDispatch, UseAppSelector } from '../../store';
-import { getUserState, resetState } from '../../store/user/basicInfo';
-import ProfileWrapper from '../../Hoc/profileWrapper'
+import DesiredRoles from '../components/ProfilePageComponent/DesiredRoles';
+import ExperienceSection from '../components/ProfilePageComponent/ExperienceSection';
+import ProfileBasicInfo from '../components/ProfilePageComponent/ProfileBasicInfo';
+import SideBar from '../components/ProfilePageComponent/Sidebar';
+import SkillsSection from '../components/ProfilePageComponent/SkillsSection';
+import { UseAppDispatch, UseAppSelector } from '../store';
+import { getUserState, resetState } from '../store/user/basicInfo';
+import ProfileWrapper from '../Hoc/profileWrapper'
 
 
 const Container = Styled.div`
@@ -45,22 +45,11 @@ const ProfilePage: React.FC = () => {
     const dispatch = UseAppDispatch();
 
 
-    useEffect(() => {
-        if (!userName || !_id) router.replace('/auth/signin')
-        router.push('/account/profile', `/${userName}`, { shallow: true })
-    }, [])
-    const logout = useCallback(() => {
-        const auth = getAuth();
-        signOut(auth).then(() => {
-            // Sign-out successful.
-            dispatch(resetState())
-            router.replace('/auth/signin')
-        }).catch((error) => {
-            // An error happened.
-            console.error(error)
-            alert(error)
-        });
-    }, [])
+    // useEffect(() => {
+    //     if (!userName || !_id) router.replace('/auth/signin')
+    //     router.push('/account/profile', `/${userName}`, { shallow: true })
+    // }, [])
+
 
 
     return (
