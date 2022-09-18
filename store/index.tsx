@@ -1,28 +1,24 @@
-import { configureStore } from '@reduxjs/toolkit';
-import userSlice from './user/basicInfo';
-import experience from './user/experiences';
-import filter from './filter';
-import search from './search';
-import hackerrank from './platforms/hackerrank';
-import github from './platforms/github';
-import leetcode from './platforms/leetcode';
-import codepen from './platforms/codepen';
-import medium from './platforms/medium';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-
-
 import {
     Action,
-    AnyAction,
-    combineReducers,
-    ThunkAction,
+
+    combineReducers, configureStore, ThunkAction
 } from '@reduxjs/toolkit';
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import filter from './filter';
+import codepen from './platforms/codepen';
+import github from './platforms/github';
+import hackerrank from './platforms/hackerrank';
+import leetcode from './platforms/leetcode';
+import medium from './platforms/medium';
+import search from './search';
+import userSlice from './user/basicInfo';
+
+
 
 
 const combinedReducer = combineReducers({
     user: userSlice,
-    experience,
     hackerrank,
     github,
     leetcode,
