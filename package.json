@@ -62,7 +62,6 @@
     "react-redux": "^8.0.2",
     "rss-to-json": "^2.1.0",
     "swagger-ui-react": "^4.14.0",
-    "textract": "^2.5.0",
     "underscore": "^1.13.4",
     "yup": "^0.32.11"
   },

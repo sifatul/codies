@@ -180,11 +180,6 @@ const getDataFromCV = async (fileLocalPath = '/public/test.pdf') => {
         resolve({ text:'', error })
     })
 
-    // const filePath = path.join(process.cwd(), fileLocalPath)
-    // textract.fromFileWithPath(filePath, function (error, text) {
-    //   resolve({ text, error })
-    //   // console.log()
-    // })
   })
 
   fs.unlinkSync(fileLocalPath);
