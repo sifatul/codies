@@ -1,15 +1,16 @@
+import { getLinksFromText } from 'js-string-helper';
+import path from 'path';
 import textract from 'textract';
 import _ from 'underscore';
-import path from 'path';
-import {getLinksFromText} from 'js-string-helper'
- 
+
+
 
 const dictionary = {
   titles: {
     objective: ['objective', 'objectives'],
     summary: ['summary'],
     technology: ['technology', 'technologies'],
-    experience: ['experience', 'WORK EXPERIENCE'],
+    experience: ['experience'],
     education: ['education'],
     skills: ['skills', 'Skills & Expertise', 'technology', 'technologies'],
     languages: ['languages'],
@@ -51,8 +52,8 @@ const dictionary = {
   }
 };
 
- 
- 
+
+
 
 function restoreTextByRows(rowNum, allRows) {
   rowNum = rowNum - 1;
@@ -61,7 +62,7 @@ function restoreTextByRows(rowNum, allRows) {
   do {
     rows.push(allRows[rowNum]);
     rowNum++;
-  } while(rowNum < allRows.length);
+  } while (rowNum < allRows.length);
 
   return rows.join("\n");
 }
@@ -75,25 +76,25 @@ function parseDictionaryTitles(Resume, rows: string[], rowIdx: number) {
     ruleExpression,
     isRuleFound,
     result;
-    console.log("allTitles: ",allTitles)
+  console.log("allTitles: ", allTitles)
 
-  _.forEach(dictionary.titles, function(expressions, key) {
+  _.forEach(dictionary.titles, function (expressions, key) {
     expressions = expressions || [];
     // means, that titled row is less than 5 words
     if (countWords(row) <= 15) {
-      _.forEach(expressions, function(expression) {
+      _.forEach(expressions, function (expression) {
         ruleExpression = new RegExp(expression);
         isRuleFound = ruleExpression.test(row);
 
         if (isRuleFound) {
           allTitles = _.without(allTitles.split('|'), key).join('|');
-          searchExpression = '(?:' + expression + ')((.*\n)+?)(?:'+allTitles+'|{end})';
+          searchExpression = '(?:' + expression + ')((.*\n)+?)(?:' + allTitles + '|{end})';
           // restore remaining text to search in relevant part of text
           result = new RegExp(searchExpression, 'gm').exec(restoreTextByRows(rowIdx, rows));
 
           if (result) {
-            Resume[key]=result[1]
-            console.log("result",result)
+            Resume[key] = result[1]
+            console.log("result", result)
           }
         }
       });
@@ -101,7 +102,7 @@ function parseDictionaryTitles(Resume, rows: string[], rowIdx: number) {
   });
 }
 
- 
+
 function cleanStr(str) {
   return str.replace(/\r?\n|\r|\t|\n/g, ' ').trim();
 }
@@ -122,12 +123,12 @@ function cleanTextByRows(data) {
 }
 
 function parseDictionaryRegular(data) {
-  const output:any = {}
+  const output: any = {}
   var regularDictionary = dictionary.regular,
     find;
 
-  _.forEach(regularDictionary, function(expressions, key:string) {
-    _.forEach(expressions, function(expression) {
+  _.forEach(regularDictionary, function (expressions, key: string) {
+    _.forEach(expressions, function (expression) {
       find = new RegExp(expression).exec(data);
       if (find) {
         output[key.toLowerCase()] = find[0]
@@ -136,28 +137,21 @@ function parseDictionaryRegular(data) {
   });
   return output
 }
- 
 
-export default async (req:any, res: any) => {
-  // const { db } = await connectToDatabase();
-  // if(!db) return res.json({error: "database connection failed"})
 
-  // const movies = await db
-  //   .collection("users")
-  //   .find({})
-  //   .sort({ metacritic: -1 })
-  //   .limit(20)
-  //   .toArray();
+export default async (req: any, res: any) => {
 
-  // let url = 'https://firebasestorage.googleapis.com/v0/b/githubpage-fa457.appspot.com/o/CV_md_sifatul_islam_2020_11_24.pdf?alt=media&token=2d778a2f-cab2-428e-833c-e5f7056005f0'
-  // let url = 'https://firebasestorage.googleapis.com/v0/b/githubpage-fa457.appspot.com/o/juaid-rakin-resume.pdf?alt=media&token=0ff0dffc-b0eb-42bc-b68c-750fb92043d2'
-  // let url = 'https://www.dayjob.com/downloads/CV_examples/Web_Developer_Resume_1.pdf'
-  // url = "https://firebasestorage.googleapis.com/v0/b/githubpage-fa457.appspot.com/o/Ruhul's%20Resume%20(1).pdf?alt=media&token=19357c65-de73-42c2-972a-c33a564577fa"
-  const {text, error} = await new Promise(resolve=>{
-     
-      const filePath  = path.join(process.cwd(),'/public/test.pdf')
-    textract.fromFileWithPath(filePath, function( error, text ) {
-      resolve({text, error})
+  const { text, error, data, json } = getDataFromCV();
+
+  return res.json({ text, error, data, json });
+};
+
+const getDataFromCV = async (fileLocalPath = '/public/test.pdf') => {
+  const { text, error } = await new Promise(resolve => {
+
+    const filePath = path.join(process.cwd(), fileLocalPath)
+    textract.fromFileWithPath(filePath, function (error, text) {
+      resolve({ text, error })
       // console.log()
     })
   })
@@ -167,14 +161,14 @@ export default async (req:any, res: any) => {
   const json = parseDictionaryRegular(data);
   const cleaned = cleanStr(data)
   const urls = getLinksFromText(cleaned)
- 
-  if((urls||[]).length>0) json.urls = urls
-   
-  for (var i = 0; i < rows.length; i++) {
- 
-    parseDictionaryTitles(json, rows, i);
-    
-  }
 
-  return res.json({text, error, data, json});
-};
+  if ((urls || []).length > 0) json.urls = urls
+
+  for (var i = 0; i < rows.length; i++) {
+
+    parseDictionaryTitles(json, rows, i);
+
+  }
+  return { text, error, data, json }
+}
+export {getDataFromCV}

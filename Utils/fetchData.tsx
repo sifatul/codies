@@ -7,7 +7,7 @@ const GetData = (url: string) => {
             });
     });
 };
-const PostData = (url: string, data: string) => {
+const PostData = (url: string, data: any) => {
     return new Promise((resolve) => {
         fetch(url, { method: 'POST', body: data })
             .then(r => r.json().then(data => resolve({ status: r.status, ...data })))

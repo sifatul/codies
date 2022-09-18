@@ -64,7 +64,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const ProfileCollectForm = (props: any) => {
-    const { callback } = props
+    const { callback = () => { } } = props
 
     const { _id = '', github_url, leetcode_url, hackerrank_url } = UseAppSelector(getUserState);
     const dispatch = UseAppDispatch();

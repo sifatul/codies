@@ -1,18 +1,17 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
-import Styled from '@emotion/styled';
 import { css, cx } from '@emotion/css';
-import React, { useEffect, useMemo, useState } from 'react';
-import ProfileCollectModal from './profileCollectModal';
-import { UseAppDispatch, UseAppSelector } from '../../../store';
-import { getGithubUserInfo, getTopRepos, setGithubUserInfo } from '../../../store/platforms/github';
-import { getUserState, setProfilePic, setUserInfo } from '../../../store/user/basicInfo';
+import Styled from '@emotion/styled';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDomain, getLastPathname } from 'js-string-helper';
-import { GetData } from '../../../Utils/fetchData';
-import { Filter } from '../../../types/common.types';
-import CountList from './countList';
-import UserBasicInfo from '../../userBasicInfo';
+import React, { useEffect, useMemo, useState } from 'react';
 import checkUserInfo from '../../../Hooks/checkUser.hook';
+import { UseAppDispatch, UseAppSelector } from '../../../store';
+import { getGithubUserInfo, setGithubUserInfo } from '../../../store/platforms/github';
+import { getUserState } from '../../../store/user/basicInfo';
+import { Filter } from '../../../types/common.types';
+import { GetData } from '../../../Utils/fetchData';
+import CountList from './countList';
+import ProfileCollectModal from './profileCollectModal';
 
 
 const Title = Styled.p`
