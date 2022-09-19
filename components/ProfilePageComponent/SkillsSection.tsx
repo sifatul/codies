@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Styled from '@emotion/styled';
 import { cx, css } from '@emotion/css';
 import SkillTags from './SkillTags';
@@ -47,13 +47,17 @@ const SkillsSection = () => {
         setIsOpen(false);
     }
 
-    useEffect(() => {
+    const getData = useCallback(() => {
         GetData('/api/skills?userId=' + _id).then((res: any) => {
             console.log(res);
             const { data = [], status } = res;
             if (status == 201) setSkillTags(data);
         });
     }, []);
+
+    useEffect(() => {
+        getData();
+    }, [getData]);
 
     return (
         <Container>
@@ -69,9 +73,8 @@ const SkillsSection = () => {
                     />
                 </div>
             </SkillsSectionHeaderContainer>
-            {skillTags && skillTags?.length ? (
-                <SkillTags tags={skillTags as any} />
-            ) : (
+            {skillTags && skillTags?.length && <SkillTags tags={skillTags as any} />}
+            {!skillTags && !skillTags.length && (
                 <ContentContainer>
                     <AddBtn label='Add skills' onClick={openModal} />
                     <SkillsSectionModal
