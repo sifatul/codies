@@ -90,9 +90,12 @@ const validationSchema = Yup.object().shape({
     skillTag: Yup.string().required('Skill tag is required'),
 });
 
-const SkillsSectionForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
+const SkillsSectionForm: React.FC<{ closeModal: () => void; skillTags: [] }> = ({
+    closeModal,
+    skillTags,
+}) => {
     const { _id = '' } = UseAppSelector(getUserState);
-    const [tags, setTags] = useState<any>([]);
+    const [tags, setTags] = useState<any>(skillTags || []);
     const formik = useFormik({
         initialValues: {
             skillTag: '',
@@ -125,7 +128,7 @@ const SkillsSectionForm: React.FC<{ closeModal: () => void }> = ({ closeModal })
         );
 
         if (res?.status === 201) {
-            closeModal()
+            closeModal();
             alert('skills added successfully');
         } else {
             alert('please try again');
