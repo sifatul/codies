@@ -19,6 +19,7 @@ interface ModalProps {
     closeModal: () => void;
     modalIsOpen: boolean;
     afterOpenModal?: () => void;
+    skillTags: [],
 }
 
 const SkillsSectionModal: React.FC<ModalProps> = ({
@@ -26,6 +27,7 @@ const SkillsSectionModal: React.FC<ModalProps> = ({
     closeModal,
     modalIsOpen,
     afterOpenModal,
+    skillTags
 }) => {
     return (
         <div>
@@ -40,7 +42,7 @@ const SkillsSectionModal: React.FC<ModalProps> = ({
                 ariaHideApp={false}
             >
                 <div>
-                    <SkillsSectionForm />
+                    <SkillsSectionForm skillTags={skillTags} closeModal={closeModal}/>
                 </div>
             </Modal>
         </div>

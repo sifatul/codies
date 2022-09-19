@@ -19,18 +19,16 @@ const SkillTag = Styled.p`
     font-weight: 500;
 `;
 
-const SkillTags = () => {
+interface SkillTagsProps {
+    tags?: [];
+}
+
+const SkillTags: React.FC<SkillTagsProps> = ({ tags }) => {
     return (
         <SkillsTagContainer>
-            <SkillTag>Javascript</SkillTag>
-            <SkillTag>Typescript</SkillTag>
-            <SkillTag>Reactjs</SkillTag>
-            <SkillTag>Nextjs</SkillTag>
-            <SkillTag>Nestjs</SkillTag>
-            <SkillTag>Jenkins</SkillTag>
-            <SkillTag>Docker</SkillTag>
-            <SkillTag>MySQL</SkillTag>
-            <SkillTag>Git</SkillTag>
+            {tags?.map((item) => (
+                <SkillTag key={item}>{item}</SkillTag>
+            ))}
         </SkillsTagContainer>
     );
 };

@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Styled from '@emotion/styled';
 import { cx, css } from '@emotion/css';
 import SkillTags from './SkillTags';
 import EditButton from './EditButton';
 import SkillsSectionModal from './SkillsSectionModal';
+import AddBtn from './AddBtn';
+import { UseAppSelector } from '../../store';
+import { getUserState } from '../../store/user/basicInfo';
+import { GetData } from '../../Utils/fetchData';
 
 const Container = Styled.div`
     border-bottom: 1px solid #e1e1e1;
-    padding-bottom: 12px;
+    padding: 12px;
 `;
 
 const SkillsSectionHeaderContainer = Styled.div`
@@ -24,7 +28,11 @@ const SkillsSectionHeader = Styled.h3`
     margin: 0;
 `;
 
+const ContentContainer = Styled.div``;
+
 const SkillsSection = () => {
+    const { _id = '' } = UseAppSelector(getUserState);
+    const [skillTags, setSkillTags] = useState<any>([]);
     const [modalIsOpen, setIsOpen] = React.useState(false);
     function openModal() {
         setIsOpen(true);
@@ -39,6 +47,18 @@ const SkillsSection = () => {
         setIsOpen(false);
     }
 
+    const getData = useCallback(() => {
+        GetData('/api/skills?userId=' + _id).then((res: any) => {
+            console.log(res);
+            const { data = [], status } = res;
+            if (status == 201) setSkillTags(data);
+        });
+    }, [_id]);
+
+    useEffect(() => {
+        getData();
+    }, [getData]);
+
     return (
         <Container>
             <SkillsSectionHeaderContainer>
@@ -49,10 +69,22 @@ const SkillsSection = () => {
                         openModal={openModal}
                         modalIsOpen={modalIsOpen}
                         closeModal={closeModal}
+                        skillTags={skillTags as any}
                     />
                 </div>
             </SkillsSectionHeaderContainer>
-            <SkillTags />
+            {skillTags && skillTags?.length && <SkillTags tags={skillTags as any} />}
+            {!skillTags && !skillTags.length && (
+                <ContentContainer>
+                    <AddBtn label='Add skills' onClick={openModal} />
+                    <SkillsSectionModal
+                        openModal={openModal}
+                        modalIsOpen={modalIsOpen}
+                        closeModal={closeModal}
+                        skillTags={skillTags as any}
+                    />
+                </ContentContainer>
+            )}
         </Container>
     );
 };
