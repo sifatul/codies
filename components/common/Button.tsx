@@ -1,6 +1,8 @@
 import Styled from '@emotion/styled';
 import { css, cx } from '@emotion/css';
 import Image from 'next/image';
+import { faPenToSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ButtonStyled = Styled.button`
     display: flex;
@@ -28,7 +30,7 @@ const ButtonStyled = Styled.button`
     cursor: pointer;
 `;
 
-const GhostBtnStyled = Styled.button`
+const GhostBtnStyled = Styled(ButtonStyled)`
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -40,7 +42,7 @@ const GhostBtnStyled = Styled.button`
 
     color: #000000;
     background: transparent;
-    border: none;
+    border: 2px solid #00A2F4;
 `;
 
 const SecondaryBtnStyled = Styled(ButtonStyled)`
@@ -56,11 +58,17 @@ const LinkWithColor = Styled.span`
     margin-left: 5px;
     cursor: pointer;
 `;
+const AddBtnStyled = Styled(SecondaryBtnStyled)`
+  
+    border: 1px solid #2255F7;
+    color: #2255F7
+`;
 
 export enum ButtonType {
     PRIMARY = 'primary',
     SECONDARY = 'secondary',
     GHOST = 'ghost',
+    ADD = 'add',
 }
 
 interface BtnProps {
@@ -83,6 +91,9 @@ const Button: React.FC<BtnInputProps> = ({ label, type, labelWithLink, onClick, 
     if (type === ButtonType.SECONDARY) {
         return <SecondaryButton label={label} onClick={onClick} icon={icon} actionType={actionType} />;
     }
+    if (type === ButtonType.ADD) {
+        return <AddButton label={label} onClick={onClick} actionType={actionType} />;
+    }
     return <ButtonStyled type={actionType} onClick={onClick}>{label}</ButtonStyled>;
 };
 
@@ -90,8 +101,8 @@ export default Button;
 
 const GhostBtn: React.FC<BtnProps> = ({ label, onClick, labelWithLink, icon, actionType }) => {
     return (
-        <GhostBtnStyled type={actionType}>
-            <span>{label}</span> <LinkWithColor onClick={onClick}>{labelWithLink}</LinkWithColor>
+        <GhostBtnStyled type={actionType} onClick={onClick}>
+            <span>{label}</span> <LinkWithColor >{labelWithLink}</LinkWithColor>
         </GhostBtnStyled>
     );
 };
@@ -102,5 +113,14 @@ const SecondaryButton: React.FC<BtnProps> = ({ label, onClick, icon = '', action
             {icon && <Image alt='Social Icon' src={icon} width={24} height={24} />}
             <span>{label}</span>
         </SecondaryBtnStyled>
+    );
+};
+
+const AddButton: React.FC<BtnProps> = ({ label, onClick, actionType }) => {
+    return (
+        <AddBtnStyled type={actionType} onClick={onClick} >
+            <FontAwesomeIcon icon={faPlus} />
+            <span>{label}</span>
+        </AddBtnStyled>
     );
 };

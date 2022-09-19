@@ -4,7 +4,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect } from 'react';
 import DesiredRoles from '../components/ProfilePageComponent/DesiredRoles';
-import ExperienceSection from '../components/ProfilePageComponent/ExperienceSection';
+import ExperienceSection from '../components/ProfilePageComponent/experienceSection';
 import ProfileBasicInfo from '../components/ProfilePageComponent/ProfileBasicInfo';
 import SideBar from '../components/ProfilePageComponent/Sidebar';
 import SkillsSection from '../components/ProfilePageComponent/SkillsSection';

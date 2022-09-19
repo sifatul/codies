@@ -34,4 +34,13 @@ const PatchData = (url: string, profileUrl: string) => {
             });
     });
 };
-export { GetData, PostData, PutData, PatchData };
+const DeleteData = (url: string) => {
+    return new Promise((resolve) => {
+        fetch(url, { method: 'DELETE' })
+            .then(r => r.json().then(data => resolve({ status: r.status, ...data })))
+            .catch((e) => {
+                throw e;
+            });
+    });
+};
+export { GetData, PostData, PutData, PatchData, DeleteData };

@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import ExperienceForm from './form/ExperienceForm';
+import ExperienceForm from '../form/ExperienceForm';
 
 const customStyles = {
     content: {
@@ -20,6 +20,7 @@ interface ModalProps {
     closeModal: () => void;
     modalIsOpen: boolean;
     afterOpenModal?: () => void;
+    data?: any
 }
 
 const ExperienceSectionModal: React.FC<ModalProps> = ({
@@ -27,6 +28,7 @@ const ExperienceSectionModal: React.FC<ModalProps> = ({
     closeModal,
     modalIsOpen,
     afterOpenModal,
+    data
 }) => {
     return (
         <div>
@@ -41,7 +43,7 @@ const ExperienceSectionModal: React.FC<ModalProps> = ({
                 ariaHideApp={false}
             >
                 <div>
-                    <ExperienceForm />
+                    <ExperienceForm data={data} />
                 </div>
             </Modal>
         </div>

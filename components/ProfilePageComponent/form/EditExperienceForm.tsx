@@ -5,7 +5,7 @@ import { ErrorMessage, Field, Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import CustomDatePicker from '../../form/FormField/CustomDatePicker';
 import Button, { ButtonType } from "../../common/Button"
-import { PostData } from '../../../Utils/fetchData';
+import { DeleteData, PostData, PutData } from '../../../Utils/fetchData';
 import { UseAppSelector } from '../../../store';
 import { getUserState } from '../../../store/user/basicInfo';
 
@@ -39,6 +39,7 @@ const InputField = css`
 const ButtonContainer = Styled.div`
     display: flex;
     justify-content: flex-end;
+    gap: 10px;
 `;
 
 const ErrorMessageClass = css`
@@ -46,6 +47,9 @@ const ErrorMessageClass = css`
     color: red;
     font-weight: 300;
     font-size: 14px;
+`;
+const ButtonWrapper = Styled.div`
+flex-basis: 40%
 `;
 
 const validationSchema = Yup.object().shape({
@@ -69,27 +73,52 @@ const validationSchema = Yup.object().shape({
 });
 
 
-const AddNewCompanyForm = () => {
-    const { _id = '' } = UseAppSelector(getUserState);
+const EditExperienceForm = (props: any) => {
+    const { data = {} } = props
+    const { companyName = '',
+        position = '',
+        presentCompany = false,
+        startDate = null,
+        endDate = null,
+        summary = '',
+        techStack = [],
+        _id = ''
+    } = data
+    const { _id: userId } = UseAppSelector(getUserState);
+    console.log(data)
+
+    const deleteExperience = useCallback(async (experienceId: string) => {
+        const res: any = DeleteData('/api/experience?_id=' + experienceId)
+        console.log(res)
+        if (res?.status == 201) {
+            alert('updated')
+        }
+
+    }, [])
 
     const formik = useFormik({
         initialValues: {
-            companyName: '',
-            position: '',
-            presentCompany: false,
-            startDate: null,
-            endDate: null,
-            summary: '',
-            techStack: [],
+            companyName: companyName,
+            position,
+            presentCompany,
+            startDate: startDate ? new Date(startDate) : null,
+            endDate: endDate ? new Date(endDate) : null,
+            summary,
+            techStack,
         },
         validationSchema: validationSchema,
         onSubmit: (val: any) => {
             console.log("experience ", JSON.stringify(val))
             const body = {
-                userId: _id,
-                ...val
+                userId,
+                ...val,
+                _id
             }
-            PostData('/api/experience', JSON.stringify(body))
+            PutData('/api/experience', JSON.stringify(body)).then((res: any) => {
+                if (res?.status == 201) {
+                    alert('updated')
+                }
+            })
 
         },
     });
@@ -154,12 +183,23 @@ const AddNewCompanyForm = () => {
                         />
                     </div>
                     <ButtonContainer>
-                        <Button
-                            type={ButtonType.PRIMARY}
-                            label='Submit'
-                            actionType='submit'
-                        // onClick={uploadToServer}
-                        />
+                        <ButtonWrapper>
+                            <Button
+                                type={ButtonType.PRIMARY}
+                                label='Submit'
+                                actionType='submit'
+                            // onClick={uploadToServer}
+                            />
+                        </ButtonWrapper>
+
+                        <ButtonWrapper>
+                            <Button
+                                type={ButtonType.GHOST}
+                                label='Delete'
+                                // actionType='submit'
+                                onClick={e => { deleteExperience(_id) }}
+                            />
+                        </ButtonWrapper>
                     </ButtonContainer>
                 </Form>
             </FormikProvider>
@@ -167,4 +207,4 @@ const AddNewCompanyForm = () => {
     );
 };
 
-export default AddNewCompanyForm;
+export default EditExperienceForm;

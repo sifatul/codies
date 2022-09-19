@@ -23,6 +23,7 @@ const MUIDatePicker = ({ ...props }: any) => {
                 className={cx(InputField)}
                 {...field}
                 {...props}
+                inputFormat={"yyyy-MM-dd"}
                 selected={(field.value && new Date(field.value)) || null}
                 onChange={(val) => {
                     setFieldValue(field.name, val);

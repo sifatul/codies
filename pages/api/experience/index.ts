@@ -60,6 +60,65 @@ const createExperience =  async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(500).json({ message: 'something went wrong' });
     }
 };
+const updateExperience =  async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+        await connectToDatabase();
+
+        if (!req.body) {
+            return res.status(400).json({ message: 'body param missing' });
+        }
+
+        const { userId, companyName, position, startDate, endDate, summary, techStack , _id} = JSON.parse(req.body)
+
+        if (!userId || !companyName || !position || !startDate || !_id) {
+            return res.status(400).json({ message: 'required param missing' });
+        }
+         
+
+        const newExperience = {
+            userId,
+            companyName,
+            position,
+            startDate,
+            endDate,
+            summary,
+            techStack,
+        };
+        const newExperienceRes = await Experience.updateOne(
+            { _id: new ObjectId(_id) },
+            {
+                $set: newExperience,
+            }
+        );
+
+        return res
+            .status(201)
+            .json({ message: 'experience added successfully.', data: newExperienceRes });
+    } catch (error) {
+        return res.status(500).json({ message: 'something went wrong' });
+    }
+};
+const deleteExperience =  async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+        await connectToDatabase();
+
+        const {_id} = req.query
+        
+
+        if ( !_id) {
+            return res.status(400).json({ message: 'required param missing' });
+        }
+         
+         
+        const newExperienceRes = await Experience.deleteOne(  { _id: new ObjectId(_id.toString()) });
+
+        return res
+            .status(201)
+            .json({ message: 'experience deleted successfully.', data: newExperienceRes });
+    } catch (error) {
+        return res.status(500).json({ message: 'something went wrong' });
+    }
+};
 
 handler.post(async (req: any, res: any) => {
     const userReview = await createExperience(req, res);
@@ -68,6 +127,16 @@ handler.post(async (req: any, res: any) => {
 });
 handler.get(async (req: any, res: any) => {
     const userReview = await getExperience(req, res);
+
+    return userReview;
+});
+handler.put(async (req: any, res: any) => {
+    const userReview = await updateExperience(req, res);
+
+    return userReview;
+});
+handler.delete(async (req: any, res: any) => {
+    const userReview = await deleteExperience(req, res);
 
     return userReview;
 });

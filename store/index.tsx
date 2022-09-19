@@ -14,9 +14,6 @@ import medium from './platforms/medium';
 import search from './search';
 import userSlice from './user/basicInfo';
 
-
-
-
 const combinedReducer = combineReducers({
     user: userSlice,
     hackerrank,
