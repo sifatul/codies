@@ -7,6 +7,7 @@ import FirebaseLoginManage from '../Hooks/socailLogin';
 import { wrapper } from '../store';
 import '../styles/globals.css';
 import { app } from '../Utils/firebaseConfig';
+import BackdropComponent from "../components/common/Backdrop"
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -23,7 +24,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     }, []);
 
 
-    return <Component {...pageProps} />;
+    return <>
+        <BackdropComponent />
+        <Component {...pageProps} />
+    </>;
 }
 
 export default wrapper.withRedux(MyApp);

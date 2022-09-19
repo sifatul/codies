@@ -6,8 +6,9 @@ import * as Yup from 'yup';
 import CustomDatePicker from '../../form/FormField/CustomDatePicker';
 import Button, { ButtonType } from "../../common/Button"
 import { PostData } from '../../../Utils/fetchData';
-import { UseAppSelector } from '../../../store';
+import { UseAppDispatch, UseAppSelector } from '../../../store';
 import { getUserState } from '../../../store/user/basicInfo';
+import { setExperience } from '../../../store/user/experience';
 
 const FormContainer = Styled.div`
     padding: 20px;
@@ -48,29 +49,35 @@ const ErrorMessageClass = css`
     font-size: 14px;
 `;
 
-const validationSchema = Yup.object().shape({
+export const validationSchema = Yup.object().shape({
     companyName: Yup.string().required('Company name is required'),
     position: Yup.string().required('Position is required'),
     startDate: Yup.date().required('Start date is required').nullable(),
     presentCompany: Yup.boolean().default(false),
     endDate: Yup.date()
+        .transform((v, o) => o === '' ? null : v)
+        .nullable().optional()
         .when(['presentCompany'], {
-            is: (presentCompany: boolean) => {
-                return presentCompany === false;
+            is: (presentCompany: boolean, endDate: any) => {
+                return presentCompany === false && endDate != null;
             },
-            then: Yup.date().required('End date is required').nullable(),
+            then: Yup.date().required('End date is required')
         })
-
-        .when("startDate",
-            (startDate: any, Yup: any) => startDate && Yup.min(startDate, "End time cannot be before start time"))
-        .nullable(),
+        .when('startDate', {
+            is: ((startDate: any, endDate: any) => {
+                return (startDate != null && endDate != null);
+            }),
+            then: Yup.date().min(Yup.ref('startDate'), "End date can't be before Start date")
+        }),
     summary: Yup.string(),
     techStach: Yup.array(),
 });
 
 
-const AddNewCompanyForm = () => {
+const AddNewCompanyForm = (props: any) => {
+    const { closeModal } = props
     const { _id = '' } = UseAppSelector(getUserState);
+    const dispatch = UseAppDispatch();
 
     const formik = useFormik({
         initialValues: {
@@ -89,7 +96,19 @@ const AddNewCompanyForm = () => {
                 userId: _id,
                 ...val
             }
-            PostData('/api/experience', JSON.stringify(body))
+            PostData('/api/experience', JSON.stringify(body)).then((res: any) => {
+                const { status, data } = res
+                if (status == 201) {
+                    delete res?.status
+                    console.log(res)
+                    dispatch(setExperience(data))
+                } else {
+                    alert("failed to add")
+                }
+
+                closeModal()
+            })
+
 
         },
     });
@@ -140,7 +159,10 @@ const AddNewCompanyForm = () => {
                     </FieldGrid>
                     <div className={cx(InputFieldContainer)}>
                         <label>
-                            <Field type='checkbox' name='presentCompany' />{' '}
+                            <Field type='checkbox' name='presentCompany' onChange={(e: any) => {
+                                handleChange(e)
+                                setFieldValue('endDate', null)
+                            }} />
                             <span>I currently work here</span>
                         </label>
                     </div>

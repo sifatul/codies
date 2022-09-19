@@ -1,19 +1,12 @@
-import React, { useEffect, useState } from 'react';
 import Styled from '@emotion/styled';
-import { cx, css } from '@emotion/css';
-import SkillTags from '../SkillTags';
-import EditButton from '../EditButton';
-import ExperienceSectionModal from './ExperienceSectionModal';
-import { GetData } from '../../../Utils/fetchData';
-import { UseAppSelector } from '../../../store';
+import React, { useEffect } from 'react';
+import { UseAppDispatch, UseAppSelector } from '../../../store';
 import { getUserState } from '../../../store/user/basicInfo';
-import { DateString } from '../../../Utils/timFormat';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faPlus } from '@fortawesome/free-solid-svg-icons';
-import experienceList from './experiencelist';
-import ExperienceList from './experiencelist';
-import Button, { ButtonType } from "../../common/Button"
+import { setExperienceList } from '../../../store/user/experience';
+import { GetData } from '../../../Utils/fetchData';
 import AddBtn from '../AddBtn';
+import ExperienceList from './experiencelist';
+import ExperienceSectionModal from './ExperienceSectionModal';
 
 const Container = Styled.div`
     border-bottom: 1px solid #e1e1e1;
@@ -38,20 +31,29 @@ const ExperienceSectionHeader = Styled.h3`
 const ExperienceSection = () => {
     const [modalIsOpen, setIsOpen] = React.useState(false);
     const { _id = '', } = UseAppSelector(getUserState);
-    const [experiences, setExperiences] = useState([])
+    const dispatch = UseAppDispatch();
+
 
     function openModal() {
         setIsOpen(true);
     }
 
-    function afterOpenModal() {
-        // references are now sync'd and can be accessed.
-        // subtitle.style.color = "#f00";
-    }
 
     function closeModal() {
         setIsOpen(false);
     }
+
+    useEffect(() => {
+        if (!_id) return
+        GetData('/api/experience?userId=' + _id).then((output: any) => {
+            const { data = [], status } = output
+            if (status == 201) {
+                delete data?.status
+                dispatch(setExperienceList(data))
+            }
+        })
+
+    }, [_id])
 
     return (
         <Container>
@@ -67,7 +69,6 @@ const ExperienceSection = () => {
                 openModal={openModal}
                 closeModal={closeModal}
                 modalIsOpen={modalIsOpen}
-
             />
             <ExperienceList />
 

@@ -18,6 +18,7 @@ export interface UserState {
     hackerrank_url?: string;
     codepen_url?: string;
     medium_url?: string;
+    isLoading: boolean;
 }
 
 /**
@@ -33,13 +34,13 @@ const initialState: UserState = {
     dob: '',
     profilePic: '',
     mobile: '',
-
     linkedin_url: '',
     github_url: '',
     leetcode_url: '',
     hackerrank_url: '',
     codepen_url: '',
     medium_url: '',
+    isLoading: false
 } as const;
 
 /**
@@ -94,10 +95,11 @@ export const userSlice = createSlice({
             if (profilePic) state.profilePic = profilePic;
             if (fullName) state.fullName = fullName;
         },
-        resetState: (
-            state: Draft<typeof initialState>
-        ) => {
+        resetState: (state: Draft<typeof initialState>) => {
             state = initialState
+        },
+        setLoading: (state: Draft<typeof initialState>, action: PayloadAction<boolean>) => {
+            state.isLoading = action.payload
         },
     },
 });
@@ -106,6 +108,6 @@ export const userSlice = createSlice({
 export const getUserState = (state: { user: UserState }) => state.user;
 
 // Exports all actions
-export const { setName, setEmail, setUserInfo, setProfilePic, setCountry, resetState } = userSlice.actions;
+export const { setName, setEmail, setUserInfo, setProfilePic, setCountry, resetState, setLoading } = userSlice.actions;
 
 export default userSlice.reducer;

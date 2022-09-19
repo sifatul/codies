@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react"
+import Styled from '@emotion/styled'
+import React from "react"
 import { UseAppSelector } from "../../../store"
 import { getUserState } from "../../../store/user/basicInfo"
-import { GetData } from "../../../Utils/fetchData"
-import { DateString } from "../../../Utils/timFormat"
-import SkillTags from "../SkillTags"
-
-import Styled from '@emotion/styled';
-import ExperienceSectionModal from "./ExperienceSectionModal"
+import { getExperiences } from "../../../store/user/experience"
+import { DateString } from "../../../Utils/timeFormat"
 import EditButton from "../EditButton"
+import SkillTags from "../SkillTags"
+import ExperienceSectionModal from "./ExperienceSectionModal"
+
 
 
 const ExperienceCards = Styled.div`
@@ -49,8 +49,8 @@ const JobDescription = Styled.p`
 const ExperienceList = () => {
 
   const { _id = '', } = UseAppSelector(getUserState);
-  const [experiences, setExperiences] = useState([])
   const [editExperienceIdx, setIsEditExperienceIdx] = React.useState(-1);
+  const experiences = UseAppSelector(getExperiences);
 
   function openModal(index: number) {
     setIsEditExperienceIdx(index);
@@ -62,20 +62,14 @@ const ExperienceList = () => {
   }
 
 
-  useEffect(() => {
-    GetData('/api/experience?userId=' + _id).then((output: any) => {
-      const { data = [], status } = output
-      if (status == 201) setExperiences(data)
-    })
 
-  }, [])
 
 
   return <>
     <ExperienceSectionModal
       openModal={() => { }}
       modalIsOpen={editExperienceIdx >= 0}
-      data={experiences[editExperienceIdx]}
+      data={editExperienceIdx >= 0 ? experiences[editExperienceIdx] : null}
       closeModal={closeModal}
     />
 
@@ -84,7 +78,7 @@ const ExperienceList = () => {
       const stateTime = DateString(startDate)
       const endTime = isPresentCompany ? 'ongoing' : DateString(endDate)
 
-      return <div key={"experience" + _id}>
+      return <div key={"experience" + _id + idx}>
 
         <ExperienceCards>
           <ExperienceCardHeaderContainer>

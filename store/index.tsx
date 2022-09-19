@@ -13,16 +13,19 @@ import leetcode from './platforms/leetcode';
 import medium from './platforms/medium';
 import search from './search';
 import userSlice from './user/basicInfo';
+import experiences from './user/experience';
 
 const combinedReducer = combineReducers({
     user: userSlice,
+    experiences,
     hackerrank,
     github,
     leetcode,
     codepen,
     filter,
     search,
-    medium
+    medium,
+
 });
 
 const reducer: typeof combinedReducer = (state, action) => {

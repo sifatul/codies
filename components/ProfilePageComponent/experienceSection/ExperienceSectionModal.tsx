@@ -43,7 +43,7 @@ const ExperienceSectionModal: React.FC<ModalProps> = ({
                 ariaHideApp={false}
             >
                 <div>
-                    <ExperienceForm data={data} />
+                    <ExperienceForm data={data} closeModal={closeModal} />
                 </div>
             </Modal>
         </div>

@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, EmailAuthProvider, FacebookAuthProvider
 import { useRouter } from "next/router";
 import React, { useCallback } from "react";
 import { UseAppDispatch } from "../store";
-import { setUserInfo } from "../store/user/basicInfo";
+import { setLoading, setUserInfo } from "../store/user/basicInfo";
 import { SocialLoginPlatform } from "../types/common.types";
 import { githubProvider, googleProvider } from "../Utils/auth/providers";
 import { GetData } from "../Utils/fetchData";
@@ -74,18 +74,28 @@ export default function FirebaseLoginManage() {
     try {
       const query = `platform=${platform}&token=${token}&email=${email}&fullName=${fullName}&profilePic=${profilePic}`;
       const res: any = await GetData(`/api/auth/social?${query}`)
+      const { status = 404, verified = false, google_token = '', github_token = '' } = res
+      dispatch(setLoading(false))
 
-      if (res?.status == 200 && !res.verified) {
-        router.push('/auth/verify-email?email=' + res?.email);
-      }
-      if (res?.status == 200 && res.verified) {
+      if (status == 200 && (verified || google_token || github_token)) {
+        /*
+        1. user is verified
+        2. user is not verified but is of social login
+        */
         delete res.status
 
         dispatch(setUserInfo(res))
         router.push(`/${res?.userName}`)
+        return
       }
 
-      if (res?.status == 404) {
+      else if (status == 200 && !verified) {
+        router.push('/auth/verify-email?email=' + res?.email);
+        return
+      }
+
+
+      else if (status == 404) {
         // user not found
         // proceed to create new user
 
@@ -94,8 +104,10 @@ export default function FirebaseLoginManage() {
 
       }
     } catch (e) {
+      dispatch(setLoading(false))
       console.error(e)
       alert(JSON.stringify(e))
+
     }
   }
 
@@ -107,6 +119,7 @@ export default function FirebaseLoginManage() {
     ];
 
     try {
+      dispatch(setLoading(true))
       const auth = getAuth();
 
       // console.log(auth)
@@ -133,6 +146,7 @@ export default function FirebaseLoginManage() {
 
       // The signed-in user info.
     } catch (err: any) {
+      dispatch(setLoading(false))
       const auth = getAuth();
 
       // if (err.email && err.credential && err.code === 'auth/account-exists-with-different-credential') {
