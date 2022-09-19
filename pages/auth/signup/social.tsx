@@ -1,35 +1,22 @@
-import { css, cx } from '@emotion/css';
+import { cx } from '@emotion/css';
 import { Form, FormikProvider, useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import React, { useCallback } from 'react';
 import * as Yup from 'yup';
 import Button, { ButtonType } from '../../../components/common/Button';
 import SectionMetaInfo from '../../../components/common/formSectionMetaInfo';
 import Input from '../../../components/common/Input';
-import { useRouter } from 'next/router';
-
+import checkUserInfo from '../../../Hooks/checkUser.hook';
+import { UseAppDispatch } from '../../../store';
+import { setUserInfo } from '../../../store/user/basicInfo';
+import { PostData } from '../../../Utils/fetchData';
 import {
     FormSection,
     FormWrap, ImageContainer, RowGap, SectionContainer
 } from '../signup';
-import { PostData } from '../../../Utils/fetchData';
-import checkUserInfo from '../../../Hooks/checkUser.hook';
-import { UseAppDispatch } from '../../../store';
-import { setMyId, setUserInfo } from '../../../store/user/basicInfo';
 
-const JustifySpaceBetween = css`
-    justify-content: space-between;
-`;
 
-const ColorGray = css`
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
 
-    display: flex;
-    align-items: center;
-    text-align: right;
-    color: #3F4753;
-`;
 
 const SocialSignup: React.FC = () => {
     const router = useRouter()
