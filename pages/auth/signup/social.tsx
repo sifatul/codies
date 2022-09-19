@@ -14,7 +14,7 @@ import {
 import { PostData } from '../../../Utils/fetchData';
 import checkUserInfo from '../../../Hooks/checkUser.hook';
 import { UseAppDispatch } from '../../../store';
-import { setUserInfo } from '../../../store/user/basicInfo';
+import { setMyId, setUserInfo } from '../../../store/user/basicInfo';
 
 const JustifySpaceBetween = css`
     justify-content: space-between;

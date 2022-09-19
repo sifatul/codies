@@ -21,7 +21,7 @@ import SocialAuthComponent from '../../components/auth/social';
 import { useRouter } from 'next/router';
 import { GetData, PostData } from '../../Utils/fetchData';
 import { UseAppDispatch } from '../../store';
-import { setUserInfo } from '../../store/user/basicInfo';
+import { setLoading, setMyId, setMyInfo, setUserInfo } from '../../store/user/basicInfo';
 import FirebaseLoginManage from '../../Hooks/socailLogin';
 
 const JustifySpaceBetween = css`
@@ -50,12 +50,12 @@ const SigninPage: React.FC = () => {
         router.push('/auth/signup')
     }, [])
     const userSignin = useCallback(async (param: { email: string, password: string }) => {
-
+        dispatch(setLoading(true));
         try {
             const res: any = await GetData(`/api/auth/login?email=${param.email}&password=${param.password}`);
             if (res.status == 200) {
                 delete res.status
-                dispatch(setUserInfo(res))
+                dispatch(setMyInfo(res))
                 singinEmailUser(param.email, param.password)
                 return router.push(`/${res.userName}`)
             }
@@ -66,6 +66,7 @@ const SigninPage: React.FC = () => {
             alert(JSON.stringify(e))
 
         }
+        dispatch(setLoading(false));
 
 
     }, [])

@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, EmailAuthProvider, FacebookAuthProvider
 import { useRouter } from "next/router";
 import React, { useCallback } from "react";
 import { UseAppDispatch } from "../store";
-import { setLoading, setUserInfo } from "../store/user/basicInfo";
+import { setLoading, setMyInfo, setUserInfo } from "../store/user/basicInfo";
 import { SocialLoginPlatform } from "../types/common.types";
 import { githubProvider, googleProvider } from "../Utils/auth/providers";
 import { GetData } from "../Utils/fetchData";
@@ -84,7 +84,7 @@ export default function FirebaseLoginManage() {
         */
         delete res.status
 
-        dispatch(setUserInfo(res))
+        dispatch(setMyInfo(res))
         router.push(`/${res?.userName}`)
         return
       }
@@ -112,11 +112,7 @@ export default function FirebaseLoginManage() {
   }
 
   const getSocialRedirectResult = async () => {
-    const supportedPopupSignInMethods = [
-      GoogleAuthProvider.PROVIDER_ID,
-      FacebookAuthProvider.PROVIDER_ID,
-      GithubAuthProvider.PROVIDER_ID,
-    ];
+
 
     try {
       dispatch(setLoading(true))
@@ -125,7 +121,8 @@ export default function FirebaseLoginManage() {
       // console.log(auth)
       const result = await getRedirectResult(auth)
       // console.log("result: ", result)
-      if (!result) return
+      if (!result) return dispatch(setLoading(false))
+
 
       const user = result.user;
 
@@ -177,6 +174,7 @@ export default function FirebaseLoginManage() {
       // const credential = GithubAuthProvider.credentialFromError(error);
       console.error(`${email} is registered under a different platform`)
     }
+    dispatch(setLoading(false))
 
   }
 

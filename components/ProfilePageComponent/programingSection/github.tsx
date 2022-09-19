@@ -46,7 +46,8 @@ const GithubProgramming = () => {
   const [showProfileLinkModal, setShowProfileLinkModal] = useState(false)
   const githubUserInfo = UseAppSelector(getGithubUserInfo);
 
-  const { _id = '', github_url, leetcode_url, hackerrank_url, profilePic } = UseAppSelector(getUserState);
+  const userState = UseAppSelector(getUserState);
+  const { github_url, profilePic } = userState?.userInfo || {}
   const dispatch = UseAppDispatch();
   const { updateUserInfo } = checkUserInfo()
 

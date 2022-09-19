@@ -14,13 +14,10 @@ const Container = Styled.div`
 `;
 const ProfileWrapper = (props: any) => {
   const router = useRouter()
-  const { userName = '', _id } = UseAppSelector(getUserState);
+  const { _id } = UseAppSelector(getUserState);
   const dispatch = UseAppDispatch();
 
 
-  useEffect(() => {
-    if (!userName || !_id) router.replace('/auth/signin')
-  }, [])
   const logout = useCallback(() => {
     const auth = getAuth();
     signOut(auth).then(() => {

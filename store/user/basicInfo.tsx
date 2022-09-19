@@ -1,11 +1,9 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
-    _id?: string;
     email: string;
     fullName?: string;
     userName: string;
-
     country: string;
     gender: string;
     dob: string;
@@ -18,28 +16,29 @@ export interface UserState {
     hackerrank_url?: string;
     codepen_url?: string;
     medium_url?: string;
-    isLoading: boolean;
 }
 
 /**
  * Default state object with initial values.
  */
-const initialState: UserState = {
+const initialState: { userInfo: UserState, _id: string, isLoading: boolean } = {
+    userInfo: {
+        userName: '',
+        fullName: 'unknown',
+        email: '',
+        country: '',
+        gender: '',
+        dob: '',
+        profilePic: '',
+        mobile: '',
+        linkedin_url: '',
+        github_url: '',
+        leetcode_url: '',
+        hackerrank_url: '',
+        codepen_url: '',
+        medium_url: '',
+    },
     _id: '',
-    userName: '',
-    fullName: 'unknown',
-    email: '',
-    country: '',
-    gender: '',
-    dob: '',
-    profilePic: '',
-    mobile: '',
-    linkedin_url: '',
-    github_url: '',
-    leetcode_url: '',
-    hackerrank_url: '',
-    codepen_url: '',
-    medium_url: '',
     isLoading: false
 } as const;
 
@@ -55,45 +54,44 @@ export const userSlice = createSlice({
     reducers: {
         setName: (
             state: Draft<typeof initialState>,
-            action: PayloadAction<typeof initialState.userName>
+            action: PayloadAction<typeof initialState.userInfo.userName>
         ) => {
-            state.userName = action.payload;
+            state.userInfo.userName = action.payload;
         },
         setEmail: (
             state: Draft<typeof initialState>,
-            action: PayloadAction<typeof initialState.email>
+            action: PayloadAction<typeof initialState.userInfo.email>
         ) => {
-            state.email = action.payload;
+            state.userInfo.email = action.payload;
         },
         setProfilePic: (
             state: Draft<typeof initialState>,
-            action: PayloadAction<typeof initialState.email>
+            action: PayloadAction<typeof initialState.userInfo.email>
         ) => {
-            state.profilePic = action.payload;
+            state.userInfo.profilePic = action.payload;
         },
         setCountry: (
             state: Draft<typeof initialState>,
-            action: PayloadAction<typeof initialState.email>
+            action: PayloadAction<typeof initialState.userInfo.email>
         ) => {
-            state.country = action.payload;
+            state.userInfo.country = action.payload;
         },
         setMobile: (
             state: Draft<typeof initialState>,
-            action: PayloadAction<typeof initialState.mobile>
+            action: PayloadAction<typeof initialState.userInfo.mobile>
         ) => {
-            state.mobile = action.payload;
+            state.userInfo.mobile = action.payload;
         },
         setUserInfo: (state: Draft<typeof initialState>, action: PayloadAction<UserState>) => {
 
-            const { _id = '', userName = '', github_url = '', hackerrank_url = '', leetcode_url = '', linkedin_url = '', profilePic = '', fullName = '' } = action.payload
-            if (_id) state._id = _id;
-            if (userName) state.userName = userName;
-            if (github_url) state.github_url = github_url;
-            if (hackerrank_url) state.hackerrank_url = hackerrank_url;
-            if (leetcode_url) state.leetcode_url = leetcode_url;
-            if (linkedin_url) state.linkedin_url = linkedin_url;
-            if (profilePic) state.profilePic = profilePic;
-            if (fullName) state.fullName = fullName;
+            const { userName = '', github_url = '', hackerrank_url = '', leetcode_url = '', linkedin_url = '', profilePic = '', fullName = '' } = action.payload
+            if (userName) state.userInfo.userName = userName;
+            if (github_url) state.userInfo.github_url = github_url;
+            if (hackerrank_url) state.userInfo.hackerrank_url = hackerrank_url;
+            if (leetcode_url) state.userInfo.leetcode_url = leetcode_url;
+            if (linkedin_url) state.userInfo.linkedin_url = linkedin_url;
+            if (profilePic) state.userInfo.profilePic = profilePic;
+            if (fullName) state.userInfo.fullName = fullName;
         },
         resetState: (state: Draft<typeof initialState>) => {
             state = initialState
@@ -101,13 +99,17 @@ export const userSlice = createSlice({
         setLoading: (state: Draft<typeof initialState>, action: PayloadAction<boolean>) => {
             state.isLoading = action.payload
         },
+        setMyInfo: (state: Draft<typeof initialState>, action: PayloadAction<any>) => {
+            state._id = action.payload._id
+            state.userInfo = action.payload
+        },
     },
 });
 
 // A small helper of user state for `useSelector` function.
-export const getUserState = (state: { user: UserState }) => state.user;
+export const getUserState = (state: { user: typeof initialState }) => state.user;
 
 // Exports all actions
-export const { setName, setEmail, setUserInfo, setProfilePic, setCountry, resetState, setLoading } = userSlice.actions;
+export const { setName, setEmail, setUserInfo, setProfilePic, setCountry, resetState, setLoading, setMyInfo } = userSlice.actions;
 
 export default userSlice.reducer;

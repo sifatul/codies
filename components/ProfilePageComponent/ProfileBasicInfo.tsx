@@ -132,8 +132,8 @@ const PrivacyNoteDescriptionParagraph = Styled.div`
 `;
 const ProfileBasicInfo = () => {
 
-    const githubUserInfo = UseAppSelector(getUserState);
-    const { profilePic = "https://source.unsplash.com/6VPEOdpFNAs", fullName = '' } = githubUserInfo
+    const userState = UseAppSelector(getUserState);
+    const { profilePic = "https://source.unsplash.com/6VPEOdpFNAs", fullName = '' } = userState?.userInfo || {}
 
 
     return (

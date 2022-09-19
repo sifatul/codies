@@ -46,13 +46,15 @@ const Paragraph = Styled.p`
 const HackerrankProgramming = () => {
   const [showProfileLinkModal, setShowProfileLinkModal] = useState(false)
   const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
-  const { profilePic } = UseAppSelector(getUserState);
+
+
+  const userState = UseAppSelector(getUserState);
+  const { hackerrank_url, profilePic } = userState?.userInfo || {}
 
   const { languages = [] } = hackerrankUserInfo
   const { updateUserInfo } = checkUserInfo()
 
 
-  const { hackerrank_url } = UseAppSelector(getUserState);
   const dispatch = UseAppDispatch();
 
 

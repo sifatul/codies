@@ -45,7 +45,9 @@ const LeetcodeProgramming = () => {
 
   const { languageProblemCount = [] } = leetcodeUserInfo
 
-  const { _id = '', leetcode_url } = UseAppSelector(getUserState);
+
+  const userState = UseAppSelector(getUserState);
+  const { leetcode_url } = userState?.userInfo || {}
   const dispatch = UseAppDispatch();
 
 

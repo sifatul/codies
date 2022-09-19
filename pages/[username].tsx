@@ -1,21 +1,13 @@
 import Styled from '@emotion/styled';
-import { useRouter } from "next/router";
-import React, { useEffect } from 'react';
+import React from 'react';
 import DesiredRoles from '../components/ProfilePageComponent/DesiredRoles';
 import ExperienceSection from '../components/ProfilePageComponent/experienceSection';
 import ProfileBasicInfo from '../components/ProfilePageComponent/ProfileBasicInfo';
 import SideBar from '../components/ProfilePageComponent/Sidebar';
 import SkillsSection from '../components/ProfilePageComponent/skillSection/SkillsSection';
 import ProfileWrapper from '../Hoc/profileWrapper';
-import { UseAppSelector } from '../store';
-import { getUserState } from '../store/user/basicInfo';
 
 
-const Container = Styled.div`
-    margin: 0 auto;
-    min-height: 100vh;
-    max-width:1024px;
-`;
 
 const ProfileHeader = Styled.div`
     height: auto;
@@ -38,14 +30,6 @@ const ProfileSkillsSection = Styled.div`
 `;
 
 const ProfilePage: React.FC = () => {
-    const router = useRouter()
-    const { userName = '', _id } = UseAppSelector(getUserState);
-
-
-    useEffect(() => {
-        if (!userName || !_id) router.replace('/auth/signin')
-    }, [])
-
 
 
     return (

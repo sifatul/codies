@@ -8,7 +8,7 @@ import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
 import { useRouter } from 'next/router';
 import { PostData } from '../../Utils/fetchData';
 import { UseAppDispatch } from '../../store';
-import { setUserInfo } from '../../store/user/basicInfo';
+import { setMyInfo, setUserInfo } from '../../store/user/basicInfo';
 
 const FlexContainer = Styled.div`
     display: flex;
@@ -103,8 +103,7 @@ const VerifyEmailPage: React.FC = () => {
             }
             alert("user is verified");
             delete res.status
-            dispatch(setUserInfo(res))
-
+            dispatch(setMyInfo(res))
             router.push(`/${res.userName}`)
         } catch (e) {
             alert(JSON.stringify(e))
