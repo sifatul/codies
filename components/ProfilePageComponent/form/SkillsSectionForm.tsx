@@ -5,6 +5,9 @@ import { Field, Form, FormikProvider, useFormik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { UseAppSelector } from '../../../store';
+import { getUserState } from '../../../store/user/basicInfo';
+import { PostData } from '../../../Utils/fetchData';
 
 const Container = Styled.div`
     padding-bottom: 12px;
@@ -49,6 +52,11 @@ const Button = Styled.button`
     cursor: pointer;
 `;
 
+const ButtonContainer = Styled.div`
+    display: flex;
+    justify-content: flex-end;
+`;
+
 const ErrorMessageClass = css`
     margin-top: 8px;
     color: red;
@@ -82,7 +90,8 @@ const validationSchema = Yup.object().shape({
     skillTag: Yup.string().required('Skill tag is required'),
 });
 
-const SkillsSectionForm = () => {
+const SkillsSectionForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
+    const { _id = '' } = UseAppSelector(getUserState);
     const [tags, setTags] = useState<any>([]);
     const formik = useFormik({
         initialValues: {
@@ -107,6 +116,22 @@ const SkillsSectionForm = () => {
         setTags([...tags]);
     };
 
+    const handleSave = async () => {
+        if (!tags && !tags.length) return;
+
+        const res: any = await PostData(
+            '/api/skills',
+            JSON.stringify({ userId: _id, techStack: [...tags] })
+        );
+
+        if (res?.status === 201) {
+            closeModal()
+            alert('skills added successfully');
+        } else {
+            alert('please try again');
+        }
+    };
+
     const { handleChange, errors, values, setFieldValue, resetForm } = formik;
 
     return (
@@ -125,7 +150,6 @@ const SkillsSectionForm = () => {
                                 label='Skill tag'
                                 placeholder='Skill Tag'
                                 name='skillTag'
-
                             />
                             <Button type='submit'>Add</Button>
                         </FormWrapper>
@@ -148,6 +172,9 @@ const SkillsSectionForm = () => {
                     </SkillTag>
                 ))}
             </SkillsTagContainer>
+            <ButtonContainer>
+                <Button onClick={handleSave}>Save</Button>
+            </ButtonContainer>
         </Container>
     );
 };
