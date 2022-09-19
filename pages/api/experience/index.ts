@@ -5,22 +5,20 @@ import { connectToDatabase } from '../../../Utils/mongodb';
 import User from '../users/models/UserSchema';
 import Experience from './models/ExperienceSchema';
 const handler = nextConnect();
-const getExperience =  async (req: NextApiRequest, res: NextApiResponse) => {
+const getExperience = async (req: NextApiRequest, res: NextApiResponse) => {
     await connectToDatabase();
-    const { userId='' } = req.query;
+    const { userId = '' } = req.query;
 
     if (!userId) {
         return res.status(400).json({ message: 'request param is missing' });
     }
     const query = { userId: new ObjectId(userId.toString()) };
-    const experiences = await Experience.find({query}, null,  { strictQuery: false });
+    const experiences = await Experience.find({ query }, null, { strictQuery: false });
 
-    return res
-    .status(201)
-    .json({data: experiences});
-}
+    return res.status(201).json({ data: experiences });
+};
 
-const createExperience =  async (req: NextApiRequest, res: NextApiResponse) => {
+const createExperience = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         await connectToDatabase();
 
@@ -28,7 +26,8 @@ const createExperience =  async (req: NextApiRequest, res: NextApiResponse) => {
             return res.status(400).json({ message: 'body param missing' });
         }
 
-        const { userId, companyName, position, startDate, endDate, summary, techStack } = JSON.parse(req.body)
+        const { userId, companyName, position, startDate, endDate, summary, techStack } =
+            JSON.parse(req.body);
 
         if (!userId || !companyName || !position || !startDate) {
             return res.status(400).json({ message: 'required param missing' });
@@ -60,7 +59,7 @@ const createExperience =  async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(500).json({ message: 'something went wrong' });
     }
 };
-const updateExperience =  async (req: NextApiRequest, res: NextApiResponse) => {
+const updateExperience = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         await connectToDatabase();
 
@@ -68,12 +67,12 @@ const updateExperience =  async (req: NextApiRequest, res: NextApiResponse) => {
             return res.status(400).json({ message: 'body param missing' });
         }
 
-        const { userId, companyName, position, startDate, endDate, summary, techStack , _id} = JSON.parse(req.body)
+        const { userId, companyName, position, startDate, endDate, summary, techStack, _id } =
+            JSON.parse(req.body);
 
         if (!userId || !companyName || !position || !startDate || !_id) {
             return res.status(400).json({ message: 'required param missing' });
         }
-         
 
         const newExperience = {
             userId,
@@ -98,19 +97,17 @@ const updateExperience =  async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(500).json({ message: 'something went wrong' });
     }
 };
-const deleteExperience =  async (req: NextApiRequest, res: NextApiResponse) => {
+const deleteExperience = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         await connectToDatabase();
 
-        const {_id} = req.query
-        
+        const { _id } = req.query;
 
-        if ( !_id) {
+        if (!_id) {
             return res.status(400).json({ message: 'required param missing' });
         }
-         
-         
-        const newExperienceRes = await Experience.deleteOne(  { _id: new ObjectId(_id.toString()) });
+
+        const newExperienceRes = await Experience.deleteOne({ _id: new ObjectId(_id.toString()) });
 
         return res
             .status(201)

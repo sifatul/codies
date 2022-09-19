@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react"
-import { UseAppDispatch, UseAppSelector } from "../../../store"
+import Styled from '@emotion/styled'
+import React from "react"
+import { UseAppSelector } from "../../../store"
 import { getUserState } from "../../../store/user/basicInfo"
-import { GetData } from "../../../Utils/fetchData"
-import { DateString } from "../../../Utils/timFormat"
-import SkillTags from "../SkillTags"
-
-import Styled from '@emotion/styled';
-import ExperienceSectionModal from "./ExperienceSectionModal"
+import { getExperiences } from "../../../store/user/experience"
+import { DateString } from "../../../Utils/timeFormat"
 import EditButton from "../EditButton"
-import { getExperiences, setExperience } from "../../../store/user/experience"
+import SkillTags from "../SkillTags"
+import ExperienceSectionModal from "./ExperienceSectionModal"
+
 
 
 const ExperienceCards = Styled.div`
