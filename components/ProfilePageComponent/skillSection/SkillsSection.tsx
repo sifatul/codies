@@ -1,14 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import Styled from '@emotion/styled';
-import { cx, css } from '@emotion/css';
-import SkillTags from './SkillTags';
-import EditButton from '../EditButton';
-import SkillsSectionModal from './SkillsSectionModal';
-import AddBtn from '../AddBtn';
+import React, { useCallback, useEffect } from 'react';
 import { UseAppDispatch, UseAppSelector } from '../../../store';
 import { getUserState } from '../../../store/user/basicInfo';
-import { GetData } from '../../../Utils/fetchData';
 import { getSkillTags, setSkillTags } from '../../../store/user/experience';
+import { GetData } from '../../../Utils/fetchData';
+import AddBtn from '../AddBtn';
+import EditButton from '../EditButton';
+import SkillsSectionModal from './SkillsSectionModal';
+import SkillTags from './SkillTags';
 
 const Container = Styled.div`
     border-bottom: 1px solid #e1e1e1;
@@ -41,10 +40,6 @@ const SkillsSection = () => {
         setIsOpen(true);
     }
 
-    function afterOpenModal() {
-        // references are now sync'd and can be accessed.
-        // subtitle.style.color = "#f00";
-    }
 
     function closeModal() {
         setIsOpen(false);
@@ -69,7 +64,7 @@ const SkillsSection = () => {
             <SkillsSectionHeaderContainer>
                 <SkillsSectionHeader>Skills</SkillsSectionHeader>
                 <div>
-                    <EditButton onClick={openModal} />
+                    {(skillTags || [])?.length > 0 && <EditButton onClick={openModal} />}
                     <SkillsSectionModal
                         openModal={openModal}
                         modalIsOpen={modalIsOpen}
