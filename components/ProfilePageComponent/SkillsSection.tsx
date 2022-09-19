@@ -53,7 +53,7 @@ const SkillsSection = () => {
             const { data = [], status } = res;
             if (status == 201) setSkillTags(data);
         });
-    }, []);
+    }, [_id]);
 
     useEffect(() => {
         getData();
