@@ -22,14 +22,15 @@ const ShowButton = Styled.button`
     color: #277BC0;
 `;
 
-const ExperienceForm = (props: any) => {
+const ExperienceForm = (props: { data: any, closeModal?: () => void }) => {
+    const { data = null, closeModal } = props
 
     return (
         <Container>
             <AddNewCompanySection>
                 <div>
-                    {props && <EditExperienceForm {...props} />}
-                    {!props && <AddNewCompanyForm />}
+                    {data && <EditExperienceForm {...props} />}
+                    {!data && <AddNewCompanyForm closeModal={closeModal} />}
                 </div>
             </AddNewCompanySection>
         </Container>

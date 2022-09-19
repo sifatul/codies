@@ -1,6 +1,6 @@
 const DateString=(time: string)=>{
   
-  var options = {  year: 'numeric', month: 'long'};
+  var options:Intl.DateTimeFormatOptions = {  year: 'numeric', month: 'long'};
 var today  = new Date(time);
  
 

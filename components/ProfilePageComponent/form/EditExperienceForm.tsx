@@ -1,14 +1,15 @@
-import React, { useCallback } from 'react';
+import { css, cx } from '@emotion/css';
 import Styled from '@emotion/styled';
-import { cx, css } from '@emotion/css';
 import { ErrorMessage, Field, Form, FormikProvider, useFormik } from 'formik';
+import React, { useCallback } from 'react';
 import * as Yup from 'yup';
-import CustomDatePicker from '../../form/FormField/CustomDatePicker';
-import Button, { ButtonType } from "../../common/Button"
-import { DeleteData, PostData, PutData } from '../../../Utils/fetchData';
-import { UseAppSelector } from '../../../store';
+import { UseAppDispatch, UseAppSelector } from '../../../store';
 import { getUserState } from '../../../store/user/basicInfo';
-
+import { deleteExperience, getExperiences, updateExperience } from '../../../store/user/experience';
+import { DeleteData, PutData } from '../../../Utils/fetchData';
+import Button, { ButtonType } from "../../common/Button";
+import CustomDatePicker from '../../form/FormField/CustomDatePicker';
+import { validationSchema } from "./AddNewCompanyForm"
 const FormContainer = Styled.div`
     padding: 20px;
     // border: 1px solid #e1e1e1;
@@ -52,29 +53,11 @@ const ButtonWrapper = Styled.div`
 flex-basis: 40%
 `;
 
-const validationSchema = Yup.object().shape({
-    companyName: Yup.string().required('Company name is required'),
-    position: Yup.string().required('Position is required'),
-    startDate: Yup.date().required('Start date is required').nullable(),
-    presentCompany: Yup.boolean().default(false),
-    endDate: Yup.date()
-        .when(['presentCompany'], {
-            is: (presentCompany: boolean) => {
-                return presentCompany === false;
-            },
-            then: Yup.date().required('End date is required').nullable(),
-        })
 
-        .when("startDate",
-            (startDate: any, Yup: any) => startDate && Yup.min(startDate, "End time cannot be before start time"))
-        .nullable(),
-    summary: Yup.string(),
-    techStach: Yup.array(),
-});
 
 
 const EditExperienceForm = (props: any) => {
-    const { data = {} } = props
+    const { data = {}, closeModal } = props
     const { companyName = '',
         position = '',
         presentCompany = false,
@@ -85,16 +68,42 @@ const EditExperienceForm = (props: any) => {
         _id = ''
     } = data
     const { _id: userId } = UseAppSelector(getUserState);
-    console.log(data)
+    const dispatch = UseAppDispatch();
 
-    const deleteExperience = useCallback(async (experienceId: string) => {
-        const res: any = DeleteData('/api/experience?_id=' + experienceId)
+
+
+    const handleDelete = useCallback(async () => {
+        const res: any = await DeleteData('/api/experience?_id=' + _id)
         console.log(res)
         if (res?.status == 201) {
-            alert('updated')
+            alert('deleted')
+            dispatch(deleteExperience(_id))
+        } else {
+            alert(JSON.stringify(res))
         }
+        closeModal()
 
-    }, [])
+    }, [_id])
+
+    const EditExperience = useCallback(async (val: any) => {
+
+        console.log("experience ", JSON.stringify(val))
+        const body = {
+            userId,
+            ...val,
+            _id
+        }
+        const res: any = await PutData('/api/experience', JSON.stringify(body))
+        if (res?.status == 201) {
+            alert('updated')
+            dispatch(updateExperience(body))
+        }
+        else {
+            alert(JSON.stringify(res))
+        }
+        closeModal()
+
+    }, [_id])
 
     const formik = useFormik({
         initialValues: {
@@ -108,17 +117,7 @@ const EditExperienceForm = (props: any) => {
         },
         validationSchema: validationSchema,
         onSubmit: (val: any) => {
-            console.log("experience ", JSON.stringify(val))
-            const body = {
-                userId,
-                ...val,
-                _id
-            }
-            PutData('/api/experience', JSON.stringify(body)).then((res: any) => {
-                if (res?.status == 201) {
-                    alert('updated')
-                }
-            })
+            EditExperience(val)
 
         },
     });
@@ -197,7 +196,7 @@ const EditExperienceForm = (props: any) => {
                                 type={ButtonType.GHOST}
                                 label='Delete'
                                 // actionType='submit'
-                                onClick={e => { deleteExperience(_id) }}
+                                onClick={handleDelete}
                             />
                         </ButtonWrapper>
                     </ButtonContainer>

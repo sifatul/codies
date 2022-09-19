@@ -4,7 +4,7 @@ import Styled from '@emotion/styled';
 const BtnWrapper = Styled.div`
     max-width:280px
 `;
-const AddBtn = (props) => {
+const AddBtn = (props: any) => {
   const { onClick } = props
   return <>
     <BtnWrapper>

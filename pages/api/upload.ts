@@ -1,4 +1,5 @@
 import { IncomingForm } from 'formidable';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { getDataFromCV } from './cv-parser';
 
 var mv = require('mv');
@@ -10,18 +11,18 @@ export const config = {
     }
 };
  
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
     
-    const localPath = await new Promise((resolve, reject) => {
+    const localPath:string = await new Promise((resolve, reject) => {
        const form = new IncomingForm()
        
-        form.parse(req, (err, fields, files) => {
+        form.parse(req, (err, fields, files:any) => {
             if (err) return reject(err)
             console.log(fields, files)
-            console.log(files.file.filepath)
-            var oldPath = files.file.filepath;
+            console.log(files.file?.filepath)
+            var oldPath = files.file?.filepath;
             var newPath = `./public/uploads/${files.file.originalFilename}`;
-            mv(oldPath, newPath, function(err) {
+            mv(oldPath, newPath, function(err:any) {
               console.log(err)
             });
 

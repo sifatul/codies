@@ -80,17 +80,17 @@ const UploadResume = () => {
 
   const dispatch = UseAppDispatch();
   const userInfo = UseAppSelector(getUserState);
-  const [file, setFile] = useState(null);
-  const [image, setImage] = useState(null);
-  const [dataFromCv, setDataFromCv] = useState(null)
+  const [file, setFile] = useState<any>(null);
+  const [image, setImage] = useState<any>(null);
+  const [dataFromCv, setDataFromCv] = useState<any>(null)
 
 
 
-  const uploadToClient = (file) => {
+  const uploadToClient = (file: string) => {
     setImage(file);
   };
 
-  const uploadToServer = async (event) => {
+  const uploadToServer = async () => {
     const body = new FormData();
     // console.log("file", image)
     body.append("file", image);
@@ -125,7 +125,7 @@ const UploadResume = () => {
       }
 
     })
-    dispatch(setUserInfo({...userInfo, ...links}))
+    dispatch(setUserInfo({ ...userInfo, ...links }))
   }, [dataFromCv])
   return <>
 
