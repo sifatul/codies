@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Styled from '@emotion/styled';
 import { cx, css } from '@emotion/css';
 import { Field, Form, FormikProvider, useFormik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
-import { UseAppSelector } from '../../../store';
+import { UseAppDispatch, UseAppSelector } from '../../../store';
 import { getUserState } from '../../../store/user/basicInfo';
-import { PostData } from '../../../Utils/fetchData';
+import { PostData, PutData } from '../../../Utils/fetchData';
+import { getSkillTags, setSkillTags } from '../../../store/user/experience';
 
 const Container = Styled.div`
     padding-bottom: 12px;
@@ -90,12 +91,26 @@ const validationSchema = Yup.object().shape({
     skillTag: Yup.string().required('Skill tag is required'),
 });
 
-const SkillsSectionForm: React.FC<{ closeModal: () => void; skillTags: [] }> = ({
+const SkillsSectionForm: React.FC<{ closeModal: () => void; }> = ({
     closeModal,
-    skillTags,
 }) => {
+    const skillTags = UseAppSelector(getSkillTags);
+
     const { _id = '' } = UseAppSelector(getUserState);
     const [tags, setTags] = useState<any>(skillTags || []);
+    const dispatch = UseAppDispatch();
+
+
+    const handleSkills = useCallback(async () => {
+        if (!tags && !tags.length) return;
+        const previousDate = skillTags || []
+        const response = (previousDate.length > 0) ? await handleSave() : await handleUpdate()
+        if (response) {
+            dispatch(setSkillTags(tags))
+        }
+        closeModal();
+    }, [skillTags, tags])
+
     const formik = useFormik({
         initialValues: {
             skillTag: '',
@@ -114,13 +129,31 @@ const SkillsSectionForm: React.FC<{ closeModal: () => void; skillTags: [] }> = (
         },
     });
 
-    const handleRemove = (index: number) => {
-        tags.splice(index, 1);
-        setTags([...tags]);
+    const handleRemove = (oneTag: string) => {
+        const remainingTag = tags.filter((item: string) => item != oneTag)
+        setTags([...remainingTag]);
+    };
+
+    const handleUpdate = async () => {
+        if (!tags && !tags.length) return;
+
+        const res: any = await PutData(
+            '/api/skills',
+            JSON.stringify({ userId: _id, techStack: [...tags] })
+        );
+
+        if (res?.status === 201) {
+
+            alert('skills added successfully');
+            return true
+
+        } else {
+            alert('please try again');
+            return false
+        }
     };
 
     const handleSave = async () => {
-        if (!tags && !tags.length) return;
 
         const res: any = await PostData(
             '/api/skills',
@@ -128,10 +161,12 @@ const SkillsSectionForm: React.FC<{ closeModal: () => void; skillTags: [] }> = (
         );
 
         if (res?.status === 201) {
-            closeModal();
             alert('skills added successfully');
+            return true
+
         } else {
             alert('please try again');
+            return false
         }
     };
 
@@ -167,7 +202,7 @@ const SkillsSectionForm: React.FC<{ closeModal: () => void; skillTags: [] }> = (
                     <SkillTag key={index}>
                         {item}
                         <span
-                            onClick={() => handleRemove(index)}
+                            onClick={() => handleRemove(item)}
                             className={cx(RemoveIconButtonClass)}
                         >
                             <FontAwesomeIcon icon={faClose} />
@@ -176,7 +211,7 @@ const SkillsSectionForm: React.FC<{ closeModal: () => void; skillTags: [] }> = (
                 ))}
             </SkillsTagContainer>
             <ButtonContainer>
-                <Button onClick={handleSave}>Save</Button>
+                <Button onClick={handleSkills}>Save</Button>
             </ButtonContainer>
         </Container>
     );

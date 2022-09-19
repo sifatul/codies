@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import SkillsSectionForm from './form/SkillsSectionForm';
+import SkillsSectionForm from '../form/SkillsSectionForm';
 
 const customStyles = {
     content: {
@@ -42,7 +42,7 @@ const SkillsSectionModal: React.FC<ModalProps> = ({
                 ariaHideApp={false}
             >
                 <div>
-                    <SkillsSectionForm skillTags={skillTags} closeModal={closeModal}/>
+                    <SkillsSectionForm skillTags={skillTags} closeModal={closeModal} />
                 </div>
             </Modal>
         </div>

@@ -2,7 +2,7 @@ import { IncomingForm } from 'formidable';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getDataFromCV } from './cv-parser';
 
-let mv = require('mv');
+const mv = require('mv');
 
 export const config = {
     api: {
@@ -18,8 +18,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             if (err) return reject(err);
             console.log(fields, files);
             console.log(files.file?.filepath);
-            let oldPath = files.file?.filepath;
-            let newPath = `./public/uploads/${files.file.originalFilename}`;
+            const oldPath = files.file?.filepath;
+            const newPath = `./public/uploads/${files.file.originalFilename}`;
             mv(oldPath, newPath, function (err: any) {
                 console.log(err);
             });

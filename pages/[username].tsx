@@ -1,16 +1,14 @@
 import Styled from '@emotion/styled';
-import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
-import { getAuth, signOut } from 'firebase/auth';
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import DesiredRoles from '../components/ProfilePageComponent/DesiredRoles';
 import ExperienceSection from '../components/ProfilePageComponent/experienceSection';
 import ProfileBasicInfo from '../components/ProfilePageComponent/ProfileBasicInfo';
 import SideBar from '../components/ProfilePageComponent/Sidebar';
-import SkillsSection from '../components/ProfilePageComponent/SkillsSection';
-import { UseAppDispatch, UseAppSelector } from '../store';
-import { getUserState, resetState } from '../store/user/basicInfo';
-import ProfileWrapper from '../Hoc/profileWrapper'
+import SkillsSection from '../components/ProfilePageComponent/skillSection/SkillsSection';
+import ProfileWrapper from '../Hoc/profileWrapper';
+import { UseAppSelector } from '../store';
+import { getUserState } from '../store/user/basicInfo';
 
 
 const Container = Styled.div`
@@ -42,13 +40,11 @@ const ProfileSkillsSection = Styled.div`
 const ProfilePage: React.FC = () => {
     const router = useRouter()
     const { userName = '', _id } = UseAppSelector(getUserState);
-    const dispatch = UseAppDispatch();
 
 
-    // useEffect(() => {
-    //     if (!userName || !_id) router.replace('/auth/signin')
-    //     router.push('/account/profile', `/${userName}`, { shallow: true })
-    // }, [])
+    useEffect(() => {
+        if (!userName || !_id) router.replace('/auth/signin')
+    }, [])
 
 
 

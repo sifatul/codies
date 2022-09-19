@@ -5,7 +5,7 @@ import { getUserState } from "../../../store/user/basicInfo"
 import { getExperiences } from "../../../store/user/experience"
 import { DateString } from "../../../Utils/timeFormat"
 import EditButton from "../EditButton"
-import SkillTags from "../SkillTags"
+import SkillTags from "../skillSection/SkillTags"
 import ExperienceSectionModal from "./ExperienceSectionModal"
 
 

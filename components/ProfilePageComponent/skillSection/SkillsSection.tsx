@@ -2,12 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Styled from '@emotion/styled';
 import { cx, css } from '@emotion/css';
 import SkillTags from './SkillTags';
-import EditButton from './EditButton';
+import EditButton from '../EditButton';
 import SkillsSectionModal from './SkillsSectionModal';
-import AddBtn from './AddBtn';
-import { UseAppSelector } from '../../store';
-import { getUserState } from '../../store/user/basicInfo';
-import { GetData } from '../../Utils/fetchData';
+import AddBtn from '../AddBtn';
+import { UseAppDispatch, UseAppSelector } from '../../../store';
+import { getUserState } from '../../../store/user/basicInfo';
+import { GetData } from '../../../Utils/fetchData';
+import { getSkillTags, setSkillTags } from '../../../store/user/experience';
 
 const Container = Styled.div`
     border-bottom: 1px solid #e1e1e1;
@@ -32,8 +33,10 @@ const ContentContainer = Styled.div``;
 
 const SkillsSection = () => {
     const { _id = '' } = UseAppSelector(getUserState);
-    const [skillTags, setSkillTags] = useState<any>([]);
+    const skillTags = UseAppSelector(getSkillTags);
     const [modalIsOpen, setIsOpen] = React.useState(false);
+    const dispatch = UseAppDispatch();
+
     function openModal() {
         setIsOpen(true);
     }
@@ -47,12 +50,14 @@ const SkillsSection = () => {
         setIsOpen(false);
     }
 
-    const getData = useCallback(() => {
-        GetData('/api/skills?userId=' + _id).then((res: any) => {
-            console.log(res);
-            const { data = [], status } = res;
-            if (status == 201) setSkillTags(data);
-        });
+    const getData = useCallback(async () => {
+        if (!_id) return
+        const res: any = await GetData('/api/skills?userId=' + _id)
+        console.log(res);
+        const { data = [], status } = res || {};
+        if (status == 201) {
+            dispatch(setSkillTags(data))
+        }
     }, [_id]);
 
     useEffect(() => {
@@ -73,8 +78,8 @@ const SkillsSection = () => {
                     />
                 </div>
             </SkillsSectionHeaderContainer>
-            {skillTags && skillTags?.length && <SkillTags tags={skillTags as any} />}
-            {!skillTags && !skillTags.length && (
+            {(skillTags || [])?.length > 0 && <SkillTags tags={skillTags as any} />}
+            {(skillTags || [])?.length <= 0 && (
                 <ContentContainer>
                     <AddBtn label='Add skills' onClick={openModal} />
                     <SkillsSectionModal

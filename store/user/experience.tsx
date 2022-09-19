@@ -19,8 +19,9 @@ export interface experiencesProjectType {
 /**
  * Default state object with initial values.
  */
-const initialState: { experiences: experiencesProjectType[] } = {
-  experiences: [] as experiencesProjectType[]
+const initialState: { experiences: experiencesProjectType[], skillTags: string[] } = {
+  experiences: [] as experiencesProjectType[],
+  skillTags: [] as string[]
 
   // topRepos: [],
 } as const;
@@ -71,16 +72,27 @@ export const experiencesSlice = createSlice({
       state.experiences = afterDeleteExp
     },
 
+    setSkillTags: (
+      state: Draft<typeof initialState>,
+      action: PayloadAction<string[]>
+    ) => {
+
+      state.skillTags = action.payload
+    },
+
 
   },
 });
 
 // A small helper of user state for `useSelector` function.
-export const getExperiences = (state: { experiences: { experiences: experiencesProjectType[] } }) => {
+export const getExperiences = (state: { experiences: { experiences: experiencesProjectType[], skillTags: string[] } }) => {
   return state.experiences.experiences
+};
+export const getSkillTags = (state: { experiences: { experiences: experiencesProjectType[], skillTags: string[] } }) => {
+  return state.experiences.skillTags || []
 };
 
 // Exports all actions
-export const { setExperience, updateExperience, deleteExperience, setExperienceList } = experiencesSlice.actions;
+export const { setExperience, updateExperience, deleteExperience, setExperienceList, setSkillTags } = experiencesSlice.actions;
 
 export default experiencesSlice.reducer;
