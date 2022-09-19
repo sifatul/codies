@@ -13,7 +13,7 @@ const getExperience =  async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(400).json({ message: 'request param is missing' });
     }
     const query = { userId: new ObjectId(userId.toString()) };
-    const experiences = await Experience.find({query});
+    const experiences = await Experience.find({query}, null,  { strictQuery: false });
 
     return res
     .status(201)

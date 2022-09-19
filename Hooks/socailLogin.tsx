@@ -74,18 +74,27 @@ export default function FirebaseLoginManage() {
     try {
       const query = `platform=${platform}&token=${token}&email=${email}&fullName=${fullName}&profilePic=${profilePic}`;
       const res: any = await GetData(`/api/auth/social?${query}`)
+      const { status = 404, verified = false, google_token = '', github_token = '' } = res
 
-      if (res?.status == 200 && !res.verified) {
-        router.push('/auth/verify-email?email=' + res?.email);
-      }
-      if (res?.status == 200 && res.verified) {
+      if (status == 200 && (verified || google_token || github_token)) {
+        /*
+        1. user is verified
+        2. user is not verified but is of social login
+        */
         delete res.status
 
         dispatch(setUserInfo(res))
         router.push(`/${res?.userName}`)
+        return
       }
 
-      if (res?.status == 404) {
+      else if (status == 200 && !verified) {
+        router.push('/auth/verify-email?email=' + res?.email);
+        return
+      }
+
+
+      else if (status == 404) {
         // user not found
         // proceed to create new user
 
