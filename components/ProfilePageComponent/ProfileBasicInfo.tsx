@@ -137,8 +137,14 @@ const PrivacyNoteDescriptionParagraph = Styled.div`
 `;
 const ProfileBasicInfo = () => {
     const userState = UseAppSelector(getUserState);
-    const { profilePic = 'https://source.unsplash.com/6VPEOdpFNAs', fullName = '' } =
-        userState?.userInfo || {};
+    const {
+        profilePic = 'https://source.unsplash.com/6VPEOdpFNAs',
+        fullName = '',
+        city = '',
+        country = '',
+        profileHeading = '',
+        phoneNumber = '',
+    } = userState?.userInfo || {};
 
     const [modalIsOpen, setIsOpen] = React.useState(false);
 
@@ -168,10 +174,7 @@ const ProfileBasicInfo = () => {
                 </UserNameContainer>
                 <UserDescriptionAndSocialContainer>
                     <UserDescriptionContainer>
-                        <UserDescriptionParagraph>
-                            Junior Full stack developer Focused on Frontend, Skilled in Javascript,
-                            React and Node.Js
-                        </UserDescriptionParagraph>
+                        <UserDescriptionParagraph>{profileHeading}</UserDescriptionParagraph>
                     </UserDescriptionContainer>
                     <SocialIconContainer>
                         <FontAwesomeIcon icon={faGithubSquare} />
@@ -182,14 +185,12 @@ const ProfileBasicInfo = () => {
                     <UserLocation>
                         <FontAwesomeIcon icon={faLocationDot} />
                         <UserLocationAndPhoneParagraph>
-                            Dhaka, Bangladesh
+                            {city} {country}
                         </UserLocationAndPhoneParagraph>
                     </UserLocation>
                     <UserPhone>
                         <FontAwesomeIcon icon={faPhone} />
-                        <UserLocationAndPhoneParagraph>
-                            +8801111222333
-                        </UserLocationAndPhoneParagraph>
+                        <UserLocationAndPhoneParagraph>{phoneNumber}</UserLocationAndPhoneParagraph>
                     </UserPhone>
                 </UserLocationAndPhoneContainer>
             </UserInformationContainer>

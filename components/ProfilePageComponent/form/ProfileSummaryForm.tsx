@@ -6,7 +6,7 @@ import { isPhoneNumber } from 'js-string-helper';
 import { getPhoneNumberRegex } from '../../../helper/regex';
 import { css, cx } from '@emotion/css';
 import Button, { ButtonType } from '../../common/Button';
-import { PutData } from '../../../Utils/fetchData';
+import { PatchData, PutData } from '../../../Utils/fetchData';
 import { UseAppSelector } from '../../../store';
 import { getUserState } from '../../../store/user/basicInfo';
 
@@ -72,7 +72,7 @@ const ProfileSummaryForm: React.FC<{ closeModal: () => void }> = ({ closeModal }
         },
         validationSchema: validationSchema,
         onSubmit: async (val: any) => {
-            const res: any = await PutData('/api/users/' + _id, JSON.stringify(val));
+            const res: any = await PatchData('/api/users/' + _id, JSON.stringify(val));
 
             if (res?.status === 200) {
                 alert('Successfully updated');
