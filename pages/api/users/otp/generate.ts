@@ -125,15 +125,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             return res.status(400).json({ status: 'error', error: 'required param missing' });
 
         // tslint:disable-next-line: await-promise
-        const isUserExist = await User.findOne({
-            where: { email: email },
-        });
+        const isUserExist = await User.findOne({ email: email }, null, { strictQuery: false });
+        
 
         if (!isUserExist) {
             return res.status(404).send({
-                status: 'error',
-                error: 'No user found',
+                message: 'No user found',
             });
+        }
+        if(isUserExist.verified) {
+            return res.status(302).send({
+                message: 'user is already verified',
+            });
+           
         }
 
         const callback = (result: any) => {
