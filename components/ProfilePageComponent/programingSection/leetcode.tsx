@@ -46,8 +46,8 @@ const LeetcodeProgramming = () => {
   const { languageProblemCount = [] } = leetcodeUserInfo
 
 
-  const userState = UseAppSelector(getUserState);
-  const { leetcode_url } = userState?.userInfo || {}
+  const { userInfo, _id } = UseAppSelector(getUserState);
+  const { leetcode_url } = userInfo || {}
   const dispatch = UseAppDispatch();
 
 
@@ -109,7 +109,7 @@ const LeetcodeProgramming = () => {
     <ProgrammingSectionHeader>
       <Title>Leetcoding</Title>
 
-      <div className={cx(iconClass)} onClick={e => setShowProfileLinkModal(true)}>
+      <div className={cx(iconClass)} onClick={e => _id && setShowProfileLinkModal(true)}>
         <img src='/icons/leetcode.png' alt='leetcode-icon' style={{ height: '20px' }} />
       </div>
     </ProgrammingSectionHeader>

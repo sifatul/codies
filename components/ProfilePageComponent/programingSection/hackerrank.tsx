@@ -48,8 +48,8 @@ const HackerrankProgramming = () => {
   const hackerrankUserInfo = UseAppSelector(getHackerRankUserInfo);
 
 
-  const userState = UseAppSelector(getUserState);
-  const { hackerrank_url, profilePic } = userState?.userInfo || {}
+  const { userInfo, _id } = UseAppSelector(getUserState);
+  const { hackerrank_url, profilePic } = userInfo || {}
 
   const { languages = [] } = hackerrankUserInfo
   const { updateUserInfo } = checkUserInfo()
@@ -131,7 +131,7 @@ const HackerrankProgramming = () => {
     <ProgrammingSectionHeader>
       <Title>Hackerranking</Title>
 
-      <div className={cx(iconClass)} onClick={e => setShowProfileLinkModal(true)}>
+      <div className={cx(iconClass)} onClick={e => _id && setShowProfileLinkModal(true)}>
         <FontAwesomeIcon icon={faHackerrank} />
       </div>
     </ProgrammingSectionHeader>

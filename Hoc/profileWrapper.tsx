@@ -10,7 +10,7 @@ import { getUserState, resetState } from '../store/user/basicInfo';
 const Container = Styled.div`
     margin: 0 auto;
     min-height: 100vh;
-    max-width:1024px;
+    max-width:1440px;
 `;
 const ProfileWrapper = (props: any) => {
   const router = useRouter()
@@ -31,14 +31,18 @@ const ProfileWrapper = (props: any) => {
     });
   }, [])
 
+  const goToHomepage = useCallback(() => {
+    router.replace('/')
+  }, [])
+
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
+      <Box sx={{ flexGrow: 1, background: 'transparent' }}>
+        <AppBar position="static" sx={{ background: 'transparent', color: 'black' }}>
           <Toolbar  >
-            <div style={{ width: '100%', maxWidth: '1024px', margin: '0 auto', display: 'flex' }}>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1, }}>
+            <div style={{ width: '100%', maxWidth: '1440px', margin: '0 auto', display: 'flex' }}>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontSize: '25px' }} onClick={goToHomepage}>
                 Codies
           </Typography>
               {_id && <Button color="inherit" onClick={logout}>Logout</Button>}

@@ -46,8 +46,8 @@ const GithubProgramming = () => {
   const [showProfileLinkModal, setShowProfileLinkModal] = useState(false)
   const githubUserInfo = UseAppSelector(getGithubUserInfo);
 
-  const userState = UseAppSelector(getUserState);
-  const { github_url, profilePic } = userState?.userInfo || {}
+  const { userInfo, _id } = UseAppSelector(getUserState);
+  const { github_url, profilePic } = userInfo || {}
   const dispatch = UseAppDispatch();
   const { updateUserInfo } = checkUserInfo()
 
@@ -125,7 +125,7 @@ const GithubProgramming = () => {
     <ProgrammingSectionHeader>
       <Title>Projects</Title>
 
-      <div className={cx(iconClass)} onClick={e => setShowProfileLinkModal(true)}>
+      <div className={cx(iconClass)} onClick={e => _id && setShowProfileLinkModal(true)}>
         <FontAwesomeIcon icon={faGithub} />
       </div>
     </ProgrammingSectionHeader>

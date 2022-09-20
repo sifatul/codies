@@ -19,7 +19,7 @@ const ButtonStyled = Styled.button`
     border-radius: 8px;
     font-weight: 400;
     font-size: 16px;
-    line-height: 24px;
+    line-height: 28px;
 
     display: flex;
     align-items: center;
@@ -31,15 +31,9 @@ const ButtonStyled = Styled.button`
 `;
 
 const GhostBtnStyled = Styled(ButtonStyled)`
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 28px;
-
     display: flex;
     align-items: center;
     text-align: center;
-
     color: #000000;
     background: transparent;
     border: 2px solid #00A2F4;
@@ -50,6 +44,15 @@ const SecondaryBtnStyled = Styled(ButtonStyled)`
     color: #3F4753;
     border: 1px solid #E7E8E9;
     font-weight: 400;
+`;
+
+const TertiaryButtonStyle = Styled(ButtonStyled)`
+    display: flex;
+    padding:0;
+    align-items: center;
+    text-align: center;
+    color: #000000;
+    background: transparent; 
 `;
 
 const LinkWithColor = Styled.span`
@@ -69,6 +72,7 @@ export enum ButtonType {
     SECONDARY = 'secondary',
     GHOST = 'ghost',
     ADD = 'add',
+    TERTIARY = 'tertiary',
 }
 
 interface BtnProps {
@@ -94,6 +98,10 @@ const Button: React.FC<BtnInputProps> = ({ label, type, labelWithLink, onClick, 
     if (type === ButtonType.ADD) {
         return <AddButton label={label} onClick={onClick} actionType={actionType} />;
     }
+    if (type === ButtonType.TERTIARY) {
+        return <TertiaryButton onClick={onClick} label={label} labelWithLink={labelWithLink} actionType={actionType} />;
+    }
+
     return <ButtonStyled type={actionType} onClick={onClick}>{label}</ButtonStyled>;
 };
 
@@ -122,5 +130,13 @@ const AddButton: React.FC<BtnProps> = ({ label, onClick, actionType }) => {
             <FontAwesomeIcon icon={faPlus} />
             <span>{label}</span>
         </AddBtnStyled>
+    );
+};
+
+const TertiaryButton: React.FC<BtnProps> = ({ label, onClick, labelWithLink, icon, actionType }) => {
+    return (
+        <TertiaryButtonStyle type={actionType} onClick={onClick}>
+            <span>{label}</span> <LinkWithColor >{labelWithLink}</LinkWithColor>
+        </TertiaryButtonStyle>
     );
 };

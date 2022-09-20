@@ -2,12 +2,13 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { getAnalytics, logEvent } from 'firebase/analytics';
 import type { AppProps } from 'next/app';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import FirebaseLoginManage from '../Hooks/socailLogin';
 import { wrapper } from '../store';
 import '../styles/globals.css';
 import { app } from '../Utils/firebaseConfig';
 import BackdropComponent from "../components/common/Backdrop"
+import ProfileWrapper from '../Hoc/profileWrapper';
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -26,7 +27,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     return <>
         <BackdropComponent />
-        <Component {...pageProps} />
+        <ProfileWrapper>
+            <Component {...pageProps} />
+        </ProfileWrapper>
     </>;
 }
 

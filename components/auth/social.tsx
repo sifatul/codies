@@ -11,7 +11,8 @@ export const SocialBtnContainer = css`
     flex-direction: column;
     align-items: center;
     gap: 24px 0;
-    margin: 35px 0;
+    margin-top: 35px;
+    margin-bottom: 24px;
 `;
 
 

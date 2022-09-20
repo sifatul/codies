@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { css, cx } from '@emotion/css';
 import { useFormik, Form, FormikProvider } from 'formik';
 import * as Yup from 'yup';
@@ -43,6 +43,7 @@ const SigninPage: React.FC = () => {
 
     const dispatch = UseAppDispatch();
     const { singinEmailUser } = FirebaseLoginManage()
+    const [showEmailForm, setShowEmailForm] = useState(false)
 
 
     const router = useRouter()
@@ -106,76 +107,90 @@ const SigninPage: React.FC = () => {
                         description='Your own Digital Profile'
                     />
 
-                    <SocialAuthComponent />
-                    <div className={cx(Divider)}>
-                        <span className={cx(DividerText)}>or</span>
-                    </div>
-                    <div>
-                        <FormikProvider value={formik}>
-                            <Form>
-                                <div className={cx(RowGap)}>
-                                    <Input
-                                        label='Email'
-                                        placeholder='Email or User name'
-                                        type={InputType.TEXT}
-                                        name='email'
-                                        value={values.email}
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                        }}
-                                    />
-                                </div>
-                                <div className={cx(RowGap)}>
-                                    <Input
-                                        label='Password'
-                                        placeholder='Password'
-                                        type={InputType.PASSWORD}
-                                        name='password'
-                                        value={values.password}
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                        }}
-                                    />
-                                </div>
-                                <div className={cx([RowGap, FlexItem, JustifySpaceBetween])}>
-                                    <div className={cx([FlexItem])}>
-                                        <div className={cx([CheckboxContainer])}>
-                                            <Input
-                                                label='agree'
-                                                type={InputType.CHECKBOX}
-                                                name='rememberMe'
-                                                id='rememberMe'
-                                                value={values.rememberMe}
-                                                onChange={(e) => {
-                                                    handleChange(e);
-                                                }}
-                                            />
+                    {!showEmailForm && <>
+                        <SocialAuthComponent />
+                        <div>
+                            <Button
+                                onClick={e => {
+                                    e.preventDefault()
+                                    setShowEmailForm(true)
+                                }}
+                                type={ButtonType.SECONDARY}
+                                label='Login with Email'
+                            />
+                        </div>
+                    </>}
+                    {showEmailForm &&
+                        <div>
+                            <FormikProvider value={formik}>
+                                <Form>
+                                    <div className={cx(RowGap)}>
+                                        <Input
+                                            label='Email'
+                                            placeholder='Email or User name'
+                                            type={InputType.TEXT}
+                                            name='email'
+                                            value={values.email}
+                                            onChange={(e) => {
+                                                handleChange(e);
+                                            }}
+                                        />
+                                    </div>
+                                    <div className={cx(RowGap)}>
+                                        <Input
+                                            label='Password'
+                                            placeholder='Password'
+                                            type={InputType.PASSWORD}
+                                            name='password'
+                                            value={values.password}
+                                            onChange={(e) => {
+                                                handleChange(e);
+                                            }}
+                                        />
+                                    </div>
+                                    <div className={cx([RowGap, FlexItem, JustifySpaceBetween])}>
+                                        <div className={cx([FlexItem])}>
+                                            <div className={cx([CheckboxContainer])}>
+                                                <Input
+                                                    label='agree'
+                                                    type={InputType.CHECKBOX}
+                                                    name='rememberMe'
+                                                    id='rememberMe'
+                                                    value={values.rememberMe}
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                    }}
+                                                />
+                                            </div>
+                                            <label htmlFor='rememberMe' className={cx(ColorGray)}>Remember me</label>
                                         </div>
-                                        <label htmlFor='rememberMe' className={cx(ColorGray)}>Remember me</label>
+                                        <div>
+                                            <label htmlFor='rememberMe' className={cx(ColorGray)}>Forgot Password?</label>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label htmlFor='rememberMe' className={cx(ColorGray)}>Forgot Password?</label>
+                                    <div className={cx([RowGap])}>
+                                        <Button
+                                            type={ButtonType.PRIMARY}
+                                            label='Login to Your Account'
+                                            actionType='submit'
+                                        />
                                     </div>
-                                </div>
-                                <div className={cx([RowGap])}>
-                                    <Button
-                                        type={ButtonType.PRIMARY}
-                                        label='Login to Your Account'
-                                        actionType='submit'
-                                    />
-                                </div>
-                                <div className={cx([RowGap, FlexItem, JustifyCenter])}>
-                                    <Button
-                                        type={ButtonType.GHOST}
-                                        label='Not a member yet? '
-                                        labelWithLink='Register Now'
-                                        actionType='button'
-                                        onClick={goToSignup}
-                                    />
-                                </div>
-                            </Form>
-                        </FormikProvider>
+
+                                </Form>
+                            </FormikProvider>
+                        </div>
+
+                    }
+                    <div className={cx([FlexItem, JustifyCenter])}>
+                        <Button
+                            type={ButtonType.TERTIARY}
+                            label='Not a member yet? '
+                            labelWithLink='Register Now'
+                            actionType='button'
+                            onClick={goToSignup}
+                        />
                     </div>
+
                 </div>
             </div>
             <div className={cx(ImageContainer)} />

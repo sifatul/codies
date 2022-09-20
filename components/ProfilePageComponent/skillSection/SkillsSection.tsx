@@ -76,7 +76,8 @@ const SkillsSection = () => {
             {(skillTags || [])?.length > 0 && <SkillTags tags={skillTags as any} />}
             {(skillTags || [])?.length <= 0 && (
                 <ContentContainer>
-                    <AddBtn label='Add skills' onClick={openModal} />
+                    {_id && <AddBtn label='Add skills' onClick={openModal} />}
+                    {!_id && <p>No data found</p>}
                     <SkillsSectionModal
                         openModal={openModal}
                         modalIsOpen={modalIsOpen}

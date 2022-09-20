@@ -42,7 +42,7 @@ const SkillsSectionModal: React.FC<ModalProps> = ({
                 ariaHideApp={false}
             >
                 <div>
-                    <SkillsSectionForm skillTags={skillTags} closeModal={closeModal} />
+                    <SkillsSectionForm closeModal={closeModal} />
                 </div>
             </Modal>
         </div>

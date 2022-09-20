@@ -59,11 +59,12 @@ const ExperienceSection = () => {
         <Container>
             <ExperienceSectionHeaderContainer>
                 <ExperienceSectionHeader>Experience</ExperienceSectionHeader>
-                <div>
+                {_id && <div>
                     <p>Your work will be shown here.</p>
                     <AddBtn onClick={openModal} />
 
-                </div>
+                </div>}
+                {!_id && <p>No data found</p>}
             </ExperienceSectionHeaderContainer>
             <ExperienceSectionModal
                 openModal={openModal}

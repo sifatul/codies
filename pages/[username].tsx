@@ -5,7 +5,6 @@ import ExperienceSection from '../components/ProfilePageComponent/experienceSect
 import ProfileBasicInfo from '../components/ProfilePageComponent/ProfileBasicInfo';
 import SideBar from '../components/ProfilePageComponent/Sidebar';
 import SkillsSection from '../components/ProfilePageComponent/skillSection/SkillsSection';
-import ProfileWrapper from '../Hoc/profileWrapper';
 
 
 
@@ -35,26 +34,21 @@ const ProfilePage: React.FC = () => {
     return (
         <>
 
-
-            <ProfileWrapper>
-                <>
-                    <ProfileHeader>
-                        <ProfileBasicInfo />
-                    </ProfileHeader>
-                    <ProfileDetailsContainer>
-                        <ProfileSummaryContainer>
-                            <SideBar />
-                        </ProfileSummaryContainer>
-                        <ProfileSkillsSection>
-                            <DesiredRoles />
-                            <SkillsSection />
-                            <ExperienceSection />
-                        </ProfileSkillsSection>
-                    </ProfileDetailsContainer>
-                </>
-            </ProfileWrapper>
-
+            <ProfileHeader>
+                <ProfileBasicInfo />
+            </ProfileHeader>
+            <ProfileDetailsContainer>
+                <ProfileSummaryContainer>
+                    <SideBar />
+                </ProfileSummaryContainer>
+                <ProfileSkillsSection>
+                    <DesiredRoles />
+                    <SkillsSection />
+                    <ExperienceSection />
+                </ProfileSkillsSection>
+            </ProfileDetailsContainer>
         </>
+
     );
 };
 
