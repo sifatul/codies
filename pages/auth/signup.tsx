@@ -236,7 +236,7 @@ const SignupPage: React.FC<{}> = () => {
                             options={{
                                 ...defaultOptions,
                                 animationData: successAnimation,
-                                loop: false
+                                loop: false,
                             }}
                             eventListeners={[
                                 {
@@ -340,7 +340,7 @@ const SignupPage: React.FC<{}> = () => {
                             </div>
                         </>
                     )}
-                    {!loading && (
+                    {!loading && signupStatus.status === StatusType.IDEL && (
                         <div className={cx([FlexItem, JustifyCenter])}>
                             <Button
                                 type={ButtonType.TERTIARY}
