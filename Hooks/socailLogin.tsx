@@ -174,7 +174,7 @@ export default function FirebaseLoginManage() {
       const email = err.customData.email;
       // The AuthCredential type that was used.
       // const credential = GithubAuthProvider.credentialFromError(error);
-      console.error(`${email} is registered under a different platform`)
+      alert(`${email} is registered under a different platform`)
     }
     dispatch(setLoading(false))
 
