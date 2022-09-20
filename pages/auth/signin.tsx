@@ -1,4 +1,5 @@
 import { css, cx } from '@emotion/css';
+import { getAnalytics, logEvent } from 'firebase/analytics';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useCallback, useState } from 'react';
@@ -13,13 +14,7 @@ import { setLoading, setMyInfo } from '../../store/user/basicInfo';
 import { GetData } from '../../Utils/fetchData';
 import {
     CheckboxContainer, FlexItem, FormSection,
-    FormWrap,
-
-
-
-
-
-    ImageContainer, JustifyCenter, RowGap, SectionContainer
+    FormWrap, ImageContainer, JustifyCenter, RowGap, SectionContainer
 } from './signup';
 
 const JustifySpaceBetween = css`
@@ -42,6 +37,7 @@ const SigninPage: React.FC = () => {
     const dispatch = UseAppDispatch();
     const { singinEmailUser } = FirebaseLoginManage()
     const [showEmailForm, setShowEmailForm] = useState(false)
+    const analytics = getAnalytics();
 
 
     const router = useRouter()
@@ -56,6 +52,8 @@ const SigninPage: React.FC = () => {
                 delete res.status
                 dispatch(setMyInfo(res))
                 singinEmailUser(param.email, param.password)
+                logEvent(analytics, `email signin successful`);
+
                 return router.push(`/${res.userName}`)
             }
             if (res.status == 401) return router.push('/auth/verify-email?email=' + param?.email);
@@ -63,7 +61,7 @@ const SigninPage: React.FC = () => {
         } catch (e) {
             console.error(e);
             alert(JSON.stringify(e))
-
+            logEvent(analytics, `error email signin`);
         }
         dispatch(setLoading(false));
 

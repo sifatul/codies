@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { PostData } from '../../Utils/fetchData';
 import { UseAppDispatch } from '../../store';
 import { setMyInfo, setUserInfo } from '../../store/user/basicInfo';
+import { getAnalytics, logEvent } from 'firebase/analytics';
 
 const FlexContainer = Styled.div`
     display: flex;
@@ -74,6 +75,7 @@ const VerifyEmailPage: React.FC = () => {
     const router = useRouter()
     const { email } = router.query
     const dispatch = UseAppDispatch();
+    const analytics = getAnalytics();
 
     const [otp, setOpt] = useState<string>();
 
@@ -104,6 +106,7 @@ const VerifyEmailPage: React.FC = () => {
             alert("user is verified");
             delete res.status
             dispatch(setMyInfo(res))
+            logEvent(analytics, `email signup complete`);
             router.push(`/${res.userName}`)
         } catch (e) {
             alert(JSON.stringify(e))

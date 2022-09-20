@@ -1,4 +1,5 @@
 import { css, cx } from '@emotion/css';
+import { getAnalytics, logEvent } from 'firebase/analytics';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useCallback, useState } from 'react';
@@ -96,6 +97,7 @@ padding-bottom: 4px;
 
 const SignupPage: React.FC<{}> = () => {
     const router = useRouter()
+    const analytics = getAnalytics();
 
 
     const { getUserByName, getUserByEmail } = checkUserInfo()
@@ -132,11 +134,13 @@ const SignupPage: React.FC<{}> = () => {
             if (!res?.email) throw "email missing in response"
             alert("user created")
             createEmailAndPasswordUser(newUser.email, newUser.password)
+            logEvent(analytics, `email verification sent`);
             router.push('/auth/verify-email?email=' + res?.email);
 
         } catch (e) {
             console.error(e);
             alert(JSON.stringify(e))
+            logEvent(analytics, `signup error`);
         }
 
     }, [])

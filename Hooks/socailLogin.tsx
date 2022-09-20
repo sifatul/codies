@@ -60,11 +60,12 @@ export default function FirebaseLoginManage() {
   const dispatch = UseAppDispatch();
   const router = useRouter()
   const auth = getAuth();
+  const analytics = getAnalytics();
 
 
 
   const socialLogin = async (providerId: string, token: string | OAuthCredential | null | undefined, email?: string | null | undefined, fullName?: string, profilePic?: string) => {
-    let platform;
+    let platform = 'email';
     if (providerId === GithubAuthProvider.PROVIDER_ID) {
       platform = SocialLoginPlatform.GITHUB
     } else if (providerId === GoogleAuthProvider.PROVIDER_ID) {
@@ -83,6 +84,7 @@ export default function FirebaseLoginManage() {
         2. user is not verified but is of social login
         */
         delete res.status
+        logEvent(analytics, `${platform} login successful`);
 
         dispatch(setMyInfo(res))
         router.push(`/${res?.userName}`)
@@ -133,8 +135,7 @@ export default function FirebaseLoginManage() {
       } else if (result.providerId === GoogleAuthProvider.PROVIDER_ID) {
         credential = GoogleAuthProvider.credentialFromResult(result);
       }
-      const analytics = getAnalytics();
-      logEvent(analytics, 'google login successful');
+
 
       if (user.uid && result.providerId) await socialLogin(result.providerId, user.uid, user?.email || '', user?.displayName || '', user?.photoURL || '')
 
