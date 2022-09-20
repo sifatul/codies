@@ -64,8 +64,6 @@ const ProfilePage: React.FC = () => {
     return (
         <>
             <AlertDialog />
-
-
             <ProfileHeader>
                 <ProfileBasicInfo />
             </ProfileHeader>
@@ -74,7 +72,7 @@ const ProfilePage: React.FC = () => {
                     <SideBar />
                 </ProfileSummaryContainer>
                 <ProfileSkillsSection>
-                    <DesiredRoles />
+                    {/* <DesiredRoles /> */}
                     <SkillsSection />
                     <ExperienceSection />
                 </ProfileSkillsSection>
