@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         logEvent(analytics, 'page view');
 
         getSocialRedirectResult()
-        // getAuthStateChange()
+        getAuthStateChange()
 
 
     }, []);
