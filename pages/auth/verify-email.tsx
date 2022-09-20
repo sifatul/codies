@@ -141,10 +141,10 @@ const VerifyEmailPage: React.FC = () => {
 
 
                     }} />
-                    <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <Button
                             onClick={sendOtp}
-                            type={ButtonType.GHOST}
+                            type={ButtonType.TERTIARY}
                             label="Didn't get the code?"
                             labelWithLink='Resend'
                         />
