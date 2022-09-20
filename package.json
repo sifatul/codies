@@ -38,7 +38,6 @@
     "graphql-request": "^4.3.0",
     "js-string-helper": "^0.0.39",
     "linkedin-scrapper": "^1.2.1",
-    "lottie-web": "^5.9.6",
     "mongodb": "^4.8.1",
     "mongoose": "^6.5.2",
     "multer": "^1.4.5-lts.1",
