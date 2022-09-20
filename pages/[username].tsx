@@ -1,11 +1,15 @@
 import Styled from '@emotion/styled';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useCallback, useEffect } from 'react';
 import AlertDialog from '../components/common/TakeUserFeedback';
 import DesiredRoles from '../components/ProfilePageComponent/DesiredRoles';
 import ExperienceSection from '../components/ProfilePageComponent/experienceSection';
 import ProfileBasicInfo from '../components/ProfilePageComponent/ProfileBasicInfo';
 import SideBar from '../components/ProfilePageComponent/Sidebar';
 import SkillsSection from '../components/ProfilePageComponent/skillSection/SkillsSection';
+import checkUserInfo from '../Hooks/checkUser.hook';
+import { UseAppDispatch, UseAppSelector } from '../store';
+import { getUserState, setUserInfo } from '../store/user/basicInfo';
 
 
 
@@ -30,6 +34,31 @@ const ProfileSkillsSection = Styled.div`
 `;
 
 const ProfilePage: React.FC = () => {
+    const router = useRouter()
+    const { _id = '', userInfo } = UseAppSelector(getUserState);
+    const { username } = router.query
+    const { getUserByName } = checkUserInfo()
+    const dispatch = UseAppDispatch();
+    console.log("username: ", username)
+
+    const getUserBySearchName = useCallback(async () => {
+        console.log("username:12  ", username)
+
+        const name = username?.toString() || ''
+        const userInfo: any = await getUserByName(name)
+        if (userInfo && userInfo?.status == 200) dispatch(setUserInfo(userInfo))
+
+    }, [username])
+
+
+    useEffect(() => {
+        if (!_id && !userInfo?.userName) {
+            // user is directly coming to the url
+            getUserBySearchName()
+        }
+
+
+    }, [])
 
 
     return (

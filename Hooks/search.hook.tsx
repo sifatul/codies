@@ -75,15 +75,10 @@ export default function SearchHelper(searchVal: string) {
       if (pathname.substr(-1) === '/') pathname = pathname.slice(0, -1);
 
       //its a valid url
-      dispatch(setSearchTypeUrl({
-        protocol,
-        hostname,
-        pathname,
-        originalSearchVal: searchVal,
-      }))
+      router.push(`/${searchVal}`)
     } catch (e) {
       console.error(e);
-      dispatch(setSearchTypeName(searchVal))
+      router.push(`/${searchVal}`)
 
     }
 
