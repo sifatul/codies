@@ -1,5 +1,6 @@
 import Styled from '@emotion/styled';
 import React from 'react';
+import AlertDialog from '../components/common/TakeUserFeedback';
 import DesiredRoles from '../components/ProfilePageComponent/DesiredRoles';
 import ExperienceSection from '../components/ProfilePageComponent/experienceSection';
 import ProfileBasicInfo from '../components/ProfilePageComponent/ProfileBasicInfo';
@@ -33,6 +34,8 @@ const ProfilePage: React.FC = () => {
 
     return (
         <>
+            <AlertDialog />
+
 
             <ProfileHeader>
                 <ProfileBasicInfo />

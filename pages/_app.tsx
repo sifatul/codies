@@ -9,6 +9,7 @@ import '../styles/globals.css';
 import { app } from '../Utils/firebaseConfig';
 import BackdropComponent from "../components/common/Backdrop"
 import ProfileWrapper from '../Hoc/profileWrapper';
+import AlertDialog from '../components/common/TakeUserFeedback';
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -26,7 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 
     return <>
-        <BackdropComponent />
+        <AlertDialog />
         <ProfileWrapper>
             <Component {...pageProps} />
         </ProfileWrapper>

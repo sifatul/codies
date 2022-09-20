@@ -1,4 +1,4 @@
-import { getDomain, isEmail } from 'js-string-helper';
+import { getDomain, isEmail, removeQueryString } from 'js-string-helper';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import { UseAppDispatch } from '../store';
@@ -12,7 +12,7 @@ export default function SearchHelper(searchVal: string) {
   const router = useRouter()
 
 
-  const getUserByPlatform = useCallback(async () => {
+  const getUserByPlatform = useCallback(async (DomainWithNameOnly: string) => {
     const hostnameAndQueryKey = {
       GITHUB: "github_url",
       LEETCODE: "leetcode_url",
@@ -21,25 +21,21 @@ export default function SearchHelper(searchVal: string) {
       MEDIUM: "medium_url",
       LINKEDIN: "linkedin_url"
     }
-    if (!searchVal) return
-    const _platformName = getDomain(searchVal)
+    if (!DomainWithNameOnly) return
+    const _platformName = getDomain(DomainWithNameOnly)
     if (!_platformName) return
     const platformName = _platformName.split('.')?.[0]
 
     const queryKey = hostnameAndQueryKey[platformName.toUpperCase() as Filter]
     if (!queryKey) return
     const param = {
-      [queryKey]: searchVal
+      [queryKey]: DomainWithNameOnly
     }
 
     return await GetData(`/api/users/find?param=${JSON.stringify(param)}`)
 
 
   }, [searchVal])
-  const updateStoreWithUserInfo = useCallback((userInfo: userInfoType) => {
-    dispatch(setSearchTypeEmail({ userFound: userInfo, originalSearchVal: userInfo.email }))
-    dispatch(setEmail(userInfo.email))
-  }, [])
 
   const searchInputHandler = useCallback(async () => {
 
@@ -62,10 +58,13 @@ export default function SearchHelper(searchVal: string) {
     try {
       // check if it is a valid url
 
-      let { protocol, hostname, pathname } = new URL(searchVal);
+      const noQueryUrl = removeQueryString(searchVal)
+      const DomainWithNameOnlyGrp = noQueryUrl.match('^http(s)?:\/\/([\w\d]+\.)?[a-z]*.com/(in/)?[a0-z9]{2,}')
+      const DomainWithNameOnly = (DomainWithNameOnlyGrp || [])[0]
+      let { protocol, hostname, pathname } = new URL(DomainWithNameOnly);
 
       // check values exists in database
-      const userInfo: any = await getUserByPlatform()
+      const userInfo: any = await getUserByPlatform(DomainWithNameOnly)
       if (userInfo && userInfo?.status == 200) {
         dispatch(setUserInfo(userInfo))
         router.push(`/${userInfo?.userName}`)
