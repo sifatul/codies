@@ -75,7 +75,6 @@ const VerifyEmailPage: React.FC = () => {
     const router = useRouter()
     const { email } = router.query
     const dispatch = UseAppDispatch();
-    const analytics = getAnalytics();
 
     const [otp, setOpt] = useState<string>();
 
@@ -99,6 +98,8 @@ const VerifyEmailPage: React.FC = () => {
 
     const veryOtp = useCallback(async () => {
         try {
+            const analytics = getAnalytics();
+
             const res: any = await PostData('/api/users/otp/verify', JSON.stringify({ email, otp }))
             if (res?.status != 200) {
                 throw res?.message
