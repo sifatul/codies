@@ -9,7 +9,7 @@ import { getUserState, resetState } from '../store/user/basicInfo';
 
 const Container = Styled.div`
     margin: 0 auto;
-    min-height: 100vh;
+    min-height: calc(100vh - 64px);
     max-width:1440px;
 `;
 const ProfileWrapper = (props: any) => {
