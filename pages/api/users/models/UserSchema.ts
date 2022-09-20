@@ -1,13 +1,18 @@
 import { Schema, model, models } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { Gender } from '../../../../types/common.types';
-import { isEmail, isUrl } from 'js-string-helper';
+import { isEmail, isPhoneNumber, isUrl } from 'js-string-helper';
 
 // interface
 interface IUser {
     fullName?: string;
     userName?: string;
     email: string;
+    country?: string;
+    city?: string;
+    profileHeading?: string;
+    designation?: string;
+    phoneNumber?: string;
     password: string;
     profilePic?: string;
     gender?: Gender;
@@ -136,6 +141,21 @@ const userSchema = new Schema<IUser>(
         verified: {
             type: Boolean,
             required: false,
+        },
+        phoneNumber: {
+            type: String,
+        },
+        country: {
+            type: String,
+        },
+        city: {
+            type: String,
+        },
+        profileHeading: {
+            type: String,
+        },
+        designation: {
+            type: String,
         },
     },
     { timestamps: true }

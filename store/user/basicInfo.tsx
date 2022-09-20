@@ -6,6 +6,10 @@ export interface UserState {
     fullName?: string;
     userName: string;
     country: string;
+    city?: string;
+    phoneNumber?: string;
+    designation?: string;
+    profileHeading?: string;
     gender: string;
     dob: string;
     profilePic: string;
@@ -27,6 +31,10 @@ const initialState: { userInfo: UserState, _id: string, isLoading: boolean } = {
         userName: '',
         fullName: 'unknown',
         email: '',
+        city: '',
+        phoneNumber: '',
+        profileHeading: '',
+        designation: '',
         country: '',
         gender: '',
         dob: '',

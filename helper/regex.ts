@@ -12,3 +12,5 @@ export const getHackerrankUrlRegex =
     /^(https?:\/\/)?(www\.)?hackerrank\.com\/[a-zA-Z0-9_]{1,25}$/gim;
 
 export const getCodepenUrlRegex = /^(https?:\/\/)?(www\.)?codepen\.io\/[a-zA-Z0-9_]{1,25}$/gim;
+
+export const getPhoneNumberRegex = /^(?:(?:\+|00)88|01)?\d{11}$/;
