@@ -1,3 +1,4 @@
+import Lottie from 'react-lottie';
 import { css, cx } from '@emotion/css';
 import { getAnalytics, logEvent } from 'firebase/analytics';
 import { Form, FormikProvider, useFormik } from 'formik';
@@ -8,25 +9,24 @@ import SocialAuthComponent from '../../components/auth/social';
 import Button, { ButtonType } from '../../components/common/Button';
 import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
 import Input, { InputType } from '../../components/common/Input';
-import checkUserInfo from "../../Hooks/checkUser.hook";
+import checkUserInfo from '../../Hooks/checkUser.hook';
 import FirebaseLoginManage from '../../Hooks/socailLogin';
 import { PostData } from '../../Utils/fetchData';
-
+import loadingAnimation from '../../animation/loadingAnimation.json';
+import successAnimation from '../../animation/successAnimation.json';
 
 export const SectionContainer = css`
     display: flex;
 `;
 
 export const FormSection = css`
-width: 821px;
+    width: 821px;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     padding: 60px 0;
 `;
-
-
 
 export const FormWrap = css`
     width: 488px;
@@ -88,36 +88,41 @@ export const ImageContainer = css`
     width: calc(100% - 550px);
 `;
 const errorMessage = css`
-color: #F04848;
-padding-top: 4px;
-padding-bottom: 4px;
-
+    color: #f04848;
+    padding-top: 4px;
+    padding-bottom: 4px;
 `;
 
+enum StatusType {
+    SUCCESS = 'success',
+    IDEL = 'idel',
+    ERROR = 'error',
+}
 
 const SignupPage: React.FC<{}> = () => {
-    const router = useRouter()
+    const router = useRouter();
 
-
-    const { getUserByName, getUserByEmail } = checkUserInfo()
-    const { createEmailAndPasswordUser } = FirebaseLoginManage()
-    const [showEmailForm, setShowEmailForm] = useState(false)
+    const [loading, setLoading] = useState(false);
+    const [signupStatus, setSignupStatus] = useState({
+        status: StatusType.IDEL,
+        message: '',
+    });
+    const { getUserByName, getUserByEmail } = checkUserInfo();
+    const { createEmailAndPasswordUser } = FirebaseLoginManage();
+    const [showEmailForm, setShowEmailForm] = useState(false);
 
     const goToSignin = useCallback(() => {
-        router.push('/auth/signin')
-    }, [])
-
+        router.push('/auth/signin');
+    }, []);
 
     const SignupSchema = Yup.object().shape({
         userName: Yup.string()
             .min(2, 'Too Short!')
             .max(50, 'Too Long!')
-            .matches(/^\S*$/, "username must not contain space.")
-            .matches(/^[a-zA-Z0-9]*$/, "must not contain any special character")
+            .matches(/^\S*$/, 'username must not contain space.')
+            .matches(/^[a-zA-Z0-9]*$/, 'must not contain any special character')
             .required('UserName required'),
-        email: Yup.string()
-            .email('Invalid email')
-            .required('Email is required'),
+        email: Yup.string().email('Invalid email').required('Email is required'),
         password: Yup.string()
             .required('Password is required')
             .min(8, 'Password must be at least 8 characters')
@@ -125,26 +130,30 @@ const SignupPage: React.FC<{}> = () => {
         acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required'),
     });
 
-    const createNewUser = useCallback(async (newUser: { userName: string, email: string, password: string }) => {
-        const analytics = getAnalytics();
+    const createNewUser = useCallback(
+        async (newUser: { userName: string; email: string; password: string }) => {
+            const analytics = getAnalytics();
 
-        try {
-            const res: any = await PostData('/api/users/add', JSON.stringify(newUser))
-            // console.log(res);
-            if (res.status !== 200) throw res?.message
-            if (!res?.email) throw "email missing in response"
-            alert("user created")
-            createEmailAndPasswordUser(newUser.email, newUser.password)
-            logEvent(analytics, `email verification sent`);
-            router.push('/auth/verify-email?email=' + res?.email);
-
-        } catch (e) {
-            console.error(e);
-            alert(JSON.stringify(e))
-            logEvent(analytics, `signup error`);
-        }
-
-    }, [])
+            try {
+                const res: any = await PostData('/api/users/add', JSON.stringify(newUser));
+                // console.log(res);
+                if (res.status !== 200) throw res?.message;
+                if (!res?.email) throw 'email missing in response';
+                createEmailAndPasswordUser(newUser.email, newUser.password);
+                logEvent(analytics, `email verification sent`);
+                setLoading(false);
+                setSignupStatus({ status: StatusType.SUCCESS, message: 'Successfully done!' });
+                //
+            } catch (e) {
+                console.error(e);
+                alert(JSON.stringify(e));
+                logEvent(analytics, `signup error`);
+                setLoading(false);
+                setSignupStatus({ status: StatusType.ERROR, message: 'Failed!' });
+            }
+        },
+        []
+    );
 
     const formik: any = useFormik({
         initialValues: {
@@ -155,23 +164,29 @@ const SignupPage: React.FC<{}> = () => {
         },
         validationSchema: SignupSchema,
         onSubmit: async (val) => {
+            setLoading(true);
+            const userName = val.userName;
+            const email = val.email;
 
-            const userName = val.userName
-            const email = val.email
+            const [userNamePromise, emailPromise]: any = await Promise.allSettled([
+                getUserByName(userName),
+                getUserByEmail(email),
+            ]);
 
-
-
-
-            const [userNamePromise, emailPromise]: any = await Promise.allSettled([getUserByName(userName), getUserByEmail(email)])
-
-
-            if (emailPromise?.value) return formik.setErrors({ email: "Email already exists." })
-            if (userNamePromise?.value) return formik.setErrors({ userName: "Username already exists." })
-
-            createNewUser({ userName, email, password: val.password })
-
+            if (emailPromise?.value) return formik.setErrors({ email: 'Email already exists.' });
+            if (userNamePromise?.value)
+                return formik.setErrors({ userName: 'Username already exists.' });
+            createNewUser({ userName, email, password: val.password });
         },
     });
+
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice',
+        },
+    };
 
     const { handleChange, errors, values, setFieldValue } = formik;
 
@@ -183,22 +198,64 @@ const SignupPage: React.FC<{}> = () => {
                         label="Let's partner up"
                         description="Let's level up your digital profile, together."
                     />
-                    {!showEmailForm && <>
-                        <SocialAuthComponent />
-                        <div>
-                            <Button
-                                onClick={e => {
-                                    e.preventDefault()
-                                    setShowEmailForm(true)
-                                }}
-                                type={ButtonType.SECONDARY}
-                                label='Signup with Email'
-                            />
-                        </div>
-                    </>}
+                    {!showEmailForm && (
+                        <>
+                            <SocialAuthComponent />
+                            <div>
+                                <Button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setShowEmailForm(true);
+                                    }}
+                                    type={ButtonType.SECONDARY}
+                                    label='Signup with Email'
+                                />
+                            </div>
+                        </>
+                    )}
 
+                    {loading && (
+                        <Lottie
+                            options={{
+                                ...defaultOptions,
+                                animationData: loadingAnimation,
+                            }}
+                            eventListeners={[
+                                {
+                                    eventName: 'complete',
+                                    callback: () => console.log('the animation completed:'),
+                                },
+                            ]}
+                            height={400}
+                            width={400}
+                        />
+                    )}
 
-                    {showEmailForm &&
+                    {!loading && signupStatus.status === StatusType.SUCCESS && (
+                        <Lottie
+                            options={{
+                                ...defaultOptions,
+                                animationData: successAnimation,
+                                loop: false
+                            }}
+                            eventListeners={[
+                                {
+                                    eventName: 'complete',
+                                    callback: () => {
+                                        setSignupStatus({
+                                            status: StatusType.IDEL,
+                                            message: '',
+                                        });
+                                        router.push('/auth/verify-email?email=' + values?.email);
+                                    },
+                                },
+                            ]}
+                            height={400}
+                            width={400}
+                        />
+                    )}
+
+                    {showEmailForm && !loading && signupStatus.status === StatusType.IDEL && (
                         <>
                             {/* <div className={cx(Divider)}>
                                 <span className={cx(DividerText)}>or</span>
@@ -213,7 +270,7 @@ const SignupPage: React.FC<{}> = () => {
                                                 name='userName'
                                                 value={values.userName}
                                                 onChange={(e) => {
-                                                    handleChange(e)
+                                                    handleChange(e);
                                                 }}
                                                 errorMessage={errors.userName}
                                             />
@@ -256,17 +313,21 @@ const SignupPage: React.FC<{}> = () => {
                                             </div>
                                             <label htmlFor='agreeToTerms'>
                                                 I agree to the
-                                        <span className={cx(ColoredLink)}>
-
+                                                <span className={cx(ColoredLink)}>
                                                     &nbsp;Terms and conditions&nbsp;
-                                        </span>
-                                        and <span className={cx(ColoredLink)}> Privacy policy</span>
+                                                </span>
+                                                and{' '}
+                                                <span className={cx(ColoredLink)}>
+                                                    {' '}
+                                                    Privacy policy
+                                                </span>
                                             </label>
-
                                         </div>
-                                        {errors.acceptTerms && <div className={cx(errorMessage)}>
-                                            <span>{errors.acceptTerms}</span>
-                                        </div>}
+                                        {errors.acceptTerms && (
+                                            <div className={cx(errorMessage)}>
+                                                <span>{errors.acceptTerms}</span>
+                                            </div>
+                                        )}
                                         <div className={cx([RowGap])}>
                                             <Button
                                                 type={ButtonType.PRIMARY}
@@ -274,23 +335,22 @@ const SignupPage: React.FC<{}> = () => {
                                                 actionType='submit'
                                             />
                                         </div>
-
                                     </Form>
                                 </FormikProvider>
                             </div>
                         </>
-
-                    }
-                    <div className={cx([FlexItem, JustifyCenter])}>
-                        <Button
-                            type={ButtonType.TERTIARY}
-                            label='Already a member?'
-                            labelWithLink='Login'
-                            actionType='button'
-                            onClick={goToSignin}
-                        />
-                    </div>
-
+                    )}
+                    {!loading && (
+                        <div className={cx([FlexItem, JustifyCenter])}>
+                            <Button
+                                type={ButtonType.TERTIARY}
+                                label='Already a member?'
+                                labelWithLink='Login'
+                                actionType='button'
+                                onClick={goToSignin}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
             <div className={cx(ImageContainer)} />
