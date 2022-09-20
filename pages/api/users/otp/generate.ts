@@ -6,7 +6,6 @@ import { connectToDatabase } from '../../../../Utils/mongodb';
 import OTP from '../models/OTPSchema';
 import User from '../models/UserSchema';
 
-
 /**
  * @swagger
  * '/api/users/otp/generate':
@@ -84,7 +83,7 @@ const sendOtpToEmail = async (email: string, newOtpObj: any, callback: any) => {
         },
     });
 
-    if(!newOtpObj?.otp) return callback(false)
+    if (!newOtpObj?.otp) return callback(false);
     const mailOptions = {
         from: `"Find profile"<${process.env.EMAIL_ADDRESS}>`,
         to: `${email}`,
@@ -106,8 +105,8 @@ const sendOtpToEmail = async (email: string, newOtpObj: any, callback: any) => {
 const messageForEmail = (otp: number) => {
     return (
         '<div>Hello User,</div>' +
-        `<div>One Time Password (OTP) is</div>:`+ 
-        `<strong style="font-size: 20px">${otp}</strong>` +  
+        '<div>One Time Password (OTP) is</div>:' +
+        `<strong style="font-size: 20px">${otp}</strong>` +
         '<div>Please feel free to reply to this email if you are having any troubles.</div>' +
         '<div>Regards</div>' +
         '<div>Codies team</div>'
