@@ -158,7 +158,7 @@ const ProfileBasicInfo = () => {
                 <UserNameContainer>
                     <UserNameParagraph>{fullName}</UserNameParagraph>
                     <div>
-                        <EditButton onClick={openModal} />
+                        {userState?._id && <EditButton onClick={openModal} />}
                         <ProfileHeaderModal
                             modalIsOpen={modalIsOpen}
                             openModal={openModal}

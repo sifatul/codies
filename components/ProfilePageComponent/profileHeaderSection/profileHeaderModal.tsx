@@ -40,7 +40,7 @@ const ProfileHeaderModal: React.FC<ModalProps> = ({
                 ariaHideApp={false}
             >
                 <div>
-                    <ProfileSummaryForm />
+                    <ProfileSummaryForm closeModal={closeModal} />
                 </div>
             </Modal>
         </div>
