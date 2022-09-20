@@ -51,24 +51,29 @@ const Heading = Styled.h4`
 
 const validationSchema = Yup.object().shape({
     profileHeading: Yup.string(),
-    phoneNumber: Yup.string()
-        .matches(getPhoneNumberRegex, "Doesn't look like a phone number")
-        .nullable(),
+    phoneNumber: Yup.string().required(),
     designation: Yup.string(),
     country: Yup.string().required('Required'),
     city: Yup.string().required('Required'),
 });
 
 const ProfileSummaryForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
-    const { _id = '' } = UseAppSelector(getUserState);
+    const { _id = '', userInfo } = UseAppSelector(getUserState);
+    const {
+        city = '',
+        country = '',
+        profileHeading = '',
+        phoneNumber = '',
+        designation = '',
+    } = userInfo || {};
 
     const formik = useFormik({
         initialValues: {
-            profileHeading: '',
-            phoneNumber: '',
-            designation: '',
-            country: '',
-            city: '',
+            profileHeading: profileHeading || '',
+            phoneNumber: phoneNumber || '',
+            designation: designation || '',
+            country: country || '',
+            city: city || '',
         },
         validationSchema: validationSchema,
         onSubmit: async (val: any) => {
@@ -76,7 +81,7 @@ const ProfileSummaryForm: React.FC<{ closeModal: () => void }> = ({ closeModal }
 
             if (res?.status === 200) {
                 alert('Successfully updated');
-                resetForm()
+                resetForm();
                 closeModal();
             } else {
                 alert('Try again');
@@ -115,11 +120,11 @@ const ProfileSummaryForm: React.FC<{ closeModal: () => void }> = ({ closeModal }
                             <Field
                                 className={cx(InputField)}
                                 name='country'
-                                placeholder='Bangladesh'
+                                placeholder='Country'
                             />
                         </div>
                         <div className={cx(InputFieldContainer)}>
-                            <Field className={cx(InputField)} name='city' placeholder='Dhaka' />
+                            <Field className={cx(InputField)} name='city' placeholder='City' />
                         </div>
                     </FieldGrid>
                     <div className={cx(InputFieldContainer)}>

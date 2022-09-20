@@ -144,9 +144,6 @@ const userSchema = new Schema<IUser>(
         },
         phoneNumber: {
             type: String,
-            unique: true,
-            sparse: true,
-            validate: [isPhoneNumber, 'Invalid phone number'],
         },
         country: {
             type: String,
