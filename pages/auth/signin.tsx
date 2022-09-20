@@ -37,7 +37,7 @@ const SigninPage: React.FC = () => {
     const dispatch = UseAppDispatch();
     const { singinEmailUser } = FirebaseLoginManage()
     const [showEmailForm, setShowEmailForm] = useState(false)
-    const analytics = getAnalytics();
+
 
 
     const router = useRouter()
@@ -46,6 +46,7 @@ const SigninPage: React.FC = () => {
     }, [])
     const userSignin = useCallback(async (param: { email: string, password: string }) => {
         dispatch(setLoading(true));
+        const analytics = getAnalytics();
         try {
             const res: any = await GetData(`/api/auth/login?email=${param.email}&password=${param.password}`);
             if (res.status == 200) {

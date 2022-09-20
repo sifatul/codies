@@ -97,7 +97,6 @@ padding-bottom: 4px;
 
 const SignupPage: React.FC<{}> = () => {
     const router = useRouter()
-    const analytics = getAnalytics();
 
 
     const { getUserByName, getUserByEmail } = checkUserInfo()
@@ -127,6 +126,8 @@ const SignupPage: React.FC<{}> = () => {
     });
 
     const createNewUser = useCallback(async (newUser: { userName: string, email: string, password: string }) => {
+        const analytics = getAnalytics();
+
         try {
             const res: any = await PostData('/api/users/add', JSON.stringify(newUser))
             // console.log(res);

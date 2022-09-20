@@ -1,4 +1,5 @@
 import { cx } from '@emotion/css';
+import { getAnalytics, logEvent } from 'firebase/analytics';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useCallback } from 'react';
@@ -37,6 +38,8 @@ const SocialSignup: React.FC = () => {
 
 
     const socailSignup = useCallback(async (userName: any) => {
+        const analytics = getAnalytics();
+
         try {
             if (!platform || !token || !userName) {
                 alert("params missing")
@@ -48,6 +51,8 @@ const SocialSignup: React.FC = () => {
             const res: any = await PostData(`/api/auth/social`, body)
             if (res?.status == 200) {
                 dispatch(setUserInfo(res))
+                logEvent(analytics, `${platform} signup successful`);
+
                 router.push(`/${res?.userName}`)
                 return
             }

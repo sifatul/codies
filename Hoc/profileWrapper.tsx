@@ -23,7 +23,7 @@ const ProfileWrapper = (props: any) => {
     signOut(auth).then(() => {
       // Sign-out successful.
       dispatch(resetState())
-      router.replace('/auth/signin')
+      router.push('/auth/signin')
     }).catch((error) => {
       // An error happened.
       console.error(error)

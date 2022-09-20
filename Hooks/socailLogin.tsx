@@ -60,12 +60,13 @@ export default function FirebaseLoginManage() {
   const dispatch = UseAppDispatch();
   const router = useRouter()
   const auth = getAuth();
-  const analytics = getAnalytics();
+
 
 
 
   const socialLogin = async (providerId: string, token: string | OAuthCredential | null | undefined, email?: string | null | undefined, fullName?: string, profilePic?: string) => {
     let platform = 'email';
+    const analytics = getAnalytics();
     if (providerId === GithubAuthProvider.PROVIDER_ID) {
       platform = SocialLoginPlatform.GITHUB
     } else if (providerId === GoogleAuthProvider.PROVIDER_ID) {
