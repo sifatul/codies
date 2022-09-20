@@ -12,22 +12,16 @@ const Footer = Styled.footer`
     position:absolute;
     bottom:0;
     left:0;
-    right:0
+    right:0;
 `
 
 const FooterComponent = () => {
     return (
         <Footer >
-            <a
-                href='https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
-                target='_blank'
-                rel='noopener noreferrer'
-            >
-                Made with
-                <span className={styles.logo}>
-                    <FavoriteRoundedIcon style={{ color: 'red' }} />
-                </span>  Codies
-            </a>
+            Made with
+            <span className={styles.logo}>
+                <FavoriteRoundedIcon style={{ color: 'red' }} />
+            </span>  Codies
         </Footer>
     );
 };
