@@ -1,12 +1,11 @@
-import mongoose from 'mongoose';
 import { customAlphabet } from 'nanoid';
-import { NextApiResponse, NextApiRequest } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
-
 /* eslint-disable import/no-anonymous-default-export */
 import { connectToDatabase } from '../../../../Utils/mongodb';
 import OTP from '../models/OTPSchema';
 import User from '../models/UserSchema';
+
 
 /**
  * @swagger
@@ -85,11 +84,12 @@ const sendOtpToEmail = async (email: string, newOtpObj: any, callback: any) => {
         },
     });
 
+    if(!newOtpObj?.otp) return callback(false)
     const mailOptions = {
         from: `"Find profile"<${process.env.EMAIL_ADDRESS}>`,
         to: `${email}`,
         subject: 'OTP verification',
-        text: `otp: ${newOtpObj?.otp}`,
+        html: messageForEmail(newOtpObj?.otp),
     };
 
     await transporter.verify();
@@ -105,12 +105,12 @@ const sendOtpToEmail = async (email: string, newOtpObj: any, callback: any) => {
 
 const messageForEmail = (otp: number) => {
     return (
-        'Dear User, \n\n' +
-        'OTP for Reset Password is : \n\n' +
-        `${otp}\n\n` +
-        'This is a auto-generated email. Please do not reply to this email.\n\n' +
-        'Regards\n' +
-        'Find profiles team\n\n'
+        '<div>Hello User,</div>' +
+        `<div>One Time Password (OTP) is</div>:`+ 
+        `<strong style="font-size: 20px">${otp}</strong>` +  
+        '<div>Please feel free to reply to this email if you are having any troubles.</div>' +
+        '<div>Regards</div>' +
+        '<div>Codies team</div>'
     );
 };
 export default async (req: NextApiRequest, res: NextApiResponse) => {
