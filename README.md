@@ -2,7 +2,7 @@
 [![TypeScript](https://badgen.net/badge/icon/typescript?icon=typescript&label)](https://typescriptlang.org)
 
 ## What
-[`find-profile`](https://find-profile.vercel.app/) is an intergrated platform to get cummulative summary of any developer's profiles.
+[`Codies`](https://codies.vercel.app/) is an intergrated platform to get cummulative summary of any developer's profiles.
 
 ### Result Sources
 
