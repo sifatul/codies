@@ -30,7 +30,7 @@ const ExperienceSectionHeader = Styled.h3`
 
 const ExperienceSection = () => {
     const [modalIsOpen, setIsOpen] = React.useState(false);
-    const { _id = '', } = UseAppSelector(getUserState);
+    const { _id = '', userInfo } = UseAppSelector(getUserState);
     const dispatch = UseAppDispatch();
 
 
@@ -44,8 +44,9 @@ const ExperienceSection = () => {
     }
 
     useEffect(() => {
-        if (!_id) return
-        GetData('/api/experience?userId=' + _id).then((output: any) => {
+        const requestId = userInfo?._id
+        if (!requestId) return
+        GetData('/api/experience?userId=' + requestId).then((output: any) => {
             const { data = [], status } = output
             if (status == 201) {
                 delete data?.status
@@ -53,7 +54,7 @@ const ExperienceSection = () => {
             }
         })
 
-    }, [_id])
+    }, [userInfo?._id])
 
     return (
         <Container>

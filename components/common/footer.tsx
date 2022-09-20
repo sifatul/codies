@@ -12,7 +12,7 @@ const Footer = () => {
                 Made with
                 <span className={styles.logo}>
                     <FavoriteRoundedIcon style={{ color: 'red' }} />
-                </span>
+                </span>  Codies
             </a>
         </footer>
     );

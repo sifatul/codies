@@ -31,7 +31,7 @@ const SkillsSectionHeader = Styled.h3`
 const ContentContainer = Styled.div``;
 
 const SkillsSection = () => {
-    const { _id = '' } = UseAppSelector(getUserState);
+    const { _id = '', userInfo } = UseAppSelector(getUserState);
     const skillTags = UseAppSelector(getSkillTags);
     const [modalIsOpen, setIsOpen] = React.useState(false);
     const dispatch = UseAppDispatch();
@@ -46,14 +46,15 @@ const SkillsSection = () => {
     }
 
     const getData = useCallback(async () => {
-        if (!_id) return
-        const res: any = await GetData('/api/skills?userId=' + _id)
+        const requestId = userInfo?._id
+        if (!requestId) return
+        const res: any = await GetData('/api/skills?userId=' + requestId)
         console.log(res);
         const { data = [], status } = res || {};
         if (status == 201) {
             dispatch(setSkillTags(data))
         }
-    }, [_id]);
+    }, [userInfo?._id]);
 
     useEffect(() => {
         getData();

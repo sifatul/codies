@@ -1,28 +1,26 @@
-import React, { useCallback, useMemo, useState } from 'react';
 import { css, cx } from '@emotion/css';
-import { useFormik, Form, FormikProvider } from 'formik';
+import { Form, FormikProvider, useFormik } from 'formik';
+import { useRouter } from 'next/router';
+import React, { useCallback, useState } from 'react';
 import * as Yup from 'yup';
+import SocialAuthComponent from '../../components/auth/social';
+import Button, { ButtonType } from '../../components/common/Button';
 import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
 import Input, { InputType } from '../../components/common/Input';
-import Button, { ButtonType } from '../../components/common/Button';
-import {
-    SectionContainer,
-    FormSection,
-    FormWrap,
-    Divider,
-    DividerText,
-    RowGap,
-    FlexItem,
-    JustifyCenter,
-    ImageContainer,
-    CheckboxContainer,
-} from './signup';
-import SocialAuthComponent from '../../components/auth/social';
-import { useRouter } from 'next/router';
-import { GetData, PostData } from '../../Utils/fetchData';
-import { UseAppDispatch } from '../../store';
-import { setLoading, setMyId, setMyInfo, setUserInfo } from '../../store/user/basicInfo';
 import FirebaseLoginManage from '../../Hooks/socailLogin';
+import { UseAppDispatch } from '../../store';
+import { setLoading, setMyInfo } from '../../store/user/basicInfo';
+import { GetData } from '../../Utils/fetchData';
+import {
+    CheckboxContainer, FlexItem, FormSection,
+    FormWrap,
+
+
+
+
+
+    ImageContainer, JustifyCenter, RowGap, SectionContainer
+} from './signup';
 
 const JustifySpaceBetween = css`
     justify-content: space-between;

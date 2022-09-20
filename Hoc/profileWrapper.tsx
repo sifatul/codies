@@ -30,6 +30,9 @@ const ProfileWrapper = (props: any) => {
       alert(error)
     });
   }, [])
+  const goToLogin = useCallback(() => {
+    router.replace('/auth/signin')
+  }, [])
 
   const goToHomepage = useCallback(() => {
     router.replace('/')
@@ -46,6 +49,7 @@ const ProfileWrapper = (props: any) => {
                 Codies
           </Typography>
               {_id && <Button color="inherit" onClick={logout}>Logout</Button>}
+              {!_id && <Button color="inherit" onClick={goToLogin}>Login</Button>}
             </div>
 
 

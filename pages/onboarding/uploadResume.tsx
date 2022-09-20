@@ -79,7 +79,7 @@ const fileTypes = ["PDF"];
 const UploadResume = () => {
 
   const dispatch = UseAppDispatch();
-  const userInfo = UseAppSelector(getUserState);
+  const { userInfo } = UseAppSelector(getUserState);
   const [file, setFile] = useState<any>(null);
   const [image, setImage] = useState<any>(null);
   const [dataFromCv, setDataFromCv] = useState<any>(null)

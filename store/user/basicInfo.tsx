@@ -1,6 +1,7 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
+    _id: string;
     email: string;
     fullName?: string;
     userName: string;
@@ -37,6 +38,7 @@ const initialState: { userInfo: UserState, _id: string, isLoading: boolean } = {
         hackerrank_url: '',
         codepen_url: '',
         medium_url: '',
+        _id: ''
     },
     _id: '',
     isLoading: false
