@@ -8,7 +8,7 @@ import SearchHelper from '../../Hooks/search.hook';
 import { UseAppSelector } from '../../store';
 import { getSearchState } from '../../store/search';
 
-const passedPlaceholderList = ['profile link', 'username'];
+const passedPlaceholderList = ['Github profile link', 'Leetcode profile link', 'Hackerrank profile link', 'Codepen profile link', 'Email address'];
 export default function CustomizedInputBase() {
     const [searchVal, setSearchVal] = React.useState('');
     const { originalSearchVal } = UseAppSelector(getSearchState);
@@ -34,7 +34,7 @@ export default function CustomizedInputBase() {
                 } else {
                     placeholderIndex = placeholderIndex + 1;
                 }
-            }, 220);
+            }, 250);
         },
         [placeholder]
     );
@@ -53,7 +53,7 @@ export default function CustomizedInputBase() {
       </IconButton> */}
             <InputBase
                 sx={{ ml: 1, flex: 1 }}
-                placeholder={'type a ' + placeholder}
+                placeholder={placeholder}
                 inputProps={{ 'aria-label': 'search google maps' }}
                 defaultValue={originalSearchVal}
                 onChange={(e) => {

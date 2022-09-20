@@ -22,7 +22,7 @@ export async function connectToDatabase() {
         return { client: cachedClient, db: cachedDb }
     }
     if (!uri) return { client: null, db: null }
-    const options = { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 }
+    const options = { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1, dbName: dbName }
     const client = await mongoose.connect(uri, options);
 
     // Connect the client to the server (optional starting in v4.7)

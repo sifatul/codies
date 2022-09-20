@@ -14,11 +14,13 @@ const InitialPage = () => {
       <div className={styles.container}>
 
         <main className={styles.main}>
+
+
+          <Hint />
+
           <div className={styles.seachContainer}>
             <SearchInput />
           </div>
-
-          <Hint />
         </main>
 
         <Footer />

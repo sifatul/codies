@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Styled from '@emotion/styled';
 import { cx, css } from '@emotion/css';
 import OtpInput from 'react-otp-input';
@@ -7,8 +7,8 @@ import Button, { ButtonType } from '../../components/common/Button';
 import SectionMetaInfo from '../../components/common/formSectionMetaInfo';
 import { useRouter } from 'next/router';
 import { PostData } from '../../Utils/fetchData';
-import { UseAppDispatch } from '../../store';
-import { setMyInfo, setUserInfo } from '../../store/user/basicInfo';
+import { UseAppDispatch, UseAppSelector } from '../../store';
+import { getUserState, setMyInfo, setUserInfo } from '../../store/user/basicInfo';
 import { getAnalytics, logEvent } from 'firebase/analytics';
 
 const FlexContainer = Styled.div`
@@ -75,8 +75,7 @@ const VerifyEmailPage: React.FC = () => {
     const router = useRouter()
     const { email } = router.query
     const dispatch = UseAppDispatch();
-    const analytics = getAnalytics();
-
+    const { _id } = UseAppSelector(getUserState);
     const [otp, setOpt] = useState<string>();
 
 
@@ -90,6 +89,10 @@ const VerifyEmailPage: React.FC = () => {
 
         try {
             const res: any = await PostData('/api/users/otp/generate', JSON.stringify({ email }))
+            if (res.status == 302) {
+                alert("user is already verified. Please login")
+                return router.push(`/auth/signin`)
+            }
             if (res?.error) throw res?.error
         } catch (e) {
             console.error(e)
@@ -99,6 +102,8 @@ const VerifyEmailPage: React.FC = () => {
 
     const veryOtp = useCallback(async () => {
         try {
+            const analytics = getAnalytics();
+
             const res: any = await PostData('/api/users/otp/verify', JSON.stringify({ email, otp }))
             if (res?.status != 200) {
                 throw res?.message
@@ -115,6 +120,11 @@ const VerifyEmailPage: React.FC = () => {
 
 
     }, [email, otp])
+    useEffect(() => {
+        if (_id) {
+            router.back()
+        }
+    }, [])
 
     return (
         <FlexContainer>
@@ -140,10 +150,10 @@ const VerifyEmailPage: React.FC = () => {
 
 
                     }} />
-                    <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <Button
                             onClick={sendOtp}
-                            type={ButtonType.GHOST}
+                            type={ButtonType.TERTIARY}
                             label="Didn't get the code?"
                             labelWithLink='Resend'
                         />

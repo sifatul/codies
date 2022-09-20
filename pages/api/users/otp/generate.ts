@@ -1,8 +1,6 @@
-import mongoose from 'mongoose';
 import { customAlphabet } from 'nanoid';
-import { NextApiResponse, NextApiRequest } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
-
 /* eslint-disable import/no-anonymous-default-export */
 import { connectToDatabase } from '../../../../Utils/mongodb';
 import OTP from '../models/OTPSchema';
@@ -85,11 +83,12 @@ const sendOtpToEmail = async (email: string, newOtpObj: any, callback: any) => {
         },
     });
 
+    if (!newOtpObj?.otp) return callback(false);
     const mailOptions = {
         from: `"Find profile"<${process.env.EMAIL_ADDRESS}>`,
         to: `${email}`,
         subject: 'OTP verification',
-        text: `otp: ${newOtpObj?.otp}`,
+        html: messageForEmail(newOtpObj?.otp),
     };
 
     await transporter.verify();
@@ -105,12 +104,12 @@ const sendOtpToEmail = async (email: string, newOtpObj: any, callback: any) => {
 
 const messageForEmail = (otp: number) => {
     return (
-        'Dear User, \n\n' +
-        'OTP for Reset Password is : \n\n' +
-        `${otp}\n\n` +
-        'This is a auto-generated email. Please do not reply to this email.\n\n' +
-        'Regards\n' +
-        'Find profiles team\n\n'
+        '<div>Hello User,</div>' +
+        '<div>One Time Password (OTP) is</div>:' +
+        `<strong style="font-size: 20px">${otp}</strong>` +
+        '<div>Please feel free to reply to this email if you are having any troubles.</div>' +
+        '<div>Regards</div>' +
+        '<div>Codies team</div>'
     );
 };
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -126,15 +125,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             return res.status(400).json({ status: 'error', error: 'required param missing' });
 
         // tslint:disable-next-line: await-promise
-        const isUserExist = await User.findOne({
-            where: { email: email },
-        });
+        const isUserExist = await User.findOne({ email: email }, null, { strictQuery: false });
+        
 
         if (!isUserExist) {
             return res.status(404).send({
-                status: 'error',
-                error: 'No user found',
+                message: 'No user found',
             });
+        }
+        if(isUserExist.verified) {
+            return res.status(302).send({
+                message: 'user is already verified',
+            });
+           
         }
 
         const callback = (result: any) => {
@@ -142,7 +145,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         };
         const newOtp = await sendOtp(email, callback);
 
-        return res.status(200).json({ status: 'Success', message: newOtp });
+        return res.status(200).json({ message: newOtp });
     } catch (e) {
         console.log(e);
         res.json({ status: 'error', error: 'Something went wrong please try again later' });

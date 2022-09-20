@@ -1,33 +1,36 @@
 import React from 'react';
-import Image from 'next/image';
+import Styled from '@emotion/styled';
+const MainTitle = Styled.p`
+
+font-style: normal;
+font-weight: 800;
+font-size: 72px;
+line-height: 80px;
+text-align:center;
+max-width:992px;
+`
+
+const SubTitle = Styled.p`
+
+text-align:center;
+font-style: normal;
+font-weight: 300;
+font-size: 20px;
+line-height: 30px;
+text-align: center;
+letter-spacing: -0.02em;
+opacity: 0.8;
+max-width:570px;
+margin: 0 auto;
+margin-bottom: 40px
+
+`
 
 const Hint = () => {
     return (
-        <div style={{ paddingTop: '200px' }}>
-            <p> Now you can get a summary of developers profile by inserting </p>
-            <div>
-                Profile <strong>user name</strong> or <strong>profile link</strong> from:
-            </div>
-            <img
-                alt='github icon'
-                src='https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white'
-                height='30px'
-            />
-            <img
-                alt='hackerrank icon'
-                src='https://img.shields.io/badge/-Hackerrank-2EC866?style=for-the-badge&logo=HackerRank&logoColor=white'
-                height='30px'
-            />
-            <img
-                alt='codepen icon'
-                src='https://img.shields.io/badge/Codepen-000000?style=for-the-badge&logo=codepen&logoColor=white'
-                height='30px'
-            />
-            <img
-                alt='leetcode icon'
-                src='https://img.shields.io/badge/LeetCode-grey?style=for-the-badge&logo=LeetCode&logoColor=#d16c06'
-                height='30px'
-            />
+        <div >
+            <MainTitle> Find any developer with a simple search</MainTitle>
+            <SubTitle>Find how your friends are growing in their career</SubTitle>
         </div>
     );
 };

@@ -9,7 +9,7 @@ import { getUserState, resetState } from '../store/user/basicInfo';
 
 const Container = Styled.div`
     margin: 0 auto;
-    min-height: 100vh;
+    min-height: calc(100vh - 64px);
     max-width:1440px;
 `;
 const ProfileWrapper = (props: any) => {
@@ -38,6 +38,10 @@ const ProfileWrapper = (props: any) => {
     router.replace('/')
   }, [])
 
+  const goToGithub = useCallback(() => {
+    console.log("doing something");
+    const win = window.open("https://github.com/sifatul/find-profile", "_blank");
+  }, [])
 
   return (
     <>
@@ -48,8 +52,16 @@ const ProfileWrapper = (props: any) => {
               <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontSize: '25px' }} onClick={goToHomepage}>
                 Codies
           </Typography>
-              {_id && <Button color="inherit" onClick={logout}>Logout</Button>}
-              {!_id && <Button color="inherit" onClick={goToLogin}>Login</Button>}
+              <div>
+                <Button color="inherit"
+                  sx={{ marginRight: '10px', fontWeight: 300 }}
+                  onClick={goToGithub}>Contribute</Button>
+                {_id && <Button color="inherit" onClick={logout}>Logout</Button>}
+                {!_id && <Button
+                  sx={{ fontWeight: 400 }}
+                  color="inherit" onClick={goToLogin}>Login</Button>}
+              </div>
+
             </div>
 
 
