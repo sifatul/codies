@@ -5,9 +5,12 @@ import { faGithubSquare, faLinkedinIn } from '@fortawesome/free-brands-svg-icons
 import { faLocationDot, faPhone, faShield } from '@fortawesome/free-solid-svg-icons';
 import { UseAppSelector } from '../../store';
 import { getUserState } from '../../store/user/basicInfo';
+import EditButton from './EditButton';
+import ProfileHeaderModal from './profileHeaderSection/profileHeaderModal';
 
 const Container = Styled.div`
     width: 100%;
+    padding: 40px;
 `;
 const HeaderContainer = Styled.div`
     background-color: #fcba03;
@@ -32,14 +35,16 @@ const UserInformationContainer = Styled.div`
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
+    margin-top: 20px;
 `;
 
 const UserNameContainer = Styled.div`
     display: flex;
     -webkit-box-align: center;
     align-items: center;
-    flex-wrap: wrap;
+    justify-content: space-between;
     gap: 8px;
+    width: 100%;
 `;
 
 const UserNameParagraph = Styled.p`
@@ -131,31 +136,35 @@ const PrivacyNoteDescriptionParagraph = Styled.div`
     margin: 0px;
 `;
 const ProfileBasicInfo = () => {
-
     const userState = UseAppSelector(getUserState);
-    const { profilePic = "https://source.unsplash.com/6VPEOdpFNAs", fullName = '' } = userState?.userInfo || {}
+    const { profilePic = 'https://source.unsplash.com/6VPEOdpFNAs', fullName = '' } =
+        userState?.userInfo || {};
 
+    const [modalIsOpen, setIsOpen] = React.useState(false);
+
+    function openModal() {
+        setIsOpen(true);
+    }
+
+    function closeModal() {
+        setIsOpen(false);
+    }
 
     return (
         <Container>
             <HeaderContainer />
             <UserProfilePic src={profilePic} />
-            <div
-                style={{
-                    margin: '0px 0px 8px',
-                    height: '32px',
-                }}
-            ></div>
-            <UserInformationContainer
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    gap: '12px',
-                }}
-            >
+            <UserInformationContainer>
                 <UserNameContainer>
                     <UserNameParagraph>{fullName}</UserNameParagraph>
+                    <div>
+                        <EditButton onClick={openModal} />
+                        <ProfileHeaderModal
+                            modalIsOpen={modalIsOpen}
+                            openModal={openModal}
+                            closeModal={closeModal}
+                        />
+                    </div>
                 </UserNameContainer>
                 <UserDescriptionAndSocialContainer>
                     <UserDescriptionContainer>

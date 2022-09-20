@@ -8,7 +8,8 @@ interface IUser {
     fullName?: string;
     userName?: string;
     email: string;
-    location?: string;
+    country?: string;
+    city?: string;
     profileHeading?: string;
     designation?: string;
     phoneNumber?: string;
@@ -147,7 +148,10 @@ const userSchema = new Schema<IUser>(
             sparse: true,
             validate: [isPhoneNumber, 'Invalid phone number'],
         },
-        location: {
+        country: {
+            type: String,
+        },
+        city: {
             type: String,
         },
         profileHeading: {
