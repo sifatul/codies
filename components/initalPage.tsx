@@ -6,8 +6,20 @@ import Hint from '../components/common/hint';
 import styles from '../styles/Home.module.css';
 import SearchInput from './search/search.input';
 
+
+const Main = Styled.h1`
+flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
 const SectionTitle = Styled.h1`
 
+@media (max-width: 768px){
+  font-size: 30px;
+  line-height: 30px;
+}
 width: auto;
 font-style: normal;
 font-weight: 700;
@@ -19,6 +31,11 @@ color: #000000;
 margin: 0 auto;
 `;
 const Section = Styled.section`
+
+@media (max-width: 768px){
+  padding: 30px 30px;
+  margin-top:35px;
+}
 padding: 130px 120px;
   margin-top:150px;
   background: #E9EBFF;
@@ -30,14 +47,26 @@ const SectionImageContainer = Styled.div`
   align-items: center;
 `;
 const SectionImage = Styled.img`
-  width:20%; 
+
+@media (max-width: 768px){
+  width: 80%;
+}
+  min-width:20%; 
+  width: 40%;
+  max-width:200px;
 `;
 const HalfSection = Styled.div`
   width: 50%;
+  @media (max-width: 450px){
+    width: 100%;
+  }
 `;
 const Row = Styled.div`
   width: 100%;
   display: flex;
+  @media (max-width: 450px){
+    flex-direction: column;
+  }
   
 `;
 
@@ -45,13 +74,13 @@ const InitialPage = () => {
   return (
     <>
       <div className={styles.container}>
-        <main className={styles.main}>
+        <Main >
           <Hint />
 
           <div className={styles.seachContainer}>
             <SearchInput />
           </div>
-        </main>
+        </Main>
 
         <Section>
 
@@ -64,7 +93,7 @@ const InitialPage = () => {
               <p>You can keep learning, working on projects, growing and we will keep your profile up-to-date.</p>
             </HalfSection>
 
-            <HalfSection>
+            <HalfSection style={{ margin: 'auto' }}>
 
               <SectionImageContainer>
                 <SectionImage

@@ -1,13 +1,20 @@
 import React from 'react';
 import Styled from '@emotion/styled';
 const MainTitle = Styled.p`
+
+@media (max-width: 768px){
+    font-size: 36px;
+    line-height: 40px;
+    margin-bottom: 20px;
+  }
+
     font-style: normal;
     font-weight: 800;
     font-size: 72px;
     line-height: 80px;
     text-align:center;
     max-width:992px;
-    margin-bottom: 40px
+    margin-bottom: 40px;
 `
 
 const SubTitle = Styled.p`
