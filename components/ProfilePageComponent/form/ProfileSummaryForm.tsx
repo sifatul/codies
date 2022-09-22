@@ -7,8 +7,8 @@ import { getPhoneNumberRegex } from '../../../helper/regex';
 import { css, cx } from '@emotion/css';
 import Button, { ButtonType } from '../../common/Button';
 import { PatchData, PutData } from '../../../Utils/fetchData';
-import { UseAppSelector } from '../../../store';
-import { getUserState } from '../../../store/user/basicInfo';
+import { UseAppDispatch, UseAppSelector } from '../../../store';
+import { getUserState, setMyInfo, setMyProfileSummary } from '../../../store/user/basicInfo';
 
 const FormContainer = Styled.div`
     padding: 20px;
@@ -58,7 +58,9 @@ const validationSchema = Yup.object().shape({
 });
 
 const ProfileSummaryForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
+    const dispatch = UseAppDispatch();
     const { _id = '', userInfo } = UseAppSelector(getUserState);
+
     const {
         city = '',
         country = '',
@@ -81,6 +83,14 @@ const ProfileSummaryForm: React.FC<{ closeModal: () => void }> = ({ closeModal }
 
             if (res?.status === 200) {
                 alert('Successfully updated');
+                const newUserInfo = {
+                    profileHeading: values.profileHeading,
+                    phoneNumber: values.phoneNumber,
+                    designation: values.designation,
+                    city: values.city,
+                    country: values.country,
+                };
+                dispatch(setMyProfileSummary(newUserInfo));
                 resetForm();
                 closeModal();
             } else {
