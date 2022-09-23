@@ -10,6 +10,7 @@ import { PostData } from '../../Utils/fetchData';
 import { UseAppDispatch, UseAppSelector } from '../../store';
 import { getUserState, setMyInfo, setUserInfo } from '../../store/user/basicInfo';
 import { getAnalytics, logEvent } from 'firebase/analytics';
+import LoadingAnimation from '../../components/common/loadingAnimation';
 
 const FlexContainer = Styled.div`
     display: flex;
@@ -77,6 +78,7 @@ const VerifyEmailPage: React.FC = () => {
     const dispatch = UseAppDispatch();
     const { _id } = UseAppSelector(getUserState);
     const [otp, setOpt] = useState<string>();
+    const [loading, setLoading] = useState(false)
 
 
     const handleOtpChange = (e: string) => {
@@ -101,8 +103,10 @@ const VerifyEmailPage: React.FC = () => {
     }, [email])
 
     const veryOtp = useCallback(async () => {
+        setLoading(true)
         try {
             const analytics = getAnalytics();
+
 
             const res: any = await PostData('/api/users/otp/verify', JSON.stringify({ email, otp }))
             if (res?.status != 200) {
@@ -117,6 +121,7 @@ const VerifyEmailPage: React.FC = () => {
             alert(JSON.stringify(e))
             console.error(e)
         }
+        setLoading(false)
 
 
     }, [email, otp])
@@ -128,7 +133,9 @@ const VerifyEmailPage: React.FC = () => {
 
     return (
         <FlexContainer>
-            <FlexItemLeft>
+            <LoadingAnimation open={loading} />
+            {!loading && <FlexItemLeft>
+
                 <div>
                     <SectionMetaInfo
                         label='Enter Code'
@@ -145,10 +152,7 @@ const VerifyEmailPage: React.FC = () => {
                         isInputNum={true}
                     />
                     <Button type={ButtonType.PRIMARY} label='Verify Email' onClick={e => {
-
                         veryOtp()
-
-
                     }} />
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <Button
@@ -159,7 +163,7 @@ const VerifyEmailPage: React.FC = () => {
                         />
                     </div>
                 </div>
-            </FlexItemLeft>
+            </FlexItemLeft>}
             <FlexItemRight>
                 <BackgroundImg>
                     <Image

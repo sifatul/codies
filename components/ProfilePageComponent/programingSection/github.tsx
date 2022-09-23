@@ -81,8 +81,6 @@ const GithubProgramming = () => {
   const getGithubData = React.useCallback(async () => {
     if (window == undefined || !githubUserName) return;
     const gitHubBasicInfo: any = await GetData(`/api/${Filter.GITHUB.toLocaleLowerCase()}/find?userName=${githubUserName}`);
-    // if (email) dispatch(setEmail(email))
-
 
     const repos = gitHubBasicInfo.repos
 

@@ -77,7 +77,8 @@ const ExperienceList = () => {
     {experiences.map((experience, idx) => {
       const { companyName = '', _id, position, startDate, summary, isPresentCompany, endDate } = experience
       const stateTime = DateString(startDate)
-      const endTime = isPresentCompany ? 'ongoing' : DateString(endDate)
+      const endTime = (isPresentCompany || !endDate) ? 'ongoing' : DateString(endDate)
+
 
       return <div key={"experience" + _id + idx}>
 

@@ -15,6 +15,7 @@ import { PostData } from '../../Utils/fetchData';
 
 import successAnimation from '../../animation/successAnimation.json';
 import LoadingAnimation from '../../components/common/loadingAnimation';
+import SuccessAnimation from '../../components/common/successAnimation';
 
 export const SectionContainer = css`
     display: flex;
@@ -96,7 +97,7 @@ const errorMessage = css`
 
 enum StatusType {
     SUCCESS = 'success',
-    IDEL = 'idel',
+    IDLE = 'IDLE',
     ERROR = 'error',
 }
 
@@ -105,7 +106,7 @@ const SignupPage: React.FC<{}> = () => {
 
     const [loading, setLoading] = useState(false);
     const [signupStatus, setSignupStatus] = useState({
-        status: StatusType.IDEL,
+        status: StatusType.IDLE,
         message: '',
     });
     const { getUserByName, getUserByEmail } = checkUserInfo();
@@ -217,31 +218,20 @@ const SignupPage: React.FC<{}> = () => {
 
                     <LoadingAnimation open={loading} />
 
-                    {!loading && signupStatus.status === StatusType.SUCCESS && (
-                        <Lottie
-                            options={{
-                                ...defaultOptions,
-                                animationData: successAnimation,
-                                loop: false,
-                            }}
-                            eventListeners={[
-                                {
-                                    eventName: 'complete',
-                                    callback: () => {
-                                        setSignupStatus({
-                                            status: StatusType.IDEL,
-                                            message: '',
-                                        });
-                                        router.push('/auth/verify-email?email=' + values?.email);
-                                    },
-                                },
-                            ]}
-                            height={400}
-                            width={400}
-                        />
-                    )}
+                    <SuccessAnimation
+                        open={!loading && signupStatus.status === StatusType.SUCCESS}
+                        callback={() => {
+                            setSignupStatus({
+                                status: StatusType.IDLE,
+                                message: '',
+                            });
+                            router.push('/auth/verify-email?email=' + values?.email);
+                        }}
+                    />
 
-                    {showEmailForm && !loading && signupStatus.status === StatusType.IDEL && (
+
+
+                    {showEmailForm && !loading && signupStatus.status === StatusType.IDLE && (
                         <>
                             {/* <div className={cx(Divider)}>
                                 <span className={cx(DividerText)}>or</span>
@@ -326,7 +316,7 @@ const SignupPage: React.FC<{}> = () => {
                             </div>
                         </>
                     )}
-                    {!loading && signupStatus.status === StatusType.IDEL && (
+                    {!loading && signupStatus.status === StatusType.IDLE && (
                         <div className={cx([FlexItem, JustifyCenter])}>
                             <Button
                                 type={ButtonType.TERTIARY}
