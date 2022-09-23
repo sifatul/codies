@@ -1,5 +1,5 @@
 import { getAnalytics, logEvent } from "firebase/analytics";
-import { createUserWithEmailAndPassword, EmailAuthProvider, FacebookAuthProvider, fetchSignInMethodsForEmail, getAuth, getRedirectResult, GithubAuthProvider, GoogleAuthProvider, OAuthCredential, onAuthStateChanged, signInWithEmailAndPassword, signInWithRedirect } from "firebase/auth";
+import { createUserWithEmailAndPassword, EmailAuthProvider, FacebookAuthProvider, fetchSignInMethodsForEmail, getAuth, getRedirectResult, GithubAuthProvider, GoogleAuthProvider, OAuthCredential, onAuthStateChanged, signInWithEmailAndPassword, signInWithRedirect, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import React, { useCallback } from "react";
 import { UseAppDispatch } from "../store";
@@ -213,6 +213,13 @@ export default function FirebaseLoginManage() {
       .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
+
+        // user create in databse and email yet not verified. 
+        // keeping them logged in will force user to verify the email addresses 
+        // if the email address was a typo it would be a deadlock.
+
+        // better to keep the email registered in firebase but not to force the user to comeback to verify the wrong email
+        signOut(auth)
 
 
       })
