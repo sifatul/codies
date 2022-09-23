@@ -65,7 +65,7 @@ const ExperienceSection = () => {
                     <AddBtn onClick={openModal} />
 
                 </div>}
-                {!_id && <p>No data found</p>}
+
             </ExperienceSectionHeaderContainer>
             <ExperienceSectionModal
                 openModal={openModal}

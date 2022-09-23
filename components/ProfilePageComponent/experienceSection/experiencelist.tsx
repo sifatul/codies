@@ -48,7 +48,7 @@ const JobDescription = Styled.p`
 
 const ExperienceList = () => {
 
-  const { _id = '', } = UseAppSelector(getUserState);
+  const { _id: userId } = UseAppSelector(getUserState);
   const [editExperienceIdx, setIsEditExperienceIdx] = React.useState(-1);
   const experiences = UseAppSelector(getExperiences);
 
@@ -72,6 +72,7 @@ const ExperienceList = () => {
       data={editExperienceIdx >= 0 ? experiences[editExperienceIdx] : null}
       closeModal={closeModal}
     />
+    {experiences?.length <= 0 && <p>No data found</p>}
 
     {experiences.map((experience, idx) => {
       const { companyName = '', _id, position, startDate, summary, isPresentCompany, endDate } = experience
@@ -88,7 +89,7 @@ const ExperienceList = () => {
             </div>
             <div style={{ display: 'flex' }}>
               <JobTimePeriod>{stateTime} - {endTime}</JobTimePeriod>
-              <EditButton onClick={() => openModal(idx)} />
+              {userId && <EditButton onClick={() => openModal(idx)} />}
             </div>
 
 

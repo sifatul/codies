@@ -136,7 +136,7 @@ const PrivacyNoteDescriptionParagraph = Styled.div`
     margin: 0px;
 `;
 const ProfileBasicInfo = () => {
-    const userState = UseAppSelector(getUserState);
+    const { userInfo, _id } = UseAppSelector(getUserState);
     const {
         profilePic = 'https://source.unsplash.com/6VPEOdpFNAs',
         fullName = '',
@@ -144,7 +144,7 @@ const ProfileBasicInfo = () => {
         country = '',
         profileHeading = '',
         phoneNumber = '',
-    } = userState?.userInfo || {};
+    } = userInfo || {};
 
     const [modalIsOpen, setIsOpen] = React.useState(false);
 
@@ -164,7 +164,7 @@ const ProfileBasicInfo = () => {
                 <UserNameContainer>
                     <UserNameParagraph>{fullName}</UserNameParagraph>
                     <div>
-                        {userState?._id && <EditButton onClick={openModal} />}
+                        {_id && <EditButton onClick={openModal} />}
                         <ProfileHeaderModal
                             modalIsOpen={modalIsOpen}
                             openModal={openModal}

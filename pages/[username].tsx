@@ -9,7 +9,7 @@ import SideBar from '../components/ProfilePageComponent/Sidebar';
 import SkillsSection from '../components/ProfilePageComponent/skillSection/SkillsSection';
 import checkUserInfo from '../Hooks/checkUser.hook';
 import { UseAppDispatch, UseAppSelector } from '../store';
-import { getUserState, setUserInfo } from '../store/user/basicInfo';
+import { getUserState, setMyProfileSummary, setUserInfo } from '../store/user/basicInfo';
 
 
 
@@ -50,19 +50,20 @@ const ProfilePage: React.FC = () => {
 
         const name = username?.toString() || ''
         const userInfo: any = await getUserByName(name)
-        if (userInfo && userInfo?.status == 200) dispatch(setUserInfo(userInfo))
+        if (userInfo && userInfo?.status == 200) {
+            dispatch(setUserInfo(userInfo))
+            dispatch(setMyProfileSummary(userInfo))
+        }
 
     }, [username])
 
 
     useEffect(() => {
-        if (!_id && !userInfo?.userName) {
-            // user is directly coming to the url
-            getUserBySearchName()
-        }
+        if (!username || (_id || userInfo?.userName)) return
+        getUserBySearchName()
 
 
-    }, [])
+    }, [username])
 
 
     return (

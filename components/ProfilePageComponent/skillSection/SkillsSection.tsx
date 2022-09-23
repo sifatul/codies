@@ -32,6 +32,7 @@ const ContentContainer = Styled.div``;
 
 const SkillsSection = () => {
     const { _id = '', userInfo } = UseAppSelector(getUserState);
+    console.log("_id: ", _id)
     const skillTags = UseAppSelector(getSkillTags);
     const [modalIsOpen, setIsOpen] = React.useState(false);
     const dispatch = UseAppDispatch();
@@ -57,15 +58,17 @@ const SkillsSection = () => {
     }, [userInfo?._id]);
 
     useEffect(() => {
+        console.log("userInfo?._id: ", userInfo)
+        if (!userInfo?._id) return
         getData();
-    }, [getData]);
+    }, [getData, userInfo?._id]);
 
     return (
         <Container>
             <SkillsSectionHeaderContainer>
                 <SkillsSectionHeader>Skills</SkillsSectionHeader>
                 <div>
-                    {(skillTags || [])?.length > 0 && <EditButton onClick={openModal} />}
+                    {(skillTags || [])?.length > 0 && _id && <EditButton onClick={openModal} />}
                     <SkillsSectionModal
                         openModal={openModal}
                         modalIsOpen={modalIsOpen}
