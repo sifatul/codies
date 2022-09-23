@@ -12,8 +12,9 @@ import Input, { InputType } from '../../components/common/Input';
 import checkUserInfo from '../../Hooks/checkUser.hook';
 import FirebaseLoginManage from '../../Hooks/socailLogin';
 import { PostData } from '../../Utils/fetchData';
-import loadingAnimation from '../../animation/loadingAnimation.json';
+
 import successAnimation from '../../animation/successAnimation.json';
+import LoadingAnimation from '../../components/common/loadingAnimation';
 
 export const SectionContainer = css`
     display: flex;
@@ -214,16 +215,7 @@ const SignupPage: React.FC<{}> = () => {
                         </>
                     )}
 
-                    {loading && (
-                        <Lottie
-                            options={{
-                                ...defaultOptions,
-                                animationData: loadingAnimation,
-                            }}
-                            height={400}
-                            width={400}
-                        />
-                    )}
+                    <LoadingAnimation open={loading} />
 
                     {!loading && signupStatus.status === StatusType.SUCCESS && (
                         <Lottie
