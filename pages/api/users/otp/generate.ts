@@ -105,7 +105,7 @@ const sendOtpToEmail = async (email: string, newOtpObj: any, callback: any) => {
 const messageForEmail = (otp: number) => {
     return (
         '<div>Hello User,</div>' +
-        '<div>One Time Password (OTP) is</div>:' +
+        '<div>One Time Password (OTP) is :</div>' +
         `<strong style="font-size: 20px">${otp}</strong>` +
         '<div>Please feel free to reply to this email if you are having any troubles.</div>' +
         '<div>Regards</div>' +
