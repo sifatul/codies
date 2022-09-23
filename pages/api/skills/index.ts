@@ -29,8 +29,11 @@ const addSkills = async (req: NextApiRequest, res: NextApiResponse) => {
             return res.status(400).json({ message: 'user not found' });
         }
 
-     
-        const newSkills = await Skills.findOneAndUpdate({ userId: new ObjectId(userId) }, { techStack }, { upsert: true });
+        const newSkills = await Skills.findOneAndUpdate(
+            { userId: new ObjectId(userId) },
+            { techStack },
+            { upsert: true }
+        );
 
         return res.status(201).json({ message: 'skills added successfully.', data: newSkills });
     } catch (error) {
