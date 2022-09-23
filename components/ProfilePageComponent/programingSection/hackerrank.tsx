@@ -132,7 +132,7 @@ const HackerrankProgramming = () => {
       <Title>Hackerranking</Title>
 
       <div className={cx(iconClass)} onClick={e => _id && setShowProfileLinkModal(true)}>
-        <FontAwesomeIcon icon={faHackerrank} />
+        <FontAwesomeIcon icon={faHackerrank} size="xl" />
       </div>
     </ProgrammingSectionHeader>
     {!hackerrank_url && <Paragraph > Your HackerRank profile is not connected. </Paragraph>}

@@ -110,7 +110,7 @@ const LeetcodeProgramming = () => {
       <Title>Leetcoding</Title>
 
       <div className={cx(iconClass)} onClick={e => _id && setShowProfileLinkModal(true)}>
-        <img src='/icons/leetcode.png' alt='leetcode-icon' style={{ height: '20px' }} />
+        <img src='/icons/leetcode.png' alt='leetcode-icon' style={{ height: '30px' }} />
       </div>
     </ProgrammingSectionHeader>
     {!leetcode_url && <Paragraph > Your HackerRank profile is not connected. </Paragraph>}

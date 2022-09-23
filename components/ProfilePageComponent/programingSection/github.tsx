@@ -126,7 +126,7 @@ const GithubProgramming = () => {
       <Title>Projects</Title>
 
       <div className={cx(iconClass)} onClick={e => _id && setShowProfileLinkModal(true)}>
-        <FontAwesomeIcon icon={faGithub} />
+        <FontAwesomeIcon icon={faGithub} size="xl" />
       </div>
     </ProgrammingSectionHeader>
     {!githubUserInfo?.html_url && <Paragraph > Your Github profile is not connected. </Paragraph>}

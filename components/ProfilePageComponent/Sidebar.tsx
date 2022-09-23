@@ -4,6 +4,8 @@ import EditButton from './EditButton';
 import GithubProgramming from './programingSection/github';
 import LeetcodeProgramming from './programingSection/leetcode';
 import HackerrankProgramming from './programingSection/hackerrank';
+import Stackoverflowing from './programingSection/stackoverflow';
+import Codepening from './programingSection/codepen';
 
 
 const SitebarMainContainer = Styled.div`
@@ -94,15 +96,15 @@ const SideBar = () => {
         <SitebarMainContainer>
             <SidebarHeaderContainer>
                 <SidebarHeader>About </SidebarHeader>
-                <div>
+                {/* <div>
                     <EditButton onClick={openModal} />
-                </div>
+                </div> */}
             </SidebarHeaderContainer>
             <SidebarContainer>
-                <SidebarItemContainer>
+                {/* <SidebarItemContainer>
                     <Title>Contact</Title>
                     <Paragraph>Full-time</Paragraph>
-                </SidebarItemContainer>
+                </SidebarItemContainer> */}
                 {/* <SidebarItemContainer>
                     <Title>Earliest start date</Title>
                     <Paragraph>After 3 months notice period</Paragraph>
@@ -116,11 +118,11 @@ const SideBar = () => {
 
 
 
-                <SidebarItemContainer>
+                {/* <SidebarItemContainer>
                     <Title>Languages</Title>
                     <Paragraph>Bengali <SmallText>  (native) </SmallText> </Paragraph>
                     <Paragraph>English <SmallText>  (Fluent) </SmallText> </Paragraph>
-                </SidebarItemContainer>
+                </SidebarItemContainer> */}
 
 
 
@@ -166,6 +168,24 @@ const SideBar = () => {
                     <ProgrammingSection>
 
                         <LeetcodeProgramming />
+
+                    </ProgrammingSection>
+
+                </SidebarItemContainer>
+
+                <SidebarItemContainer>
+                    <ProgrammingSection>
+
+                        <Stackoverflowing />
+
+                    </ProgrammingSection>
+
+                </SidebarItemContainer>
+
+                <SidebarItemContainer>
+                    <ProgrammingSection>
+
+                        <Codepening />
 
                     </ProgrammingSection>
 
