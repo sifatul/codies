@@ -220,12 +220,6 @@ const SignupPage: React.FC<{}> = () => {
                                 ...defaultOptions,
                                 animationData: loadingAnimation,
                             }}
-                            eventListeners={[
-                                {
-                                    eventName: 'complete',
-                                    callback: () => console.log('the animation completed:'),
-                                },
-                            ]}
                             height={400}
                             width={400}
                         />
