@@ -177,8 +177,8 @@ const ProfileBasicInfo = () => {
                         <UserDescriptionParagraph>{profileHeading}</UserDescriptionParagraph>
                     </UserDescriptionContainer>
                     <SocialIconContainer>
-                        <FontAwesomeIcon icon={faGithubSquare} />
-                        <FontAwesomeIcon icon={faLinkedinIn} />
+                        {/* <FontAwesomeIcon icon={faGithubSquare} size="lg" /> */}
+                        <FontAwesomeIcon icon={faLinkedinIn} size="lg" />
                     </SocialIconContainer>
                 </UserDescriptionAndSocialContainer>
                 <UserLocationAndPhoneContainer>

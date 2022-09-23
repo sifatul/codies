@@ -50,7 +50,14 @@ handler.post(async (req: any, res: any) => {
         res.status(400).json({ message: 'param is missing' });
     }
     try {
-        const users = await User.create({ ...query, userName, email, profilePic, fullName, verified: true });
+        const users = await User.create({
+            ...query,
+            userName,
+            email,
+            profilePic,
+            fullName,
+            verified: true,
+        });
         // console.log('new user created');
 
         return res.json(users);

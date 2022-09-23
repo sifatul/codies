@@ -15,12 +15,16 @@ import { getUserState, setUserInfo } from '../store/user/basicInfo';
 
 const ProfileHeader = Styled.div`
     height: auto;
-    margin-top: 40px;
+    // margin-top: 40px;
 `;
 const ProfileDetailsContainer = Styled.div`
     display: grid;
     grid-template-columns: 2fr 4fr;
     margin-top: 20px;
+
+    @media (max-width: 650px){
+        grid-template-columns: unset;
+    }
 
 `;
 

@@ -46,7 +46,7 @@ const getSkills = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     const query = { userId: new ObjectId(userId.toString()) };
     // tslint:disable-next-line: await-promise
-    const skills = await Skills.findOne({ query }, null, { strictQuery: false });
+    const skills = await Skills.findOne(query, null, { strictQuery: false });
 
     return res.status(201).json({ data: skills?.techStack || [] });
 };

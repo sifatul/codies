@@ -20,7 +20,6 @@ const Title = Styled.p`
   font-size: 16px;
   margin: 0;
   margin-bottom: 8px;
-  width: 100%;
 `;
 
 export const iconClass = css`
@@ -92,7 +91,7 @@ const HackerrankProgramming = () => {
 
     dispatch(setHackerRankInfo(hackerRankdata));
     return hackerRankdata;
-  }, []);
+  }, [hackerRankUserName]);
 
   useEffect(() => {
 

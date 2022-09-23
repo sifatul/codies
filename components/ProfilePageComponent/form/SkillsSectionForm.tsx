@@ -103,8 +103,8 @@ const SkillsSectionForm: React.FC<{ closeModal: () => void; }> = ({
 
     const handleSkills = useCallback(async () => {
         if (!tags && !tags.length) return;
-        const previousDate = skillTags || []
-        const response = (previousDate.length > 0) ? await handleSave() : await handleUpdate()
+
+        const response = skillTags.length == 0 ? await handleSave() : await handleUpdate()
         if (response) {
             dispatch(setSkillTags(tags))
         }

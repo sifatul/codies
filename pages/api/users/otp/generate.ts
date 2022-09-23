@@ -126,18 +126,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         // tslint:disable-next-line: await-promise
         const isUserExist = await User.findOne({ email: email }, null, { strictQuery: false });
-        
 
         if (!isUserExist) {
             return res.status(404).send({
                 message: 'No user found',
             });
         }
-        if(isUserExist.verified) {
+        if (isUserExist.verified) {
             return res.status(302).send({
                 message: 'user is already verified',
             });
-           
         }
 
         const callback = (result: any) => {
