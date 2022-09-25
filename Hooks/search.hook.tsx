@@ -59,7 +59,7 @@ export default function SearchHelper(searchVal: string) {
       // check if it is a valid url
 
       const noQueryUrl = removeQueryString(searchVal)
-      const DomainWithNameOnlyGrp = noQueryUrl.match('^http(s)?:\/\/([\w\d]+\.)?[a-z]*.com/(in/)?[a0-z9]{2,}')
+      const DomainWithNameOnlyGrp = noQueryUrl.match('^(http(s)?:\/\/([\w\d]+\.)?)?[a-z]*.com/(in/)?[a0-z9]{2,}')
       const DomainWithNameOnly = (DomainWithNameOnlyGrp || [])[0]
       let { protocol, hostname, pathname } = new URL(DomainWithNameOnly);
 
