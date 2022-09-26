@@ -1,23 +1,23 @@
 
-[![TypeScript](https://badgen.net/badge/icon/typescript?icon=typescript&label)](https://typescriptlang.org)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
+![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 
-## What
+
 [`Codies`](https://codies.vercel.app/) is an intergrated platform to get cummulative summary of any developer's profiles.
+Which auto sync with platforms like: 
+- Github
+- Leetcode
+- HackerRank
+- Codepen
+- Stackoverflow
+- etc. 
 
-### Result Sources
-
- 
-
-![image](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white) 
-![image](https://img.shields.io/badge/-Hackerrank-2EC866?style=for-the-badge&logo=HackerRank&logoColor=white)
-![CodePen](https://img.shields.io/badge/Codepen-000000?style=for-the-badge&logo=codepen&logoColor=white)
-## Why
-When we try to know about any developer we need to search in many different platforms like Github, LinkedIn, HackerRank, Leetcode etc to get better insights about the developers.
-
-## How
-Fetch basic but vital informations from different platforms like Github, LinkedIn etc and present in a single page
 
 ## How to run the project locally
+
+Copy the `.env.example` and make `.env.local` to use credentials for your own. Update values in `.env.local` and then:
 
 ```bash
 https://github.com/Sifatul/find-profile.git
@@ -37,33 +37,28 @@ To contribute in development, please follow the following steps:
 - Fork the project and create pull request(PR) to main branch
 - Meaningful commit messages, PR title or description
 
-## FAQ
-- Frontend/Backend -> NextJS
+## Stack
+- Frontend/Backend -> NextJS (typescript)
 - Package Manager -> Yarn
-(More to be added...)
+- Authentication -> firebase
+- Database -> MongoDB (mongoose)
 
 ## Guidelines
 - Filename:[ Use PascalCase for filenames](https://github.com/airbnb/javascript/tree/master/react)
 
-## List of features
-- Show data from Leetcode
-- Show data from LinkedIn
-- Add badges beside the content to represent source
-(More to be added...)
+<br/> <br/>
+## Contributing
+Thank you to all the people who already contributed to Codies!
 
-## List of issues
-- Legal issues incase of using 3rd party APIs
-- No availability of public APIs
-- Incorrect search result if there are multiple people with the same name across different platforms (to be addressed later after MVP)
-(More to be added...)
 
-## Priorities
-- Organise project structure (Folder structure, eslint, tslint, prettier config, etc)
-- Involve more contributors
-- Integrate available platforms in the system
-- Find public APIs for integration
-- Create APIs if no public API available.
-(More to be added...)
+
+<a href="https://github.com/OWNER/REPO/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=sifatul/codies" />
+</a>
+
+<br/> <br/>
+
+
 
 ## Legal
 This code is in no way affiliated with, authorized, maintained, sponsored or endorsed by Linkedin, github, leetcode or any of its affiliates or subsidiaries. This is an independent and unofficial API.
