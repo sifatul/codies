@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { parse } from 'rss-to-json';
 import { connectToDatabase } from '../../../Utils/mongodb';
 import Hackerrank from './models';
+import NextCors from 'nextjs-cors';
+
 const getUserProfileApi =
     'https://www.hackerrank.com/rest/contests/master/hackers/userName/profile';
 
@@ -19,6 +21,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const body = req.body;
 
     const output = {};
+    await NextCors(req, res, {
+        // Options
+        methods: ['GET'],
+        origin: '*',
+        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    });
 
     try {
         await connectToDatabase();
