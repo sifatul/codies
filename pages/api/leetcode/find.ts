@@ -4,6 +4,7 @@ import { connectToDatabase } from '../../../Utils/mongodb';
 import Leetcode from './models';
 import { GraphQLClient } from 'graphql-request';
 import { QueryType } from '../../../Utils/leetcode';
+import NextCors from 'nextjs-cors';
 
 const TagProblemsCountQuery = `
 query userProfile($username: String!) {
@@ -65,6 +66,12 @@ const url = 'https://leetcode.com/graphql/';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
     const output = {};
+    await NextCors(req, res, {
+      // Options
+      methods: ['GET'],
+      origin: '*',
+      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+   });
 
     try {
         await connectToDatabase();

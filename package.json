@@ -47,6 +47,7 @@
     "next-connect": "^0.13.0",
     "next-redux-wrapper": "^8.0.0",
     "next-swagger-doc": "^0.3.6",
+    "nextjs-cors": "^2.1.2",
     "node-fetch": "^3.2.10",
     "nodemailer": "^6.7.8",
     "octokit": "^2.0.7",
