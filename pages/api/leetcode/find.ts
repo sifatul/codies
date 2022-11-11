@@ -67,11 +67,11 @@ const url = 'https://leetcode.com/graphql/';
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
     const output = {};
     await NextCors(req, res, {
-      // Options
-      methods: ['GET'],
-      origin: '*',
-      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-   });
+        // Options
+        methods: ['GET'],
+        origin: '*',
+        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    });
 
     try {
         await connectToDatabase();
